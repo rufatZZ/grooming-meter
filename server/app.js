@@ -12,4 +12,16 @@ app.use(express.static(publicPath));
 
 let io = new socketIO();
 
+io.on('connection', (socket) => {
+
+    socket.on('join', (params) => {
+        socket.join(params.user);
+    });
+
+    socket.on('leave', (params) => {
+        socket.leave(params.user);
+    });
+
+});
+
 server.listen(PORT, () => console.log(`Server ${PORT} on fly`));
