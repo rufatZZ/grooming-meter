@@ -4,12 +4,12 @@ import "./App.css";
 
 interface IProps {}
 interface IState {
-  endpoint ?: any;
+  endpoint?: any;
 }
 
 let socket: any;
 
-class App extends Component<IProps, IState> {  
+class App extends Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
 
@@ -22,17 +22,17 @@ class App extends Component<IProps, IState> {
     const { endpoint } = this.state;
     socket = io(endpoint);
 
-    socket.emit('join', {user: 'rufat'});
+    socket.emit("join", { session: "12345" });
   }
 
   componentWillUnmount() {
-    socket.emit('leave', {user: 'rufat'});
+    socket.emit("leave", { session: "12345" });
   }
 
   render() {
     return (
       <div className="App">
-        <header style={{ textAlign: "center" }}>
+        <header>
           <h2>Grooming-meter</h2>
         </header>
         <div className="App--sidebar">sdfsfsd</div>
