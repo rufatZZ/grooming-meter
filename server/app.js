@@ -24,15 +24,26 @@ app.use(express.static(publicPath));
 
 
 let io = new socketIO(server);
+let users = [];
 
 io.on('connection', (socket) => {
 
     socket.on('join', (params) => {
+        console.log('user joined');
         socket.join(params.session);
+        users.push(params.user);
+
+        io.to(params.session).emit('updateUsers', users);
     });
 
     socket.on('leave', (params) => {
+        console.log('user left');
         socket.leave(params.session);
+    });
+
+    socket.on('disconnect', (params) => {
+        console.log('user disconnected');
+        socket.disconnect(params.session);
     });
 
 });

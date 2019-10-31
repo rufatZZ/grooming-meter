@@ -5,6 +5,7 @@ import "./App.css";
 interface IProps {}
 interface IState {
   endpoint?: any;
+  users?: Array<string>;
 }
 
 let socket: any;
@@ -22,7 +23,11 @@ class App extends Component<IProps, IState> {
     const { endpoint } = this.state;
     socket = io(endpoint);
 
-    socket.emit("join", { session: "12345" });
+    socket.emit("join", { session: "12345", user: Date.now() });
+
+    socket.on("updateUsers", (users: Array<string>) => {
+      this.setState({ users });
+    });
   }
 
   componentWillUnmount() {
@@ -30,12 +35,18 @@ class App extends Component<IProps, IState> {
   }
 
   render() {
+    const { users } = this.state;
+
     return (
       <div className="App">
         <header>
           <h2>Grooming-meter</h2>
         </header>
-        <div className="App--sidebar">sdfsfsd</div>
+        <div className="App--sidebar">
+          <ul>
+            {users ? users.map(user => <li>{user}</li>) : <li>No users</li>}
+          </ul>
+        </div>
         <div className="App--main">sadada</div>
       </div>
     );
