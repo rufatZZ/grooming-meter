@@ -2,10 +2,16 @@ import React, { Component } from "react";
 import io from "socket.io-client";
 import "./App.css";
 
+interface User {
+  id?: string;
+  username?: string;
+  session?: string;
+}
+
 interface IProps {}
 interface IState {
   endpoint?: any;
-  users?: Array<string>;
+  users?: User[];
 }
 
 let socket: any;
@@ -23,9 +29,10 @@ class App extends Component<IProps, IState> {
     const { endpoint } = this.state;
     socket = io(endpoint);
 
-    socket.emit("join", { session: "12345", user: Date.now() });
+    socket.emit("join", { session: "12345", username: Date.now() });
 
-    socket.on("updateUsers", (users: Array<string>) => {
+    socket.on("updateUsers", (users: User[]) => {
+      console.log("updateeeee");
       this.setState({ users });
     });
   }
@@ -44,7 +51,11 @@ class App extends Component<IProps, IState> {
         </header>
         <div className="App--sidebar">
           <ul>
-            {users ? users.map(user => <li>{user}</li>) : <li>No users</li>}
+            {users ? (
+              users.map(user => <li key={user.id}>{user.username}</li>)
+            ) : (
+              <li>No users</li>
+            )}
           </ul>
         </div>
         <div className="App--main">sadada</div>
