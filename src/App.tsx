@@ -32,7 +32,6 @@ class App extends Component<IProps, IState> {
     socket.emit("join", { session: "12345", username: Date.now() });
 
     socket.on("updateUsers", (users: User[]) => {
-      console.log("updateeeee");
       this.setState({ users });
     });
   }
@@ -44,23 +43,7 @@ class App extends Component<IProps, IState> {
   render() {
     const { users } = this.state;
 
-    return (
-      <div className="App">
-        <header>
-          <h2>Grooming-meter</h2>
-        </header>
-        <div className="App--sidebar">
-          <ul>
-            {users ? (
-              users.map(user => <li key={user.id}>{user.username}</li>)
-            ) : (
-              <li>No users</li>
-            )}
-          </ul>
-        </div>
-        <div className="App--main">sadada</div>
-      </div>
-    );
+    return <div className="App"></div>;
   }
 }
 
