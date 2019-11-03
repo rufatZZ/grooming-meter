@@ -43,7 +43,48 @@ class App extends Component<IProps, IState> {
   render() {
     const { users } = this.state;
 
-    return <div className="App"></div>;
+    return (
+      <div className="App">
+        <div className="global-container">
+          <div className="d-flex flex-row">
+            <nav className="sidebar">
+              <h1>GM</h1>
+            </nav>
+            <main className="content">
+              <div className="content-holder">
+                <div className="panel panel-primary">
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                  Reprehenderit, ipsa autem distinctio voluptate accusamus
+                  veritatis voluptatem, illo incidunt saepe sequi nesciunt
+                  dolores! Animi vel magnam ipsam ab ut, molestias distinctio!
+                </div>
+              </div>
+            </main>
+            <aside>
+              <div className="content-holder">
+                <div className="timer">
+                  <div className="panel mb-1">
+                    <span className="subtitle">Time</span><br/>
+                    <span className="timer-time">00:00</span>
+                  </div>
+                </div>
+                <div className="users">
+                  <div className="panel">
+                    <span className="subtitle">Users</span>
+                    <ul>
+                      {users &&
+                        users.map(user => (
+                          <li key={user.id}>{user.username}</li>
+                        ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    );
   }
 }
 
