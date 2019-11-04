@@ -8,6 +8,10 @@
   height: inherit;
 }
 
+.text-center {
+  text-align: center;
+}
+
 .d-flex {
   display: flex;
   height: inherit;
@@ -46,12 +50,10 @@
 
 .panel-success {
   background-color: #51c19d;
-
 }
 
 .panel-warning {
   background-color: #ffc148;
-
 }
 
 .mt-1 {
@@ -90,6 +92,26 @@ ul {
   list-style-type: none;
 }
 
+button {
+  background-color: #51c19d;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-size: 16px;
+  outline: none;
+  padding: 10px 15px;
+  margin-right: 5px;
+}
+
+button:hover,
+button:focus {
+  background-color: #3ba582;
+}
+
+a:hover, button:hover{
+  cursor: pointer;
+}
+
 /* Custom styles */
 
 nav {
@@ -114,6 +136,12 @@ main.content {
   padding: 15px 20px;
 }
 
+.subtitle {
+  color: #989898;
+  font-size: 24px;
+  font-weight: 700;
+}
+
 aside {
   width: 30%;
   height: inherit;
@@ -122,6 +150,11 @@ aside {
 }
 
 aside .timer {
+}
+
+.timer .timer-time {
+  font-size: 48px;
+  font-weight: 600;
 }
 
 aside.users {

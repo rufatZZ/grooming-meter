@@ -2,16 +2,21 @@ import React, { Component } from "react";
 import io from "socket.io-client";
 import "./App.css";
 
-interface User {
+interface IUser {
   id?: string;
   username?: string;
   session?: string;
 }
 
+interface IOption {
+  value?: number;
+}
+
 interface IProps {}
 interface IState {
   endpoint?: any;
-  users?: User[];
+  users?: IUser[];
+  options: IOption[];
 }
 
 let socket: any;
@@ -21,7 +26,15 @@ class App extends Component<IProps, IState> {
     super(props);
 
     this.state = {
-      endpoint: "http://127.0.0.1:5000"
+      endpoint: "http://127.0.0.1:5000",
+      options: [
+        { value: 1 },
+        { value: 2 },
+        { value: 3 },
+        { value: 5 },
+        { value: 8 },
+        { value: 13 }
+      ]
     };
   }
 
@@ -31,7 +44,7 @@ class App extends Component<IProps, IState> {
 
     socket.emit("join", { session: "12345", username: Date.now() });
 
-    socket.on("updateUsers", (users: User[]) => {
+    socket.on("updateUsers", (users: IUser[]) => {
       this.setState({ users });
     });
   }
@@ -40,8 +53,12 @@ class App extends Component<IProps, IState> {
     socket.emit("leave", { session: "12345" });
   }
 
+  handleVote(value?: number) {
+    console.log(value);
+  }
+
   render() {
-    const { users } = this.state;
+    const { users, options } = this.state;
 
     return (
       <div className="App">
@@ -53,28 +70,49 @@ class App extends Component<IProps, IState> {
             <main className="content">
               <div className="content-holder">
                 <div className="panel panel-primary">
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                  Reprehenderit, ipsa autem distinctio voluptate accusamus
-                  veritatis voluptatem, illo incidunt saepe sequi nesciunt
-                  dolores! Animi vel magnam ipsam ab ut, molestias distinctio!
+                  <div className="subtitle">Vote</div>
+                  <div className="mt-1 ">
+                    {options &&
+                      options.map(opt => (
+                        <button onClick={() => this.handleVote(opt.value)}>
+                          {opt.value}
+                        </button>
+                      ))}
+                  </div>
+                </div>
+
+                <div className="panel panel-primary">
+                  <div className="subtitle">Results</div>
+                  <div className="mt-1">
+                    1 2 3 4 5
+                  </div>
                 </div>
               </div>
             </main>
             <aside>
+              {/* Timer */}
               <div className="content-holder">
                 <div className="timer">
                   <div className="panel mb-1">
-                    <span className="subtitle">Time</span><br/>
-                    <span className="timer-time">00:00</span>
+                    <span className="subtitle">Time</span>
+                    <br />
+                    <div className="timer-time text-center">
+                      <span>00:00</span>
+                    </div>
                   </div>
                 </div>
+                {/*  Users */}
                 <div className="users">
                   <div className="panel">
-                    <span className="subtitle">Users</span>
+                    <span className="subtitle">
+                      Users {users && `{ ${users.length} }`}
+                    </span>
                     <ul>
                       {users &&
-                        users.map(user => (
-                          <li key={user.id}>{user.username}</li>
+                        users.map((user, index) => (
+                          <li key={user.id}>
+                            {index + 1}. <i>{user.username}</i>
+                          </li>
                         ))}
                     </ul>
                   </div>
