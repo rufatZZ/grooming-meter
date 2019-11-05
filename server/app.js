@@ -5,7 +5,7 @@ const path = require("path");
 
 const { Users } = require("./Users");
 
-const publicPath = path.join(__dirname, "../public");
+const publicPath = path.join(__dirname, "../build");
 const PORT = process.env.PORT || 5000;
 
 const app = express();
