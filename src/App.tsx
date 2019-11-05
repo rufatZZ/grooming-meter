@@ -74,18 +74,21 @@ class App extends Component<IProps, IState> {
                   <div className="mt-1 ">
                     {options &&
                       options.map(opt => (
-                        <button onClick={() => this.handleVote(opt.value)}>
+                        <label key={opt.value} className="voting-items">
+                          <input
+                            type="radio"
+                            name="optradio"
+                            onChange={() => this.handleVote(opt.value)}
+                          />
                           {opt.value}
-                        </button>
+                        </label>
                       ))}
                   </div>
                 </div>
 
                 <div className="panel panel-primary">
                   <div className="subtitle">Results</div>
-                  <div className="mt-1">
-                    1 2 3 4 5
-                  </div>
+                  <div className="mt-1"></div>
                 </div>
               </div>
             </main>
