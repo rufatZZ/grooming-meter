@@ -39,6 +39,8 @@ class App extends Component<IProps, IState> {
   }
 
   componentDidMount() {
+
+    console.log(process.env.PORT);
     
     const { endpoint } = this.state;
     socket = io(endpoint);
