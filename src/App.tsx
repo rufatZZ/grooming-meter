@@ -26,7 +26,7 @@ class App extends Component<IProps, IState> {
     super(props);
 
     this.state = {
-      endpoint: "http://127.0.0.1:5000",
+      endpoint: "/",
       options: [
         { value: 1 },
         { value: 2 },
