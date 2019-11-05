@@ -26,7 +26,7 @@ class App extends Component<IProps, IState> {
     super(props);
 
     this.state = {
-      endpoint: "/",
+      endpoint: "https://api-grooming.herokuapp.com/",
       options: [
         { value: 1 },
         { value: 2 },
