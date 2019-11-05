@@ -43,7 +43,7 @@ class App extends Component<IProps, IState> {
     console.log(process.env.PORT);
     
     const { endpoint } = this.state;
-    socket = io(endpoint);
+    socket = io();
 
     socket.emit("join", { session: "12345", username: Date.now() });
 
