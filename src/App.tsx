@@ -40,7 +40,7 @@ class App extends Component<IProps, IState> {
 
   componentDidMount() {    
     const { endpoint } = this.state;
-    socket = io();
+    socket = io(endpoint);
 
     socket.emit("join", { session: "12345", username: Date.now() });
 

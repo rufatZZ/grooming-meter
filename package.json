@@ -20,7 +20,7 @@
     "typescript": "3.6.4"
   },
   "scripts": {
-    "start": "concurrently \"npm run react\" \"npm run server\"",
+    "start": "npm run react",
     "react": "react-scripts start",
     "server": "nodemon server/app.js",
     "build": "react-scripts build",
