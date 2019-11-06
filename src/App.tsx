@@ -26,7 +26,7 @@ class App extends Component<IProps, IState> {
     super(props);
 
     this.state = {
-      endpoint: "https://api-grooming.herokuapp.com/",
+      endpoint: "http://127.0.0.1:5000/",
       options: [
         { value: 1 },
         { value: 2 },
@@ -38,10 +38,7 @@ class App extends Component<IProps, IState> {
     };
   }
 
-  componentDidMount() {
-
-    console.log(process.env.PORT);
-    
+  componentDidMount() {    
     const { endpoint } = this.state;
     socket = io();
 
