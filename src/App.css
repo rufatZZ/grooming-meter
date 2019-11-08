@@ -103,34 +103,28 @@ button {
   margin-right: 5px;
 }
 
-button:hover,
-button:focus {
-  background-color: #3ba582;
-}
-
-a:hover,
-button:hover {
-  cursor: pointer;
-}
-
-.voting-items {
+.voting-list-item label{
   color: white;
   font-size: 16px;
   padding: 5px 15px;
   margin: 0px 5px;
   border-radius: 5px;
+  background-color: #51c19d;
+}
+
+.voting-list-item label:hover{
+  cursor: pointer;
   background-color: #3ba582;
 }
 
-.voting-items input {
+.voting-list-item input {
   width: 1px;
   height: 1px;
   position: absolute;
 }
 
-.voting-items:has(input:checked) {
-  color: red;
-  background-color: red;
+.voting-list > .voting-list-item input:checked + label {
+  background-color: #308c6e;
 }
 
 /* Custom styles */
@@ -170,10 +164,7 @@ aside {
   position: relative;
 }
 
-aside .timer {
-}
-
-.timer .timer-time {
+aside .timer .timer-time {
   font-size: 48px;
   font-weight: 600;
 }

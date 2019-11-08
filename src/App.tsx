@@ -9,13 +9,14 @@ interface IUser {
 }
 
 interface IOption {
-  value?: number;
+  value?: string;
 }
 
 interface IProps {}
 interface IState {
   endpoint?: any;
   users?: IUser[];
+  userVote?: string;
   options: IOption[];
 }
 
@@ -27,18 +28,19 @@ class App extends Component<IProps, IState> {
 
     this.state = {
       endpoint: "http://127.0.0.1:5000/",
+      userVote: "",
       options: [
-        { value: 1 },
-        { value: 2 },
-        { value: 3 },
-        { value: 5 },
-        { value: 8 },
-        { value: 13 }
+        { value: "1" },
+        { value: "2" },
+        { value: "3" },
+        { value: "5" },
+        { value: "8" },
+        { value: "13" }
       ]
     };
   }
 
-  componentDidMount() {    
+  componentDidMount() {
     const { endpoint } = this.state;
     socket = io(endpoint);
 
@@ -53,12 +55,12 @@ class App extends Component<IProps, IState> {
     socket.emit("leave", { session: "12345" });
   }
 
-  handleVote(value?: number) {
-    console.log(value);
+  handleVote(value?: string) {
+    this.setState({ userVote: value });
   }
 
   render() {
-    const { users, options } = this.state;
+    const { users, options, userVote } = this.state;
 
     return (
       <div className="App">
@@ -71,17 +73,19 @@ class App extends Component<IProps, IState> {
               <div className="content-holder">
                 <div className="panel panel-primary">
                   <div className="subtitle">Vote</div>
-                  <div className="mt-1 ">
+                  <div className="voting-list mt-1 d-flex flex-row">
                     {options &&
                       options.map(opt => (
-                        <label key={opt.value} className="voting-items">
+                        <div className="voting-list-item" key={opt.value}>
                           <input
                             type="radio"
                             name="optradio"
+                            id={opt.value}
+                            checked={opt.value === userVote}
                             onChange={() => this.handleVote(opt.value)}
                           />
-                          {opt.value}
-                        </label>
+                          <label htmlFor={opt.value}>{opt.value}</label>
+                        </div>
                       ))}
                   </div>
                 </div>
@@ -100,7 +104,7 @@ class App extends Component<IProps, IState> {
                     <span className="subtitle">Time</span>
                     <br />
                     <div className="timer-time text-center">
-                      <span>00:00</span>
+                      <span>12:53</span>
                     </div>
                   </div>
                 </div>
