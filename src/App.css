@@ -92,17 +92,6 @@ ul {
   list-style-type: none;
 }
 
-button {
-  background-color: #51c19d;
-  border: none;
-  border-radius: 5px;
-  color: white;
-  font-size: 16px;
-  outline: none;
-  padding: 10px 15px;
-  margin-right: 5px;
-}
-
 .voting-list-item label{
   color: white;
   font-size: 16px;

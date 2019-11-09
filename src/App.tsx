@@ -8,6 +8,11 @@ interface IUser {
   session?: string;
 }
 
+interface IVote {
+  id?: string;
+  value?: string;
+}
+
 interface IOption {
   value?: string;
 }
@@ -17,7 +22,8 @@ interface IState {
   endpoint?: any;
   users?: IUser[];
   userVote?: string;
-  options: IOption[];
+  options?: IOption[];
+  votes?: IVote[];
 }
 
 let socket: any;
@@ -43,12 +49,12 @@ class App extends Component<IProps, IState> {
   componentDidMount() {
     const { endpoint } = this.state;
     socket = io(endpoint);
-
     socket.emit("join", { session: "12345", username: Date.now() });
-
     socket.on("updateUsers", (users: IUser[]) => {
       this.setState({ users });
     });
+
+    socket.on("updateVotes", (votes: IVote[]) => console.log(votes));
   }
 
   componentWillUnmount() {
@@ -57,6 +63,7 @@ class App extends Component<IProps, IState> {
 
   handleVote(value?: string) {
     this.setState({ userVote: value });
+    socket.emit("vote", { vote: value });
   }
 
   render() {

@@ -4,6 +4,7 @@ const http = require("http");
 const path = require("path");
 
 const { Users } = require("./Users");
+const { Votes } = require("./Votes");
 
 const publicPath = path.join(__dirname, "../public");
 const PORT = process.env.PORT || 5000;
@@ -26,6 +27,7 @@ app.use(express.static(publicPath));
 
 let io = new socketIO(server);
 const users = new Users();
+const votes = new Votes();
 
 io.on("connection", socket => {
   socket.on("join", params => {
@@ -34,7 +36,15 @@ io.on("connection", socket => {
 
     socket.join(session);
     users.add(newUser);
-    io.to(params.session).emit("updateUsers", users.getList());
+    io.to(session).emit("updateUsers", users.getList());
+  });
+
+  socket.on("vote", params => {
+    const { session, vote } = params;
+    const newVote = { id: socket.id, vote };
+    socket.join(session);
+    votes.addVote(newVote);
+    io.to(session).emit("updateVotes", votes.getList());
   });
 
   socket.on("leave", () => {
