@@ -30,6 +30,8 @@ const users = new Users();
 const votes = new Votes();
 
 io.on("connection", socket => {
+  socket.join(session);
+
   socket.on("join", params => {
     const { session, username } = params;
     const newUser = { id: socket.id, username, session };
@@ -42,7 +44,6 @@ io.on("connection", socket => {
   socket.on("vote", params => {
     const { session, vote } = params;
     const newVote = { id: socket.id, vote };
-    socket.join(session);
     votes.addVote(newVote);
     io.to(session).emit("updateVotes", votes.getList());
   });
