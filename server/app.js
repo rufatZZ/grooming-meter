@@ -30,22 +30,23 @@ const users = new Users();
 const votes = new Votes();
 
 io.on("connection", socket => {
+  const { session } = socket.handshake.query;
   socket.join(session);
 
   socket.on("join", params => {
-    const { session, username } = params;
+    const { username } = params;
     const newUser = { id: socket.id, username, session };
 
     socket.join(session);
     users.add(newUser);
-    io.to(session).emit("updateUsers", users.getList());
+    socket.broadcast.to(session).emit("updateUsers", users.getList());
   });
 
   socket.on("vote", params => {
-    const { session, vote } = params;
+    const { vote } = params;
     const newVote = { id: socket.id, vote };
     votes.addVote(newVote);
-    io.to(session).emit("updateVotes", votes.getList());
+    socket.broadcast.to(session).emit("updateVotes", votes.getList());
   });
 
   socket.on("leave", () => {
@@ -56,7 +57,7 @@ io.on("connection", socket => {
     const user = users.remove(socket.id);
 
     if (user) {
-      socket.broadcast.emit("updateUsers", users.getList());
+      socket.broadcast.to(session).emit("updateUsers", users.getList());
       socket.disconnect(user.session);
     }
   });
