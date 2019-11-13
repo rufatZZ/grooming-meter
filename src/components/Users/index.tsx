@@ -1,26 +1,34 @@
 import React from "react";
+import classnames from "classnames";
 
 import { IUser } from "./../../models";
 
 interface IProps {
   users?: IUser[];
+  currentUser?: string;
 }
 
 export const Users: React.FC<IProps> = props => {
-  const { users } = props;
+  const { users, currentUser } = props;
 
   return (
     <div className="users">
       <div className="panel">
         <span className="subtitle">Users {users && `{ ${users.length} }`}</span>
-        <ul>
+        <ol>
           {users &&
             users.map((user, index) => (
               <li key={user.id}>
-                {index + 1}. {user.username}
+                <span
+                  className={classnames({
+                    "font-bold": user.username === currentUser
+                  })}
+                >
+                  {user.username}
+                </span>
               </li>
             ))}
-        </ul>
+        </ol>
       </div>
     </div>
   );

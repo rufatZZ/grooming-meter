@@ -13,6 +13,7 @@ interface IProps {}
 interface IState {
   endpoint?: any;
   users?: IUser[];
+  username?: string;
   userVote?: string;
   options?: IOption[];
   votes?: IVote[];
@@ -40,8 +41,10 @@ class App extends Component<IProps, IState> {
 
   componentDidMount() {
     const { endpoint } = this.state;
+    const username = `${Date.now()}`;
     socket = io(endpoint, { query: `session=${12345}` });
-    socket.emit("join", { username: Date.now() });
+    socket.emit("join", { username });
+    this.setState({ username });
     socket.on("updateUsers", (users: IUser[]) => {
       this.setState({ users });
     });
@@ -60,7 +63,7 @@ class App extends Component<IProps, IState> {
   };
 
   render() {
-    const { users, options, userVote } = this.state;
+    const { users, username, options, userVote } = this.state;
 
     return (
       <div className="App">
@@ -79,7 +82,7 @@ class App extends Component<IProps, IState> {
             <aside>
               <div className="content-holder">
                 <Timer />
-                <Users users={users} />
+                <Users users={users} currentUser={username} />
               </div>
             </aside>
           </div>
