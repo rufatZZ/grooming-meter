@@ -53,10 +53,11 @@ class App extends Component<IProps, IState> {
     socket.emit("leave");
   }
 
-  handleVote(value?: string) {
+  handleVote = (value?: string) => {
+    console.log(value);
     this.setState({ userVote: value });
     socket.emit("vote", { vote: value });
-  }
+  };
 
   render() {
     const { users, options, userVote } = this.state;
@@ -77,9 +78,7 @@ class App extends Component<IProps, IState> {
             </main>
             <aside>
               <div className="content-holder">
-                {/* Timer */}
                 <Timer />
-                {/*  Users */}
                 <Users users={users} />
               </div>
             </aside>
