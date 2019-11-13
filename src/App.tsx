@@ -1,21 +1,13 @@
 import React, { Component } from "react";
 import io from "socket.io-client";
+
+import { IOption, IUser, IVote } from "./models";
+
+import { Voting } from "./components/Voting";
+import { Timer } from "./components/Timer";
+import { Users } from "./components/Users";
+
 import "./App.css";
-
-interface IUser {
-  id?: string;
-  username?: string;
-  session?: string;
-}
-
-interface IVote {
-  id?: string;
-  value?: string;
-}
-
-interface IOption {
-  value?: string;
-}
 
 interface IProps {}
 interface IState {
@@ -77,60 +69,18 @@ class App extends Component<IProps, IState> {
               <h1>GM</h1>
             </nav>
             <main className="content">
-              <div className="content-holder">
-                <div className="panel panel-primary">
-                  <div className="subtitle">Vote</div>
-                  <div className="voting-list mt-1 d-flex flex-row">
-                    {options &&
-                      options.map(opt => (
-                        <div className="voting-list-item" key={opt.value}>
-                          <input
-                            type="radio"
-                            name="optradio"
-                            id={opt.value}
-                            checked={opt.value === userVote}
-                            onChange={() => this.handleVote(opt.value)}
-                          />
-                          <label htmlFor={opt.value}>{opt.value}</label>
-                        </div>
-                      ))}
-                  </div>
-                </div>
-
-                <div className="panel panel-primary">
-                  <div className="subtitle">Results</div>
-                  <div className="mt-1"></div>
-                </div>
-              </div>
+              <Voting
+                options={options}
+                userVote={userVote}
+                handleVoting={this.handleVote}
+              />
             </main>
             <aside>
-              {/* Timer */}
               <div className="content-holder">
-                <div className="timer">
-                  <div className="panel mb-1">
-                    <span className="subtitle">Time</span>
-                    <br />
-                    <div className="timer-time text-center">
-                      <span>12:53</span>
-                    </div>
-                  </div>
-                </div>
+                {/* Timer */}
+                <Timer />
                 {/*  Users */}
-                <div className="users">
-                  <div className="panel">
-                    <span className="subtitle">
-                      Users {users && `{ ${users.length} }`}
-                    </span>
-                    <ul>
-                      {users &&
-                        users.map((user, index) => (
-                          <li key={user.id}>
-                            {index + 1}. <i>{user.username}</i>
-                          </li>
-                        ))}
-                    </ul>
-                  </div>
-                </div>
+                <Users users={users} />
               </div>
             </aside>
           </div>
