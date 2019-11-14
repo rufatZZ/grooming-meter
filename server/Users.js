@@ -15,7 +15,7 @@ class Users {
     const user = this.getUser(id);
     if (user) {
       const userIndex = this.users.findIndex(user => user.id === id);
-      return this.users.splice(userIndex, 1);
+      this.users.splice(userIndex, 1);
     }
   }
 

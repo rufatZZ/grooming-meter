@@ -53,10 +53,13 @@ io.on("connection", socket => {
   });
 
   socket.on("disconnect", () => {
-    const user = users.remove(socket.id);
+    const user = users.getUser(socket.id);
 
     if (user) {
+      users.remove(socket.id);
+      votes.removeVote(socket.id);
       io.to(session).emit("updateUsers", users.getList());
+      io.to(session).emit("updateVotes", votes.getList());
       socket.disconnect(user.session);
     }
   });

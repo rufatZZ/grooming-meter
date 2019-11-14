@@ -12,6 +12,13 @@ class Votes {
     }
   }
 
+  removeVote(id) {
+    const voterIndex = this.votes.findIndex(user => user.id === id);
+    if (~voterIndex) {
+      return this.votes.splice(voterIndex, 1);
+    }
+  }
+
   getList() {
     return this.votes;
   }

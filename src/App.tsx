@@ -45,11 +45,8 @@ class App extends Component<IProps, IState> {
     socket = io(endpoint, { query: `session=${12345}` });
     socket.emit("join", { username });
     this.setState({ username });
-    socket.on("updateUsers", (users: IUser[]) => {
-      this.setState({ users });
-    });
-
-    socket.on("updateVotes", (votes: IVote[]) => console.log(votes));
+    socket.on("updateUsers", (users: IUser[]) => this.setState({ users }));
+    socket.on("updateVotes", (votes: IVote[]) => this.setState({ votes }));
   }
 
   componentWillUnmount() {
@@ -57,7 +54,6 @@ class App extends Component<IProps, IState> {
   }
 
   handleVote = (value?: string) => {
-    console.log(value);
     this.setState({ userVote: value });
     socket.emit("vote", { vote: value });
   };
