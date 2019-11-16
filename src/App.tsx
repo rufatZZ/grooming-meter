@@ -28,6 +28,8 @@ class App extends Component<IProps, IState> {
     this.state = {
       endpoint: "http://127.0.0.1:5000/",
       userVote: "",
+      users: [],
+      votes: [],
       options: [
         { value: "1" },
         { value: "2" },
@@ -59,7 +61,7 @@ class App extends Component<IProps, IState> {
   };
 
   render() {
-    const { users, username, options, userVote } = this.state;
+    const { users, username, options, votes, userVote } = this.state;
 
     return (
       <div className="App">
@@ -71,6 +73,7 @@ class App extends Component<IProps, IState> {
             <main className="content">
               <Voting
                 options={options}
+                votes={votes}
                 userVote={userVote}
                 handleVoting={this.handleVote}
               />

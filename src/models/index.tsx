@@ -6,7 +6,7 @@ export interface IUser {
 
 export interface IVote {
   id?: string;
-  value?: string;
+  vote?: string;
 }
 
 export interface IOption {
