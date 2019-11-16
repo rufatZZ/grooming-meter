@@ -1,9 +1,10 @@
 import React from "react";
 
-import { IOption } from "./../../models";
+import { IOption, IVote } from "./../../models";
 
 interface IProps {
   options?: IOption[];
+  votes?: IVote[];
   userVote?: string;
   handleVoting: (value: string) => void;
 }
