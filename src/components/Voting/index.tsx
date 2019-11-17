@@ -10,7 +10,17 @@ interface IProps {
 }
 
 export const Voting: React.FC<IProps> = props => {
-  const { options, userVote, handleVoting } = props;
+  const { options, userVote, votes, handleVoting } = props;
+
+  // const groupBy = <TItem, TKey>(items: Array<TItem>, key: TKey) => {
+  //   return items.reduce((acc, current) => {
+  //     let _acc = [].concat();
+  //     (_acc[current[key]] = _acc[current[key]] || []).push(current);
+  //     return acc;
+  //   }, []);
+  // };
+
+  // const filteredVotes = groupBy(votes || [], "vote");
 
   const renderOptions = () => (
     <div className="voting-list mt-1 d-flex flex-row">

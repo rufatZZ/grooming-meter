@@ -163,5 +163,10 @@ aside .timer .timer-time {
   font-weight: 600;
 }
 
-aside.users {
+aside .users .users-list li{
+  margin-bottom: 2px;
+}
+
+aside .users .users-list .user-list-item-voted {
+  background-color: #51c19d;
 }
