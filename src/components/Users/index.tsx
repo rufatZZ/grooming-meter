@@ -20,7 +20,7 @@ export const Users: React.FC<IProps> = props => {
             users.map(user => (
               <li
                 key={user.id}
-                className={classnames({ "user-list-item-voted": false })}
+                className={classnames({ "user-list-item-voted": user.isVoted })}
               >
                 <span
                   className={classnames({

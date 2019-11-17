@@ -35,7 +35,7 @@ io.on("connection", socket => {
   socket.join(session);
   socket.on("join", params => {
     const { username } = params;
-    const newUser = { id: socket.id, username, session };
+    const newUser = { id: socket.id, username, session, isVoted: false };
 
     users.add(newUser);
     io.to(session).emit("updateUsers", users.getList());
@@ -45,6 +45,8 @@ io.on("connection", socket => {
     const { vote } = params;
     const newVote = { id: socket.id, vote };
     votes.addVote(newVote);
+    users.userVoted(socket.id);
+    io.to(session).emit("updateUsers", users.getList());
     io.to(session).emit("updateVotes", votes.getList());
   });
 

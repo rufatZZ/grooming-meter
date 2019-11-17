@@ -11,6 +11,14 @@ class Users {
     return this.users.find(user => user.id === id);
   }
 
+  userVoted(id) {
+    const user = this.getUser(id);
+    if (user) {
+      const userIndex = this.users.findIndex(user => user.id === id);
+      this.users[userIndex].isVoted = true;
+    }
+  }
+
   remove(id) {
     const user = this.getUser(id);
     if (user) {
