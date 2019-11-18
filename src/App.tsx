@@ -3,9 +3,9 @@ import io from "socket.io-client";
 
 import { IOption, IUser, IVote } from "./models";
 
-import { Voting } from "./components/Voting";
 import { Timer } from "./components/Timer";
 import { Users } from "./components/Users";
+import { Voting } from "./components/Voting";
 
 import "./App.css";
 
@@ -47,6 +47,7 @@ class App extends Component<IProps, IState> {
     socket = io(endpoint, { query: `session=${12345}` });
     socket.emit("join", { username });
     this.setState({ username });
+
     socket.on("updateUsers", (users: IUser[]) => this.setState({ users }));
     socket.on("updateVotes", (votes: IVote[]) => this.setState({ votes }));
   }

@@ -38,14 +38,17 @@ io.on("connection", socket => {
     const newUser = { id: socket.id, username, session, isVoted: false };
 
     users.add(newUser);
+
     io.to(session).emit("updateUsers", users.getList());
   });
 
   socket.on("vote", params => {
     const { vote } = params;
     const newVote = { id: socket.id, vote };
+
     votes.addVote(newVote);
     users.userVoted(socket.id);
+
     io.to(session).emit("updateUsers", users.getList());
     io.to(session).emit("updateVotes", votes.getList());
   });
@@ -60,8 +63,10 @@ io.on("connection", socket => {
     if (user) {
       users.remove(socket.id);
       votes.removeVote(socket.id);
+
       io.to(session).emit("updateUsers", users.getList());
       io.to(session).emit("updateVotes", votes.getList());
+      
       socket.disconnect(user.session);
     }
   });
