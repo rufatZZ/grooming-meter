@@ -7,7 +7,7 @@ export const Timer: React.FC = () => {
         <span className="subtitle">Time</span>
         <br />
         <div className="timer-time text-center">
-          <span>12:53</span>
+          <span>00:00</span>
         </div>
       </div>
     </div>
