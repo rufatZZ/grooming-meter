@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { IOption, IVote } from "./../../models";
 
@@ -11,6 +11,7 @@ interface IProps {
 
 export const Voting: React.FC<IProps> = props => {
   const { options, userVote, votes, handleVoting } = props;
+  const [isShowing, toggleShow] = useState();
 
   // const groupBy = <TItem, TKey>(items: Array<TItem>, key: TKey) => {
   //   return items.reduce((acc, current) => {
@@ -48,8 +49,17 @@ export const Voting: React.FC<IProps> = props => {
       </div>
 
       <div className="panel panel-primary">
-        <div className="subtitle">Results</div>
-        <div className="mt-1"></div>
+        <div className="d-flex flex-row flex-align-flex-end">
+          <div className="subtitle">Results</div>
+          <button
+            className="btn ml-1 mr-1 bg-success"
+            onClick={() => toggleShow(!isShowing)}
+          >
+            Show
+          </button>
+          <button className="btn bg-danger">Reset</button>
+        </div>
+        <div className="mt-1">{isShowing && "Results"}</div>
       </div>
     </div>
   );

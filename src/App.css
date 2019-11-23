@@ -3,15 +3,30 @@
   height: 100vh;
 }
 
+.btn {
+  border: none;
+  border-radius: 5px;
+  padding: 5px 15px;
+  font-size: 16px;
+  color: white;
+}
+
+.btn:hover {
+  cursor: pointer;
+}
+
+.btn:focus {
+  outline: none;
+}
+
 .global-container {
   width: 100%;
   height: inherit;
 }
 
-.font-bold{
+.font-bold {
   font-weight: 700;
 }
-
 
 .text-center {
   text-align: center;
@@ -34,6 +49,10 @@
   align-items: center;
 }
 
+.flex-align-flex-end{
+  align-items: flex-end;
+}
+
 .flex-justify-center {
   justify-content: center;
 }
@@ -45,19 +64,19 @@
   margin: 5px;
 }
 
-.panel-primary {
+.bg-primary {
   background-color: white;
 }
 
-.panel-danger {
+.bg-danger {
   background-color: #fe6d6a;
 }
 
-.panel-success {
+.bg-success {
   background-color: #51c19d;
 }
 
-.panel-warning {
+.bg-warning {
   background-color: #ffc148;
 }
 
@@ -97,30 +116,6 @@ ul {
   list-style-type: none;
 }
 
-.voting-list-item label{
-  color: white;
-  font-size: 16px;
-  padding: 5px 15px;
-  margin: 0px 5px;
-  border-radius: 5px;
-  background-color: #51c19d;
-}
-
-.voting-list-item label:hover{
-  cursor: pointer;
-  background-color: #3ba582;
-}
-
-.voting-list-item input {
-  width: 1px;
-  height: 1px;
-  position: absolute;
-}
-
-.voting-list > .voting-list-item input:checked + label {
-  background-color: #308c6e;
-}
-
 /* Custom styles */
 
 nav {
@@ -158,12 +153,36 @@ aside {
   position: relative;
 }
 
+.voting-list-item label {
+  color: white;
+  font-size: 16px;
+  padding: 5px 15px;
+  margin: 0px 5px;
+  border-radius: 5px;
+  background-color: #51c19d;
+}
+
+.voting-list-item label:hover {
+  cursor: pointer;
+  background-color: #3ba582;
+}
+
+.voting-list-item input {
+  width: 1px;
+  height: 1px;
+  position: absolute;
+}
+
+.voting-list > .voting-list-item input:checked + label {
+  background-color: #308c6e;
+}
+
 aside .timer .timer-time {
   font-size: 48px;
   font-weight: 600;
 }
 
-aside .users .users-list li{
+aside .users .users-list li {
   margin-bottom: 2px;
 }
 
