@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import classnames from "classnames";
 
 import { IOption, IVote } from "./../../models";
 
@@ -11,7 +12,11 @@ interface IProps {
 
 export const Voting: React.FC<IProps> = props => {
   const { options, userVote, votes, handleVoting } = props;
-  const [isShowing, toggleShow] = useState();
+  const [isShowing, toggleShow] = useState(false);
+  const resultList = classnames({
+    "result-list-hidden": !isShowing,
+    "result-list-open": isShowing
+  });
 
   // const groupBy = <TItem, TKey>(items: Array<TItem>, key: TKey) => {
   //   return items.reduce((acc, current) => {
@@ -59,7 +64,15 @@ export const Voting: React.FC<IProps> = props => {
           </button>
           <button className="btn bg-danger">Reset</button>
         </div>
-        <div className="mt-1">{isShowing && "Results"}</div>
+        <div className="mt-1">
+          {isShowing && (
+            <div className={`d-flex flex-column ${resultList}`}>
+              <div className="panel bg-warning result-list-item">13</div>
+              <div className="panel bg-warning result-list-item">5</div>
+              <div className="panel bg-warning result-list-item">8</div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
