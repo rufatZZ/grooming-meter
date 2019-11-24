@@ -2,9 +2,11 @@ const express = require("express");
 const socketIO = require("socket.io");
 const http = require("http");
 const path = require("path");
+const moment = require("moment");
 
 const { Users } = require("./Users");
 const { Votes } = require("./Votes");
+const { Timer } = require("./Timer");
 
 const publicPath = path.join(__dirname, "../public");
 const PORT = process.env.PORT || 5000;
@@ -33,6 +35,7 @@ io.on("connection", socket => {
   const { session } = socket.handshake.query;
 
   socket.join(session);
+
   socket.on("join", params => {
     const { username } = params;
     const newUser = { id: socket.id, username, session, isVoted: false };
@@ -66,7 +69,7 @@ io.on("connection", socket => {
 
       io.to(session).emit("updateUsers", users.getList());
       io.to(session).emit("updateVotes", votes.getList());
-      
+
       socket.disconnect(user.session);
     }
   });

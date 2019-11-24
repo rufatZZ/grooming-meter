@@ -17,6 +17,7 @@ interface IState {
   userVote?: string;
   options?: IOption[];
   votes?: IVote[];
+  timer?: string;
 }
 
 let socket: any;
@@ -30,6 +31,7 @@ class App extends Component<IProps, IState> {
       userVote: "",
       users: [],
       votes: [],
+      timer: "00:00",
       options: [
         { value: "1" },
         { value: "2" },
@@ -50,6 +52,7 @@ class App extends Component<IProps, IState> {
 
     socket.on("updateUsers", (users: IUser[]) => this.setState({ users }));
     socket.on("updateVotes", (votes: IVote[]) => this.setState({ votes }));
+    socket.on("timer", (timer: string) => this.setState({ timer}));
   }
 
   componentWillUnmount() {
@@ -62,7 +65,7 @@ class App extends Component<IProps, IState> {
   };
 
   render() {
-    const { users, username, options, votes, userVote } = this.state;
+    const { users, username, options, votes, timer, userVote } = this.state;
 
     return (
       <div className="App">
@@ -81,7 +84,7 @@ class App extends Component<IProps, IState> {
             </main>
             <aside>
               <div className="content-holder">
-                <Timer />
+                <Timer timer={timer} />
                 <Users users={users} currentUser={username} />
               </div>
             </aside>
