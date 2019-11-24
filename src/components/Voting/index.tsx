@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import classnames from "classnames";
+import isEmpty from 'lodash/isEmpty';
 
 import { IOption, IVote } from "./../../models";
 
@@ -18,15 +19,18 @@ export const Voting: React.FC<IProps> = props => {
     "result-list-open": isShowing
   });
 
-  // const groupBy = <TItem, TKey>(items: Array<TItem>, key: TKey) => {
-  //   return items.reduce((acc, current) => {
-  //     let _acc = [].concat();
-  //     (_acc[current[key]] = _acc[current[key]] || []).push(current);
-  //     return acc;
-  //   }, []);
-  // };
+  // TODO: fix typescript issues
+  const groupBy = <TItem, TKey>(items: Array<TItem>, key: TKey) => {
+    return items.reduce((acc, current) => {
+      //@ts-ignore
+      (acc[current[key]] = acc[current[key]] || []).push(current);
+      return acc;
+    }, []);
+  };
 
-  // const filteredVotes = groupBy(votes || [], "vote");
+  const filteredVotes = groupBy<IVote, string>(votes || [], "vote");
+
+  console.log(filteredVotes);
 
   const renderOptions = () => (
     <div className="voting-list mt-1 d-flex flex-row">
@@ -66,10 +70,19 @@ export const Voting: React.FC<IProps> = props => {
         </div>
         <div className="mt-1">
           {isShowing && (
-            <div className={`d-flex flex-column ${resultList}`}>
-              <div className="panel bg-warning result-list-item">13</div>
-              <div className="panel bg-warning result-list-item">5</div>
-              <div className="panel bg-warning result-list-item">8</div>
+            <div className={`d-flex flex-column`}>
+              {!isEmpty(filteredVotes) ? (
+                filteredVotes.map((vote, index) => (
+                  <div
+                    key={index}
+                    className="panel bg-warning result-list-item"
+                  >
+                    {index}
+                  </div>
+                ))
+              ) : (
+                <div className="panel bg-primary text-center">Empty results</div>
+              )}
             </div>
           )}
         </div>
