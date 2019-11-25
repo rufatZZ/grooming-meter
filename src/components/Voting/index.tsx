@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import classnames from "classnames";
-import isEmpty from 'lodash/isEmpty';
+import isEmpty from "lodash/isEmpty";
 
 import { IOption, IVote } from "./../../models";
 
@@ -8,12 +8,20 @@ interface IProps {
   options?: IOption[];
   votes?: IVote[];
   userVote?: string;
+  isShowing?: boolean;
+  toggleShow: () => void;
   handleVoting: (value: string) => void;
 }
 
 export const Voting: React.FC<IProps> = props => {
-  const { options, userVote, votes, handleVoting } = props;
-  const [isShowing, toggleShow] = useState(false);
+  const {
+    options,
+    userVote,
+    votes,
+    isShowing,
+    toggleShow,
+    handleVoting
+  } = props;
   const resultList = classnames({
     "result-list-hidden": !isShowing,
     "result-list-open": isShowing
@@ -60,9 +68,9 @@ export const Voting: React.FC<IProps> = props => {
           <div className="subtitle">Results</div>
           <button
             className="btn ml-1 mr-1 bg-success"
-            onClick={() => toggleShow(!isShowing)}
+            onClick={toggleShow}
           >
-            Show
+            {!isShowing ? "Show" : "Hide"}
           </button>
           <button className="btn bg-danger">Reset</button>
         </div>
@@ -79,7 +87,9 @@ export const Voting: React.FC<IProps> = props => {
                   </div>
                 ))
               ) : (
-                <div className="panel bg-primary text-center">Empty results</div>
+                <div className="panel bg-primary text-center">
+                  Empty results
+                </div>
               )}
             </div>
           )}

@@ -18,6 +18,7 @@ interface IState {
   options?: IOption[];
   votes?: IVote[];
   timer?: string;
+  isShowing?: boolean;
 }
 
 let socket: any;
@@ -32,6 +33,7 @@ class App extends Component<IProps, IState> {
       users: [],
       votes: [],
       timer: "00:00",
+      isShowing: false,
       options: [
         { value: "1" },
         { value: "2" },
@@ -52,7 +54,9 @@ class App extends Component<IProps, IState> {
 
     socket.on("updateUsers", (users: IUser[]) => this.setState({ users }));
     socket.on("updateVotes", (votes: IVote[]) => this.setState({ votes }));
-    socket.on("timer", (timer: string) => this.setState({ timer}));
+    socket.on("toggleShow", (isShowing: boolean) =>
+      this.setState({ isShowing })
+    );
   }
 
   componentWillUnmount() {
@@ -64,8 +68,20 @@ class App extends Component<IProps, IState> {
     socket.emit("vote", { vote: value });
   };
 
+  toggleShow = () => {
+    socket.emit("handleShow", { isShowing: this.state.isShowing });
+  };
+
   render() {
-    const { users, username, options, votes, timer, userVote } = this.state;
+    const {
+      users,
+      username,
+      options,
+      votes,
+      timer,
+      userVote,
+      isShowing
+    } = this.state;
 
     return (
       <div className="App">
@@ -80,6 +96,8 @@ class App extends Component<IProps, IState> {
                 votes={votes}
                 userVote={userVote}
                 handleVoting={this.handleVote}
+                isShowing={isShowing}
+                toggleShow={this.toggleShow}
               />
             </main>
             <aside>
