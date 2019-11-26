@@ -66,10 +66,7 @@ export const Voting: React.FC<IProps> = props => {
       <div className="panel panel-primary">
         <div className="d-flex flex-row flex-align-flex-end">
           <div className="subtitle">Results</div>
-          <button
-            className="btn ml-1 mr-1 bg-success"
-            onClick={toggleShow}
-          >
+          <button className="btn ml-1 mr-1 bg-success" onClick={toggleShow}>
             {!isShowing ? "Show" : "Hide"}
           </button>
           <button className="btn bg-danger">Reset</button>
