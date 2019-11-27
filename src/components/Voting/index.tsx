@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import classnames from "classnames";
 import isEmpty from "lodash/isEmpty";
 
@@ -22,10 +22,6 @@ export const Voting: React.FC<IProps> = props => {
     toggleShow,
     handleVoting
   } = props;
-  const resultList = classnames({
-    "result-list-hidden": !isShowing,
-    "result-list-open": isShowing
-  });
 
   // TODO: fix typescript issues
   const groupBy = <TItem, TKey>(items: Array<TItem>, key: TKey) => {
@@ -37,6 +33,8 @@ export const Voting: React.FC<IProps> = props => {
   };
 
   const filteredVotes = groupBy<IVote, string>(votes || [], "vote");
+
+  console.log(filteredVotes);
 
   const renderOptions = () => (
     <div className="voting-list mt-1 d-flex flex-row">
@@ -73,7 +71,7 @@ export const Voting: React.FC<IProps> = props => {
         </div>
         <div className="mt-1">
           {isShowing && (
-            <div className={`d-flex flex-column`}>
+            <div className="d-flex flex-column">
               {!isEmpty(filteredVotes) ? (
                 filteredVotes.map((vote, index) => (
                   <div
