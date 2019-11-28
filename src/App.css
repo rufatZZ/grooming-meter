@@ -1,210 +1,210 @@
 .App {
-  background-color: #f0f3f8;
-  height: 100vh;
+    background-color: #f0f3f8;
+    height: 100vh;
 }
 
 .btn {
-  border: none;
-  border-radius: 5px;
-  padding: 5px 15px;
-  font-size: 16px;
-  color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 15px;
+    font-size: 16px;
+    color: white;
 }
 
 .btn:hover {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .btn:focus {
-  outline: none;
+    outline: none;
 }
 
 .global-container {
-  width: 100%;
-  height: inherit;
+    width: 100%;
+    height: inherit;
 }
 
 .font-bold {
-  font-weight: 700;
+    font-weight: 700;
 }
 
 .text-center {
-  text-align: center;
+    text-align: center;
 }
 
 .d-flex {
-  display: flex;
-  height: inherit;
+    display: flex;
+    height: inherit;
 }
 
 .flex-column {
-  flex-direction: column;
+    flex-direction: column;
 }
 
 .flex-row {
-  flex-direction: row;
+    flex-direction: row;
 }
 
 .flex-align-center {
-  align-items: center;
+    align-items: center;
 }
 
 .flex-align-flex-end {
-  align-items: flex-end;
+    align-items: flex-end;
 }
 
 .flex-justify-center {
-  justify-content: center;
+    justify-content: center;
 }
 
 .panel {
-  background-color: #f0f3f8;
-  border-radius: 5px;
-  padding: 10px 15px;
-  margin: 5px 0px;
+    background-color: #f0f3f8;
+    border-radius: 5px;
+    padding: 10px 15px;
+    margin: 5px 0px;
 }
 
 .bg-primary {
-  background-color: white;
+    background-color: white;
 }
 
-.bg-secondary{
-  background-color: #f1f1f1;
+.bg-secondary {
+    background-color: #f1f1f1;
 }
 
 .bg-danger {
-  background-color: #fe6d6a;
+    background-color: #fe6d6a;
 }
 
 .bg-success {
-  background-color: #51c19d;
+    background-color: #51c19d;
 }
 
 .bg-warning {
-  background-color: #ffc148;
+    background-color: #ffc148;
 }
 
 .mt-1 {
-  margin-top: 1em;
+    margin-top: 1em;
 }
 
 .mr-1 {
-  margin-right: 1em;
+    margin-right: 1em;
 }
 
 .mb-1 {
-  margin-bottom: 1em;
+    margin-bottom: 1em;
 }
 
 .ml-1 {
-  margin-left: 1em;
+    margin-left: 1em;
 }
 
 .mt-2 {
-  margin-top: 2em;
+    margin-top: 2em;
 }
 
 .mr-2 {
-  margin-right: 2em;
+    margin-right: 2em;
 }
 
 .mb-2 {
-  margin-bottom: 2em;
+    margin-bottom: 2em;
 }
 
 .ml-2 {
-  margin-left: 2em;
+    margin-left: 2em;
 }
 
 ul {
-  list-style-type: none;
+    list-style-type: none;
 }
 
 /* Custom styles */
 
 nav {
-  width: 100px;
-  background-color: white;
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  color: #09d3ac;
-  text-align: center;
+    width: 100px;
+    background-color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    color: #09d3ac;
+    text-align: center;
 }
 
 main.content {
-  background-color: #f0f3f8;
-  width: calc(70% - 100px);
-  height: inherit;
-  margin-left: 100px;
+    background-color: #f0f3f8;
+    width: calc(70% - 100px);
+    height: inherit;
+    margin-left: 100px;
 }
 
 .content-holder {
-  padding: 15px 20px;
+    padding: 15px 20px;
 }
 
 .subtitle {
-  color: #989898;
-  font-size: 24px;
-  font-weight: 700;
+    color: #989898;
+    font-size: 24px;
+    font-weight: 700;
 }
 
 aside {
-  width: 30%;
-  height: inherit;
-  background-color: white;
-  position: relative;
+    width: 30%;
+    height: inherit;
+    background-color: white;
+    position: relative;
 }
 
 .voting-list-item label {
-  color: white;
-  font-size: 16px;
-  padding: 5px 15px;
-  margin-right: 5px;
-  border-radius: 5px;
-  background-color: #51c19d;
+    color: white;
+    font-size: 16px;
+    padding: 5px 15px;
+    margin-right: 5px;
+    border-radius: 5px;
+    background-color: #51c19d;
 }
 
 .voting-list-item label:hover {
-  cursor: pointer;
-  background-color: #3ba582;
+    cursor: pointer;
+    background-color: #3ba582;
 }
 
 .voting-list-item input {
-  width: 1px;
-  height: 1px;
-  position: absolute;
+    width: 1px;
+    height: 1px;
+    position: absolute;
 }
 
 .voting-list > .voting-list-item input:checked + label {
-  background-color: #308c6e;
+    background-color: #308c6e;
 }
 
 .result-list-item {
-  -moz-transition: width 0.3s ease-in-out;
-  -o-transition: width 0.3s ease-in-out;
-  -webkit-transition: width 0.3s ease-in-out;
-  transition: width 0.3s ease-in-out;
+    -moz-transition: width 0.3s ease-in-out;
+    -o-transition: width 0.3s ease-in-out;
+    -webkit-transition: width 0.3s ease-in-out;
+    transition: width 0.3s ease-in-out;
 }
 
 .results-list-hidden .result-list-item {
-  width: 0%;
+    width: 0%;
 }
 
 .results-list-open .result-list-item {
-  width: 100%;
+    width: 100%;
 }
 
 aside .timer .timer-time {
-  font-size: 48px;
-  font-weight: 600;
+    font-size: 48px;
+    font-weight: 600;
 }
 
 aside .users .users-list li {
-  margin-bottom: 2px;
+    margin-bottom: 2px;
 }
 
 aside .users .users-list .user-list-item-voted {
-  background-color: #51c19d;
+    background-color: #51c19d;
 }

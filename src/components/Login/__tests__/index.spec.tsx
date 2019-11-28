@@ -1,16 +1,15 @@
-import {shallow} from 'enzyme';
+import { shallow } from 'enzyme';
 import React from 'react';
 
-import {Login} from '../index';
+import { Login } from '../index';
 
 const setup = () => {
     const getWrapperShallow = shallow(<Login />);
 
     return {
-        getWrapperShallow
-    }
+        getWrapperShallow,
+    };
 };
-
 
 describe('<Login/>', () => {
     it('should render properly', () => {
