@@ -16,6 +16,7 @@ interface IProps {
 export const Voting: React.FC<IProps> = props => {
     const { options, userVote, votes, isShowing, toggleShow, handleVoting } = props;
 
+    // TODO: fix functionality for grouping itema
     // TODO: fix typescript issues
     const groupBy = <TItem, TKey>(items: Array<TItem>, key: TKey) => {
         return items.reduce((acc, current) => {
@@ -26,8 +27,6 @@ export const Voting: React.FC<IProps> = props => {
     };
 
     const filteredVotes = groupBy<IVote, string>(votes || [], 'vote');
-
-    console.log(filteredVotes);
 
     const renderOptions = () => (
         <div className="voting-list mt-1 d-flex flex-row">
