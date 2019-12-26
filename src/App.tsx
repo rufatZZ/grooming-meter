@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import io from 'socket.io-client';
 
-import { IOption, IUser, IVote } from './models';
+import { IOption, IUser, IVoteRs } from './models';
 
 import { Timer } from './components/Timer';
 import { Users } from './components/Users';
@@ -16,7 +16,7 @@ interface IState {
     username?: string;
     userVote?: string;
     options?: IOption[];
-    votes?: IVote[];
+    votesList?: IVoteRs;
     timer?: string;
     isShowing?: boolean;
 }
@@ -31,7 +31,7 @@ class App extends Component<IProps, IState> {
             endpoint: 'http://127.0.0.1:5000/',
             userVote: '',
             users: [],
-            votes: [],
+            votesList: { votes: [], length: 0 },
             timer: '00:00',
             isShowing: false,
             options: [{ value: '1' }, { value: '2' }, { value: '3' }, { value: '5' }, { value: '8' }, { value: '13' }],
@@ -46,7 +46,7 @@ class App extends Component<IProps, IState> {
         this.setState({ username });
 
         socket.on('updateUsers', (users: IUser[]) => this.setState({ users }));
-        socket.on('updateVotes', (votes: IVote[]) => this.setState({ votes }));
+        socket.on('updateVotes', (votesList: IVoteRs) => this.setState({ votesList }));
         socket.on('toggleShow', (isShowing: boolean) => this.setState({ isShowing }));
     }
 
@@ -68,7 +68,7 @@ class App extends Component<IProps, IState> {
     };
 
     render() {
-        const { users, username, options, votes, timer, userVote, isShowing } = this.state;
+        const { users, username, options, votesList, timer, userVote, isShowing } = this.state;
 
         return (
             <div className="App">
@@ -80,7 +80,7 @@ class App extends Component<IProps, IState> {
                         <main className="content">
                             <Voting
                                 options={options}
-                                votes={votes}
+                                votesList={votesList}
                                 userVote={userVote}
                                 handleVoting={this.handleVote}
                                 isShowing={isShowing}

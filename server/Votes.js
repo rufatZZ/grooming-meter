@@ -1,3 +1,5 @@
+const { groupBy } = require('./utils/array');
+
 class Votes {
     constructor() {
         this.votes = [];
@@ -21,6 +23,17 @@ class Votes {
 
     getList() {
         return this.votes;
+    }
+
+    getFormattedList() {
+        let result = {};
+        if (this.votes) {
+            result = { votes: groupBy(this.votes, 'vote'), length: this.votes.length };
+        } else {
+            result = { votes: [], length: 0 };
+        }
+
+        return result;
     }
 
     reset() {
