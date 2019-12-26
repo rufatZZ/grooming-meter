@@ -63,6 +63,10 @@ class App extends Component<IProps, IState> {
         socket.emit('handleShow', { isShowing: this.state.isShowing });
     };
 
+    handleReset = () => {
+        socket.emit('resetVotes');
+    };
+
     render() {
         const { users, username, options, votes, timer, userVote, isShowing } = this.state;
 
@@ -81,6 +85,7 @@ class App extends Component<IProps, IState> {
                                 handleVoting={this.handleVote}
                                 isShowing={isShowing}
                                 toggleShow={this.toggleShow}
+                                handleReset={this.handleReset}
                             />
                         </main>
                         <aside>
