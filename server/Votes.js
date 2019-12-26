@@ -1,31 +1,32 @@
 class Votes {
-  constructor() {
-    this.votes = [];
-  }
-
-  addVote(vote) {
-    const voterIndex = this.votes.findIndex(user => user.id === vote.id);
-    if (~voterIndex) {
-      this.votes[voterIndex] = vote;
-    } else {
-      this.votes.push(vote);
+    constructor() {
+        this.votes = [];
     }
-  }
 
-  removeVote(id) {
-    const voterIndex = this.votes.findIndex(user => user.id === id);
-    if (~voterIndex) {
-      return this.votes.splice(voterIndex, 1);
+    addVote(vote) {
+        const voterIndex = this.votes.findIndex(user => user.id === vote.id);
+        if (~voterIndex) {
+            this.votes[voterIndex] = vote;
+        } else {
+            this.votes.push(vote);
+        }
     }
-  }
 
-  getList() {
-    return this.votes;
-  }
+    removeVote(id) {
+        const voterIndex = this.votes.findIndex(user => user.id === id);
+        if (~voterIndex) {
+            return this.votes.splice(voterIndex, 1);
+        }
+    }
 
-  reset() {
-    return (this.votes = []);
-  }
+    getList() {
+        return this.votes;
+    }
+
+    reset() {
+        this.votes = [];
+        return this.votes;
+    }
 }
 
 module.exports = { Votes };

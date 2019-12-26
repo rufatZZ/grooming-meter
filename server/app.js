@@ -30,7 +30,6 @@ app.use(express.static(publicPath));
 let io = new socketIO(server);
 const users = new Users();
 const votes = new Votes();
-let isShowing = false;
 
 io.on("connection", socket => {
   const { session } = socket.handshake.query;
@@ -61,6 +60,13 @@ io.on("connection", socket => {
     const { isShowing } = params;
 
     io.to(session).emit("toggleShow", !isShowing);
+  });
+
+  socket.on("resetVotes", () => {
+    votes.reset();
+
+    io.to(session).emit("toggleShow", false);
+    io.to(session).emit("updateVotes", votes.getList());
   });
 
   socket.on("leave", () => {

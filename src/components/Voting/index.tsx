@@ -10,11 +10,13 @@ interface IProps {
     userVote?: string;
     isShowing?: boolean;
     toggleShow: () => void;
+    handleReset: () => void;
     handleVoting: (value: string) => void;
 }
 
 export const Voting: React.FC<IProps> = props => {
-    const { options, userVote, votes, isShowing, toggleShow, handleVoting } = props;
+    const { options, userVote, votes, isShowing, toggleShow, handleReset, handleVoting } = props;
+    const votesCount = votes ? votes.length : 0;
 
     // TODO: fix functionality for grouping itema
     // TODO: fix typescript issues
@@ -59,17 +61,25 @@ export const Voting: React.FC<IProps> = props => {
                     <button className="btn ml-1 mr-1 bg-success" onClick={toggleShow}>
                         {!isShowing ? 'Show' : 'Hide'}
                     </button>
-                    <button className="btn bg-danger">Reset</button>
+                    <button className="btn bg-danger" onClick={handleReset}>Reset</button>
                 </div>
                 <div className="mt-1">
                     {isShowing && (
                         <div className="d-flex flex-column">
                             {!isEmpty(filteredVotes) ? (
-                                filteredVotes.map((vote, index) => (
-                                    <div key={index} className="panel bg-warning result-list-item">
-                                        {index}
-                                    </div>
-                                ))
+                                filteredVotes.map((vote, index) => {
+                                    //@ts-ignore
+                                    const len = vote.length;
+                                    return (
+                                        <div
+                                            key={index}
+                                            className="panel bg-warning result-list-item"
+                                            style={{ width: `${(len / votesCount) * 100}%` }}
+                                        >
+                                            {index}
+                                        </div>
+                                    );
+                                })
                             ) : (
                                 <div className="panel bg-primary text-center">Empty results</div>
                             )}
