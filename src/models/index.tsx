@@ -10,6 +10,11 @@ export interface IVote {
     vote?: string;
 }
 
+export interface IVoteRs {
+    votes?: Array<IVote[]>;
+    length?: number;
+}
+
 export interface IOption {
     value?: string;
 }

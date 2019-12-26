@@ -1,12 +1,10 @@
 import React from 'react';
-import classnames from 'classnames';
-import isEmpty from 'lodash/isEmpty';
 
-import { IOption, IVote } from './../../models';
+import { IOption, IVoteRs } from 'models';
 
 interface IProps {
     options?: IOption[];
-    votes?: IVote[];
+    votesList?: IVoteRs;
     userVote?: string;
     isShowing?: boolean;
     toggleShow: () => void;
@@ -15,20 +13,8 @@ interface IProps {
 }
 
 export const Voting: React.FC<IProps> = props => {
-    const { options, userVote, votes, isShowing, toggleShow, handleReset, handleVoting } = props;
-    const votesCount = votes ? votes.length : 0;
-
-    // TODO: fix functionality for grouping itema
-    // TODO: fix typescript issues
-    const groupBy = <TItem, TKey>(items: Array<TItem>, key: TKey) => {
-        return items.reduce((acc, current) => {
-            //@ts-ignore
-            (acc[current[key]] = acc[current[key]] || []).push(current);
-            return acc;
-        }, []);
-    };
-
-    const filteredVotes = groupBy<IVote, string>(votes || [], 'vote');
+    const { options, userVote, votesList, isShowing, toggleShow, handleReset, handleVoting } = props;
+    const { votes, length: votesLen = 0 } = votesList || ({} as IVoteRs);
 
     const renderOptions = () => (
         <div className="voting-list mt-1 d-flex flex-row">
@@ -61,23 +47,25 @@ export const Voting: React.FC<IProps> = props => {
                     <button className="btn ml-1 mr-1 bg-success" onClick={toggleShow}>
                         {!isShowing ? 'Show' : 'Hide'}
                     </button>
-                    <button className="btn bg-danger" onClick={handleReset}>Reset</button>
+                    <button className="btn bg-danger" onClick={handleReset}>
+                        Reset
+                    </button>
                 </div>
                 <div className="mt-1">
                     {isShowing && (
                         <div className="d-flex flex-column">
-                            {!isEmpty(filteredVotes) ? (
-                                filteredVotes.map((vote, index) => {
-                                    //@ts-ignore
-                                    const len = vote.length;
+                            {votes ? (
+                                votes.map((vote, index) => {
                                     return (
-                                        <div
-                                            key={index}
-                                            className="panel bg-warning result-list-item"
-                                            style={{ width: `${(len / votesCount) * 100}%` }}
-                                        >
-                                            {index}
-                                        </div>
+                                        vote && (
+                                            <div
+                                                key={index}
+                                                className="panel bg-warning result-list-item"
+                                                style={{ width: `${(vote.length / votesLen) * 100}%` }}
+                                            >
+                                                {index}
+                                            </div>
+                                        )
                                     );
                                 })
                             ) : (
