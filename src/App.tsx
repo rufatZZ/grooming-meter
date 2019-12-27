@@ -60,7 +60,7 @@ class App extends Component<IProps, IState> {
     };
 
     toggleShow = () => {
-        socket.emit('handleShow', { isShowing: this.state.isShowing });
+        socket.emit('handleShow', { isShowing: !this.state.isShowing });
     };
 
     handleReset = () => {

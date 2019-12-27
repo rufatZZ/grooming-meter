@@ -3,6 +3,7 @@ const { groupBy } = require('./utils/array');
 class Votes {
     constructor() {
         this.votes = [];
+        this.isShowing = false;
     }
 
     addVote(vote) {
@@ -34,6 +35,14 @@ class Votes {
         }
 
         return result;
+    }
+
+    setShowViteList(show){
+        this.isShowing = show;
+    }
+
+    get showVoteList(){
+        return this.isShowing;
     }
 
     reset() {
