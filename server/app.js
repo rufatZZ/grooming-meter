@@ -40,6 +40,8 @@ io.on('connection', socket => {
         users.add(newUser);
 
         io.to(session).emit('updateUsers', users.getList());
+        io.to(session).emit('updateVotes', votes.getFormattedList());
+        io.to(session).emit('toggleShow', votes.showVoteList);
     });
 
     socket.on('vote', params => {
@@ -54,15 +56,16 @@ io.on('connection', socket => {
     });
 
     socket.on('handleShow', params => {
-        const { isShowing } = params;
+        votes.setShowViteList(params.isShowing);
 
-        io.to(session).emit('toggleShow', !isShowing);
+        io.to(session).emit('toggleShow', votes.showVoteList);
     });
 
     socket.on('resetVotes', () => {
         votes.reset();
+        votes.setShowViteList(false);
 
-        io.to(session).emit('toggleShow', false);
+        io.to(session).emit('toggleShow', votes.showVoteList);
         io.to(session).emit('updateVotes', votes.getList());
     });
 
