@@ -2,7 +2,7 @@ const express = require('express');
 const socketIO = require('socket.io');
 const http = require('http');
 const path = require('path');
-const moment = require('moment');
+const _ = require('lodash');
 
 const { Users } = require('./Users');
 const { Votes } = require('./Votes');
@@ -84,6 +84,11 @@ io.on('connection', socket => {
             io.to(session).emit('updateVotes', votes.getList());
 
             socket.disconnect(user.session);
+        }
+
+        if(_.isEmpty(users.getList())){
+            votes.reset();
+            votes.setShowViteList(false);
         }
     });
 });
