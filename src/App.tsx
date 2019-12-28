@@ -31,7 +31,7 @@ class App extends Component<IProps, IState> {
             endpoint: 'http://127.0.0.1:5000/',
             userVote: '',
             users: [],
-            votesList: { votes: [], length: 0 },
+            votesList: { votes: [], length: 0, average: 0 },
             timer: '00:00',
             isShowing: false,
             options: [{ value: '1' }, { value: '2' }, { value: '3' }, { value: '5' }, { value: '8' }, { value: '13' }],
