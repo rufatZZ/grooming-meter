@@ -1,4 +1,4 @@
-const { groupBy } = require('./utils/array');
+const { avgerageSum, groupBy } = require('./utils/array');
 
 class Votes {
     constructor() {
@@ -29,19 +29,19 @@ class Votes {
     getFormattedList() {
         let result = {};
         if (this.votes) {
-            result = { votes: groupBy(this.votes, 'vote'), length: this.votes.length };
+            result = { votes: groupBy(this.votes, 'vote'), length: this.votes.length, average: avgerageSum(this.votes) };
         } else {
-            result = { votes: [], length: 0 };
+            result = { votes: [], length: 0, average: 0 };
         }
 
         return result;
     }
 
-    setShowViteList(show){
+    setShowViteList(show) {
         this.isShowing = show;
     }
 
-    get showVoteList(){
+    get showVoteList() {
         return this.isShowing;
     }
 

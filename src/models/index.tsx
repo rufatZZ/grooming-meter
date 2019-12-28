@@ -11,8 +11,9 @@ export interface IVote {
 }
 
 export interface IVoteRs {
-    votes?: Array<IVote[]>;
-    length?: number;
+    votes: Array<IVote[]>;
+    length: number;
+    average: number;
 }
 
 export interface IOption {

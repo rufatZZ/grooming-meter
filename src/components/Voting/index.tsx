@@ -1,4 +1,5 @@
 import React from 'react';
+import { isEmpty } from 'lodash';
 
 import { IOption, IVoteRs } from 'models';
 
@@ -14,7 +15,7 @@ interface IProps {
 
 export const Voting: React.FC<IProps> = props => {
     const { options, userVote, votesList, isShowing, toggleShow, handleReset, handleVoting } = props;
-    const { votes, length: votesLen = 0 } = votesList || ({} as IVoteRs);
+    const { votes, length: votesLen = 0, average } = votesList || ({} as IVoteRs);
 
     const renderOptions = () => (
         <div className="voting-list mt-1 d-flex flex-row">
@@ -51,29 +52,38 @@ export const Voting: React.FC<IProps> = props => {
                         Reset
                     </button>
                 </div>
-                <div className="mt-1">
-                    {isShowing && (
-                        <div className="d-flex flex-column">
-                            {votes ? (
-                                votes.map((vote, index) => {
-                                    return (
-                                        vote && (
-                                            <div
-                                                key={index}
-                                                className="panel bg-warning result-list-item"
-                                                style={{ width: `${(vote.length / votesLen) * 100}%` }}
-                                            >
-                                                {index}
-                                            </div>
-                                        )
-                                    );
-                                })
-                            ) : (
-                                <div className="panel bg-primary text-center">Empty results</div>
-                            )}
+                {isShowing && (
+                    <div className="d-flex flex-row flex-align-center bg-primary px-1 py-1">
+                        <div style={{ width: '75%' }}>
+                            <div className="d-flex flex-column">
+                                {!isEmpty(votes) ? (
+                                    votes.map((vote, index) => {
+                                        return (
+                                            vote && (
+                                                <div
+                                                    key={index}
+                                                    className="panel bg-warning result-list-item"
+                                                    style={{ width: `${(vote.length / votesLen) * 100}%` }}
+                                                >
+                                                    {index}
+                                                </div>
+                                            )
+                                        );
+                                    })
+                                ) : (
+                                    <div className="panel bg-primary text-center">Empty results</div>
+                                )}
+                            </div>
                         </div>
-                    )}
-                </div>
+
+                        <div style={{ width: '25%' }}>
+                            <div className="final-result text-center">
+                                <span className="d-block final-result-title">Final</span>
+                                <span className="d-block final-result-body">{average}</span>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );

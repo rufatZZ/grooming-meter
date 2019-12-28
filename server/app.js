@@ -66,7 +66,7 @@ io.on('connection', socket => {
         votes.setShowViteList(false);
 
         io.to(session).emit('toggleShow', votes.showVoteList);
-        io.to(session).emit('updateVotes', votes.getList());
+        io.to(session).emit('updateVotes', votes.getFormattedList());
     });
 
     socket.on('leave', () => {
