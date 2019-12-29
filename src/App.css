@@ -231,6 +231,16 @@ aside {
     width: 100%;
 }
 
+.final-result-title{
+    font-size: 24px;
+    font-weight: 600;
+} 
+
+.final-result-body{
+    font-size: 36px;
+    font-weight: 700;
+}
+
 aside .timer .timer-time {
     font-size: 48px;
     font-weight: 600;
