@@ -221,6 +221,8 @@ aside {
     -o-transition: width 0.3s ease-in-out;
     -webkit-transition: width 0.3s ease-in-out;
     transition: width 0.3s ease-in-out;
+    font-size: 20px;
+    font-weight: 700;
 }
 
 .results-list-hidden .result-list-item {
@@ -229,6 +231,16 @@ aside {
 
 .results-list-open .result-list-item {
     width: 100%;
+}
+
+.final-result-title{
+    font-size: 24px;
+    font-weight: 600;
+} 
+
+.final-result-body{
+    font-size: 36px;
+    font-weight: 700;
 }
 
 aside .timer .timer-time {

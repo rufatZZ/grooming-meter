@@ -81,7 +81,7 @@ io.on('connection', socket => {
             votes.removeVote(socket.id);
 
             io.to(session).emit('updateUsers', users.getList());
-            io.to(session).emit('updateVotes', votes.getList());
+            io.to(session).emit('updateVotes', votes.getFormattedList());
 
             socket.disconnect(user.session);
         }

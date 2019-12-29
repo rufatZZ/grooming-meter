@@ -53,35 +53,36 @@ export const Voting: React.FC<IProps> = props => {
                     </button>
                 </div>
                 {isShowing && (
-                    <div className="d-flex flex-row flex-align-center bg-primary px-1 py-1">
-                        <div style={{ width: '75%' }}>
-                            <div className="d-flex flex-column">
-                                {!isEmpty(votes) ? (
-                                    votes.map((vote, index) => {
-                                        return (
-                                            vote && (
-                                                <div
-                                                    key={index}
-                                                    className="panel bg-warning result-list-item"
-                                                    style={{ width: `${(vote.length / votesLen) * 100}%` }}
-                                                >
-                                                    {index}
-                                                </div>
-                                            )
-                                        );
-                                    })
-                                ) : (
-                                    <div className="panel bg-primary text-center">Empty results</div>
-                                )}
+                    <div className="mt-1">
+                        {!isEmpty(votes) ? (
+                            <div className="d-flex flex-row flex-align-center bg-primary px-1 py-1">
+                                <div style={{ width: '75%' }}>
+                                    <div className="d-flex flex-column">
+                                        {votes.map((vote, index) => {
+                                            return (
+                                                vote && (
+                                                    <div
+                                                        key={index}
+                                                        className="panel bg-warning result-list-item"
+                                                        style={{ width: `${(vote.length / votesLen) * 100}%` }}
+                                                    >
+                                                        {index}
+                                                    </div>
+                                                )
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                                <div className="ml-1" style={{ width: '25%' }}>
+                                    <div className="panel final-result text-center">
+                                        <span className="d-block final-result-title">Final</span>
+                                        <span className="d-block final-result-body">{average}</span>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-
-                        <div style={{ width: '25%' }}>
-                            <div className="final-result text-center">
-                                <span className="d-block final-result-title">Final</span>
-                                <span className="d-block final-result-body">{average}</span>
-                            </div>
-                        </div>
+                        ) : (
+                            <div className="panel bg-primary text-center">Empty results</div>
+                        )}
                     </div>
                 )}
             </div>
