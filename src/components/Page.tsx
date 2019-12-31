@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import io from 'socket.io-client';
 
 import { IOption, IUser, IVoteRs } from 'models';
+import { endpoint } from 'consts';
 
 import { Timer } from 'components/Timer';
 import { Users } from 'components/Users';
@@ -26,7 +27,6 @@ class GroomingMeter extends Component<IProps, IState> {
         super(props);
 
         this.state = {
-            endpoint: 'http://127.0.0.1:5000/',
             userVote: '',
             users: [],
             votesList: { votes: [], length: 0, average: 0 },
@@ -37,7 +37,6 @@ class GroomingMeter extends Component<IProps, IState> {
     }
 
     componentDidMount() {
-        const { endpoint } = this.state;
         const username = `${Date.now()}`;
         socket = io(endpoint, { query: `session=${12345}` });
         socket.emit('join', { username });
