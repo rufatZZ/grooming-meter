@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-import GroomingMeter from './components/Page';
+import GroomingMeter from 'components/Page';
 
 import './App.css';
 

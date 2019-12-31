@@ -1,7 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 
-import { IUser } from './../../models';
+import { IUser } from 'models';
 
 interface IProps {
     users?: IUser[];
