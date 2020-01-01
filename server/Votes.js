@@ -37,7 +37,7 @@ class Votes {
         return result;
     }
 
-    setShowViteList(show) {
+    setShowVoteList(show) {
         this.isShowing = show;
     }
 
