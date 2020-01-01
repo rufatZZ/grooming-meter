@@ -56,16 +56,18 @@ io.on('connection', socket => {
     });
 
     socket.on('handleShow', params => {
-        votes.setShowViteList(params.isShowing);
+        votes.setShowVoteList(params.isShowing);
 
         io.to(session).emit('toggleShow', votes.showVoteList);
     });
 
     socket.on('resetVotes', () => {
         votes.reset();
-        votes.setShowViteList(false);
+        users.userVoted();
+        votes.setShowVoteList(false);
 
         io.to(session).emit('toggleShow', votes.showVoteList);
+        io.to(session).emit('updateUsers', users.getList()); 
         io.to(session).emit('updateVotes', votes.getFormattedList());
     });
 
@@ -88,7 +90,7 @@ io.on('connection', socket => {
 
         if(_.isEmpty(users.getList())){
             votes.reset();
-            votes.setShowViteList(false);
+            votes.setShowVoteList(false);
         }
     });
 });
