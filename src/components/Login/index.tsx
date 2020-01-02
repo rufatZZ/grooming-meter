@@ -1,5 +1,9 @@
 import React from 'react';
 
 export const Login = () => {
-    return <div>Login</div>;
+    return (
+        <main className="content">
+            <h1>Login</h1>
+        </main>
+    );
 };
