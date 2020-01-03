@@ -168,6 +168,31 @@ nav {
     text-align: center;
 }
 
+main.login {
+    background-color: #f0f3f8;
+    width: calc(100% - 100px);
+    height: 400px;
+    margin-left: 100px;    
+}
+
+
+main.login input{
+    font-size: 24px;
+    border: 1px solid lightgrey;
+    border-radius: 5px;
+    padding: 16px 20px;
+    margin-right: 10px;
+}
+
+main.login button {
+    background-color: #51c19d;
+    color: white;
+    font-size: 24px;
+    padding: 16px 40px;
+    border: 1px solid lightgrey;
+    border-radius: 5px;
+}
+
 main.content {
     background-color: #f0f3f8;
     width: calc(70% - 100px);
