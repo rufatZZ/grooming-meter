@@ -44,7 +44,7 @@ export const GroomingMeter: React.FC<IProps> = props => {
         socket.on('updateVotes', (votesList: IVoteRs) => setVotesList(votesList));
         socket.on('toggleShow', (isShowing: boolean) => toggleShowing(isShowing));
 
-        return socket.emit('leave');
+        return () => socket.emit('leave');
     }, []);
 
     const handleVote = (value: string) => {
