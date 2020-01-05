@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 
 import { IOption, IUser, IVoteRs } from 'models';
@@ -22,73 +22,63 @@ interface IState {
 
 let socket: any;
 
-class GroomingMeter extends Component<IProps, IState> {
-    constructor(props: IProps) {
-        super(props);
+export const GroomingMeter: React.FC<IProps> = props => {
+    const [username, setUsername] = useState('');
+    const [userVote, setUserVote] = useState('');
+    const [users, setUsers] = useState([]);
+    const [votesList, setVotesList] = useState({ votes: [], length: 0, average: 0 });
+    const [isShowing, toggleShowing] = useState(false);
 
-        this.state = {
-            userVote: '',
-            users: [],
-            votesList: { votes: [], length: 0, average: 0 },
-            timer: '00:00',
-            isShowing: false,
-            options: [{ value: '1' }, { value: '2' }, { value: '3' }, { value: '5' }, { value: '8' }, { value: '13' }],
-        };
-    }
+    const options: Array<any> = [{ value: '1' }, { value: '2' }, { value: '3' }, { value: '5' }, { value: '8' }, { value: '13' }];
+    const timer = '00:00';
 
-    componentDidMount() {
+    useEffect(() => {
         const username = `${Date.now()}`;
         socket = io(endpoint, { query: `session=${12345}` });
         socket.emit('join', { username });
-        this.setState({ username });
+        setUsername(username);
 
-        socket.on('updateUsers', (users: IUser[]) => this.setState({ users }));
-        socket.on('updateVotes', (votesList: IVoteRs) => this.setState({ votesList }));
-        socket.on('toggleShow', (isShowing: boolean) => this.setState({ isShowing }));
-    }
+        //@ts-ignore
+        socket.on('updateUsers', (users: IUser[]) => setUsers(users));
+        //@ts-ignore
+        socket.on('updateVotes', (votesList: IVoteRs) => setVotesList(votesList));
+        socket.on('toggleShow', (isShowing: boolean) => toggleShowing(isShowing));
 
-    componentWillUnmount() {
-        socket.emit('leave');
-    }
+        return socket.emit('leave');
+    }, []);
 
-    handleVote = (value?: string) => {
-        this.setState({ userVote: value });
+    const handleVote = (value: string) => {
+        setUserVote(value);
         socket.emit('vote', { vote: value });
     };
 
-    toggleShow = () => {
-        socket.emit('handleShow', { isShowing: !this.state.isShowing });
+    const toggleShow = () => {
+        socket.emit('handleShow', { isShowing: !isShowing });
     };
 
-    handleReset = () => {
+    const handleReset = () => {
         socket.emit('resetVotes');
     };
 
-    render() {
-        const { users, username, options, votesList, timer, userVote, isShowing } = this.state;
-
-        return (
-            <>
-                <main className="content">
-                    <Voting
-                        options={options}
-                        votesList={votesList}
-                        userVote={userVote}
-                        handleVoting={this.handleVote}
-                        isShowing={isShowing}
-                        toggleShow={this.toggleShow}
-                        handleReset={this.handleReset}
-                    />
-                </main>
-                <aside>
-                    <div className="content-holder">
-                        <Timer timer={timer} />
-                        <Users users={users} currentUser={username} />
-                    </div>
-                </aside>
-            </>
-        );
-    }
-}
-
-export default GroomingMeter;
+    return (
+        <>
+            <main className="content">
+                <Voting
+                    options={options}
+                    votesList={votesList}
+                    userVote={userVote}
+                    handleVoting={handleVote}
+                    isShowing={isShowing}
+                    toggleShow={toggleShow}
+                    handleReset={handleReset}
+                />
+            </main>
+            <aside>
+                <div className="content-holder">
+                    <Timer timer={timer} />
+                    <Users users={users} currentUser={username} />
+                </div>
+            </aside>
+        </>
+    );
+};
