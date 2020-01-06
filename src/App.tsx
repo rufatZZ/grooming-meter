@@ -21,7 +21,7 @@ const App: React.FC<IProps> = () => {
                         <Router>
                             <Route exact path="/" render={() => <Redirect to="/login" />} />
                             <Route exact path="/login" component={Login} />
-                            <Route path="/groom" component={GroomingMeter} />
+                            <Route exact path="/groom" component={GroomingMeter} />
                         </Router>
                     </WithAuthInfo>
                 </div>

@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+
 import io from 'socket.io-client';
 
 import { IOption, IUser, IVoteRs } from 'models';
@@ -7,6 +9,7 @@ import { endpoint } from 'consts';
 import { Timer } from 'components/Timer';
 import { Users } from 'components/Users';
 import { Voting } from 'components/Voting';
+import { useAuthContext } from 'context/auth';
 
 interface IProps {}
 interface IState {
@@ -23,20 +26,24 @@ interface IState {
 let socket: any;
 
 export const GroomingMeter: React.FC<IProps> = props => {
-    const [username, setUsername] = useState('');
     const [userVote, setUserVote] = useState('');
     const [users, setUsers] = useState([]);
     const [votesList, setVotesList] = useState({ votes: [], length: 0, average: 0 });
     const [isShowing, toggleShowing] = useState(false);
 
+    const { username, isLoggedIn } = useAuthContext();
+    let history = useHistory();
+
     const options: Array<any> = [{ value: '1' }, { value: '2' }, { value: '3' }, { value: '5' }, { value: '8' }, { value: '13' }];
     const timer = '00:00';
 
     useEffect(() => {
-        const username = `${Date.now()}`;
+        !isLoggedIn && history.push('/login');
+    }, []);
+
+    useEffect(() => {
         socket = io(endpoint, { query: `session=${12345}` });
         socket.emit('join', { username });
-        setUsername(username);
 
         //@ts-ignore
         socket.on('updateUsers', (users: IUser[]) => setUsers(users));
