@@ -38,6 +38,7 @@ export const GroomingMeter: React.FC<IProps> = props => {
     const options: Array<any> = [{ value: '1' }, { value: '2' }, { value: '3' }, { value: '5' }, { value: '8' }, { value: '13' }];
     const timer = '00:00';
 
+    console.log(process.env);
 
     useEffect(() => {
         !isLoggedIn && history.push('/login');
