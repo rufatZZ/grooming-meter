@@ -37,16 +37,16 @@ export const GroomingMeter: React.FC<IProps> = props => {
     const options: Array<any> = [{ value: '1' }, { value: '2' }, { value: '3' }, { value: '5' }, { value: '8' }, { value: '13' }];
     const timer = '00:00';
 
-    const { NODE_ENV, REDIRECT_URL } = process.env;
+    // const { NODE_ENV, REDIRECT_URL } = process.env;
 
-    console.log(REDIRECT_URL);
+    console.log('REDIRECT_URL as wss');
 
     useEffect(() => {
         !isLoggedIn && history.push('/login');
     }, []);
 
     useEffect(() => {
-        socket = io(REDIRECT_URL as string, { query: `session=${12345}` });
+        socket = io('wss://grooming-meter.herokuapp.com/', { query: `session=${12345}` });
         socket.emit('join', { username });
 
         //@ts-ignore
