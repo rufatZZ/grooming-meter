@@ -39,14 +39,14 @@ export const GroomingMeter: React.FC<IProps> = props => {
 
     // const { NODE_ENV, REDIRECT_URL } = process.env;
 
-    console.log('REDIRECT_URL as wss');
+    console.log('REDIRECT_URL as window.location.hostname');
 
     useEffect(() => {
         !isLoggedIn && history.push('/login');
     }, []);
 
     useEffect(() => {
-        socket = io('wss://grooming-meter.herokuapp.com/', { query: `session=${12345}` });
+        socket = io(window.location.hostname, { query: `session=${12345}` });
         socket.emit('join', { username });
 
         //@ts-ignore
