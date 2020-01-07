@@ -32,20 +32,21 @@ export const GroomingMeter: React.FC<IProps> = props => {
     const [isShowing, toggleShowing] = useState(false);
 
     const { username, isLoggedIn } = useAuthContext();
-    const { NODE_ENV, PUBLIC_URL } = process.env;
     let history = useHistory();
 
     const options: Array<any> = [{ value: '1' }, { value: '2' }, { value: '3' }, { value: '5' }, { value: '8' }, { value: '13' }];
     const timer = '00:00';
 
-    console.log(process.env);
+    const { NODE_ENV, REDIRECT_URL } = process.env;
+
+    console.log(REDIRECT_URL);
 
     useEffect(() => {
         !isLoggedIn && history.push('/login');
     }, []);
 
     useEffect(() => {
-        socket = io(NODE_ENV === 'development' ? endpoint : PUBLIC_URL, { query: `session=${12345}` });
+        socket = io(REDIRECT_URL as string, { query: `session=${12345}` });
         socket.emit('join', { username });
 
         //@ts-ignore
