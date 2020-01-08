@@ -43,7 +43,7 @@ export const GroomingMeter: React.FC<IProps> = props => {
 
     useEffect(() => {
         !isLoggedIn && history.push('/login');
-    }, []);
+    }, [isLoggedIn]);
 
     useEffect(() => {
         socket = io({ query: `session=${12345}` });
