@@ -1,5 +1,5 @@
 const express = require('express');
-const socketIO = require('socket.io')('https://grooming-meter.herokuapp.com', {
+const socketIO = require('socket.io')({
     transports: ['websocket'],
     rejectUnauthorized: false
 });
