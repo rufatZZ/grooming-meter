@@ -1,5 +1,7 @@
+const PORT = process.env.PORT || 5000;
+
 const express = require('express');
-const socketIO = require('socket.io');
+const socketIO = require('socket.io')(`wss://grooming-meter.herokuapp.com:${PORT}`, { transports: ['websocket'], rejectUnauthorized: false });
 const http = require('http');
 const path = require('path');
 const _ = require('lodash');
@@ -9,12 +11,11 @@ const { Votes } = require('./Votes');
 const { Timer } = require('./Timer');
 
 const publicPath = path.join(__dirname, '../public');
-const PORT = process.env.PORT || 5000;
 
 const app = express();
 const server = http.createServer(app);
 
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Origin', req.header('origin'));
     res.header('Access-Control-Allow-Credentials', true);
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
@@ -67,7 +68,7 @@ io.on('connection', socket => {
         votes.setShowVoteList(false);
 
         io.to(session).emit('toggleShow', votes.showVoteList);
-        io.to(session).emit('updateUsers', users.getList()); 
+        io.to(session).emit('updateUsers', users.getList());
         io.to(session).emit('updateVotes', votes.getFormattedList());
     });
 
@@ -88,7 +89,7 @@ io.on('connection', socket => {
             socket.disconnect(user.session);
         }
 
-        if(_.isEmpty(users.getList())){
+        if (_.isEmpty(users.getList())) {
             votes.reset();
             votes.setShowVoteList(false);
         }
