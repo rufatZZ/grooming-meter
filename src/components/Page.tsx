@@ -46,7 +46,16 @@ export const GroomingMeter: React.FC<IProps> = props => {
     }, [isLoggedIn]);
 
     useEffect(() => {
-        socket = io(`${window.location.hostname}:${process.env.PORT || 5000}`, { query: `session=${12345}` });
+        socket = io(`${window.location.hostname}:${process.env.PORT || 5000}`, {
+            query: `session=${12345}`,
+            reconnectionDelay: 1000,
+            reconnection: true,
+            reconnectionAttempts: 10,
+            transports: ['websocket'],
+            agent: false, // [2] Please don't set this to true
+            upgrade: false,
+            rejectUnauthorized: false
+        });
         socket.emit('join', { username });
 
         //@ts-ignore
