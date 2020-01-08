@@ -1,5 +1,5 @@
 const express = require('express');
-const socketIO = require('socket.io')
+const socketIO = require('socket.io');
 const http = require('http');
 const path = require('path');
 const _ = require('lodash');
@@ -8,13 +8,13 @@ const { Users } = require('./Users');
 const { Votes } = require('./Votes');
 const { Timer } = require('./Timer');
 
-// const publicPath = path.join(__dirname, '../build');
+const publicPath = path.join(__dirname, '../public');
 const PORT = process.env.PORT || 5000;
 
 const app = express();
 const server = http.createServer(app);
 
-app.use(function (req, res, next) {
+app.use(function(req, res, next) {
     res.header('Access-Control-Allow-Origin', req.header('origin'));
     res.header('Access-Control-Allow-Credentials', true);
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
@@ -22,15 +22,7 @@ app.use(function (req, res, next) {
     next();
 });
 
-// for production routing both of node and react
-if (process.env.NODE_ENV === "production") {
-    app.use(express.static('build'));
-  
-    const path = require("path");
-    app.get("*", (req, res) => {
-      res.sendFile(path.resolve(__dirname, "build", "index.html"));
-    });
-  }
+app.use(express.static(publicPath));
 
 let io = new socketIO(server);
 const users = new Users();
@@ -75,7 +67,7 @@ io.on('connection', socket => {
         votes.setShowVoteList(false);
 
         io.to(session).emit('toggleShow', votes.showVoteList);
-        io.to(session).emit('updateUsers', users.getList());
+        io.to(session).emit('updateUsers', users.getList()); 
         io.to(session).emit('updateVotes', votes.getFormattedList());
     });
 
@@ -96,7 +88,7 @@ io.on('connection', socket => {
             socket.disconnect(user.session);
         }
 
-        if (_.isEmpty(users.getList())) {
+        if(_.isEmpty(users.getList())){
             votes.reset();
             votes.setShowVoteList(false);
         }

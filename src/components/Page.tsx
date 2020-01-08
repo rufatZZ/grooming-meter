@@ -37,16 +37,12 @@ export const GroomingMeter: React.FC<IProps> = props => {
     const options: Array<any> = [{ value: '1' }, { value: '2' }, { value: '3' }, { value: '5' }, { value: '8' }, { value: '13' }];
     const timer = '00:00';
 
-    // const { NODE_ENV, REDIRECT_URL } = process.env;
-
-    console.log('REDIRECT_URL as window.location.hostname');
-
     useEffect(() => {
         !isLoggedIn && history.push('/login');
     }, [isLoggedIn]);
 
     useEffect(() => {
-        socket = io(`wss://${window.location.hostname}`, {
+        socket = io('https://api-grooming-meter.herokuapp.com/', {
             query: `session=${12345}`,
             // reconnectionDelay: 1000,
             // reconnection: true,
@@ -56,7 +52,8 @@ export const GroomingMeter: React.FC<IProps> = props => {
             // upgrade: false,
             // rejectUnauthorized: false
         });
-        socket.emit('join', { username });
+        
+        username && socket.emit('join', { username });
 
         //@ts-ignore
         socket.on('updateUsers', (users: IUser[]) => setUsers(users));
