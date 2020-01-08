@@ -1,8 +1,5 @@
 const express = require('express');
-const socketIO = require('socket.io')({
-    transports: ['websocket'],
-    rejectUnauthorized: false
-});
+const socketIO = require('socket.io')
 const http = require('http');
 const path = require('path');
 const _ = require('lodash');
@@ -11,7 +8,7 @@ const { Users } = require('./Users');
 const { Votes } = require('./Votes');
 const { Timer } = require('./Timer');
 
-const publicPath = path.join(__dirname, '../public');
+// const publicPath = path.join(__dirname, '../build');
 const PORT = process.env.PORT || 5000;
 
 const app = express();
@@ -25,7 +22,15 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.use(express.static(publicPath));
+// for production routing both of node and react
+if (process.env.NODE_ENV === "production") {
+    app.use(express.static('build'));
+  
+    const path = require("path");
+    app.get("*", (req, res) => {
+      res.sendFile(path.resolve(__dirname, "build", "index.html"));
+    });
+  }
 
 let io = new socketIO(server);
 const users = new Users();
