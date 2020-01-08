@@ -1,7 +1,8 @@
-const PORT = process.env.PORT || 5000;
-
 const express = require('express');
-const socketIO = require('socket.io')(`wss://grooming-meter.herokuapp.com:${PORT}`, { transports: ['websocket'], rejectUnauthorized: false });
+const socketIO = require('socket.io')('https://grooming-meter.herokuapp.com', {
+    transports: ['websocket'],
+    rejectUnauthorized: false
+});
 const http = require('http');
 const path = require('path');
 const _ = require('lodash');
@@ -11,6 +12,7 @@ const { Votes } = require('./Votes');
 const { Timer } = require('./Timer');
 
 const publicPath = path.join(__dirname, '../public');
+const PORT = process.env.PORT || 5000;
 
 const app = express();
 const server = http.createServer(app);
