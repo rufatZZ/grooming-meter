@@ -46,7 +46,7 @@ export const GroomingMeter: React.FC<IProps> = props => {
     }, [isLoggedIn]);
 
     useEffect(() => {
-        socket = io(`${window.location.hostname}:${process.env.PORT || 5000}`, {
+        socket = io(`https://${window.location.hostname}:${process.env.PORT || 5000}`, {
             query: `session=${12345}`,
             reconnectionDelay: 1000,
             reconnection: true,
