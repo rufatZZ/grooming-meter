@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { AuthContext, useAuthContext } from 'context/auth';
+import { AuthContext } from 'context/auth';
 
 export const WithAuthInfo: React.FC = props => {
     const { children } = props;
