@@ -15,7 +15,6 @@ export const Login = () => {
         <main className="login">
             <div className="d-flex flex-row flex-align-center flex-justify-center">
                 <form
-                    target="remember"
                     onSubmit={e => {
                         e.preventDefault();
                         handleLogin(username);
