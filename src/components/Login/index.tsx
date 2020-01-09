@@ -14,8 +14,16 @@ export const Login = () => {
     return (
         <main className="login">
             <div className="d-flex flex-row flex-align-center flex-justify-center">
-                <input type="text" value={username} onChange={e => setUsername(e.target.value)} />
-                <button onClick={() => handleLogin(username)}>Join</button>
+                <form
+                    target="remember"
+                    onSubmit={e => {
+                        e.preventDefault();
+                        handleLogin(username);
+                    }}
+                >
+                    <input type="text" name="gm_username" value={username} onChange={e => setUsername(e.target.value)} />
+                    <button type="submit">Join</button>
+                </form>
             </div>
         </main>
     );

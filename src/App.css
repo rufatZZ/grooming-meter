@@ -193,6 +193,11 @@ main.login button {
     border-radius: 5px;
 }
 
+main.login button:hover{
+    cursor: pointer;
+    background-color: #3ba582;
+}
+
 main.content {
     background-color: #f0f3f8;
     width: calc(70% - 100px);
