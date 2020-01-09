@@ -26,6 +26,7 @@ interface IState {
 let socket: any;
 
 export const GroomingMeter: React.FC<IProps> = props => {
+    const [timer, setTimer] = useState(0);
     const [userVote, setUserVote] = useState('');
     const [users, setUsers] = useState([]);
     const [votesList, setVotesList] = useState({ votes: [], length: 0, average: 0 });
@@ -35,7 +36,6 @@ export const GroomingMeter: React.FC<IProps> = props => {
     let history = useHistory();
 
     const options: Array<any> = [{ value: '1' }, { value: '2' }, { value: '3' }, { value: '5' }, { value: '8' }, { value: '13' }];
-    let timer = '00:00';
 
     useEffect(() => {
         !isLoggedIn && history.push('/login');
@@ -60,7 +60,7 @@ export const GroomingMeter: React.FC<IProps> = props => {
         //@ts-ignore
         socket.on('updateVotes', (votesList: IVoteRs) => setVotesList(votesList));
         socket.on('toggleShow', (isShowing: boolean) => toggleShowing(isShowing));
-        socket.on('timer', (timer: number) => console.log(timer));
+        socket.on('timer', (time: number) => setTimer(time));
 
         return () => socket.emit('leave');
     }, []);
@@ -93,7 +93,7 @@ export const GroomingMeter: React.FC<IProps> = props => {
             </main>
             <aside>
                 <div className="content-holder">
-                    <Timer timer={timer} />
+                    <Timer time={timer} />
                     <Users users={users} currentUser={username} />
                 </div>
             </aside>
