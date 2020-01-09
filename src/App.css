@@ -20,8 +20,9 @@
 }
 
 .global-container {
+    min-width: 900px;
     width: 100%;
-    height: inherit;
+    height: 100vh;
 }
 
 .font-bold {
@@ -171,8 +172,12 @@ nav {
 main.login {
     background-color: #f0f3f8;
     width: calc(100% - 100px);
-    height: 400px;
+    height: 100%;
     margin-left: 100px;    
+}
+
+main.login .login-content{
+    height: 400px;
 }
 
 
@@ -274,7 +279,7 @@ aside {
 }
 
 aside .timer .timer-time {
-    font-size: 48px;
+    font-size: 56px;
     font-weight: 600;
 }
 
