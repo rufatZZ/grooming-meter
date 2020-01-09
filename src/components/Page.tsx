@@ -35,14 +35,14 @@ export const GroomingMeter: React.FC<IProps> = props => {
     let history = useHistory();
 
     const options: Array<any> = [{ value: '1' }, { value: '2' }, { value: '3' }, { value: '5' }, { value: '8' }, { value: '13' }];
-    const timer = '00:00';
+    let timer = '00:00';
 
     useEffect(() => {
         !isLoggedIn && history.push('/login');
     }, [isLoggedIn]);
 
     useEffect(() => {
-        socket = io('https://api-grooming-meter.herokuapp.com/', {
+        socket = io(endpoint, {
             query: `session=${12345}`,
             // reconnectionDelay: 1000,
             // reconnection: true,
@@ -60,6 +60,7 @@ export const GroomingMeter: React.FC<IProps> = props => {
         //@ts-ignore
         socket.on('updateVotes', (votesList: IVoteRs) => setVotesList(votesList));
         socket.on('toggleShow', (isShowing: boolean) => toggleShowing(isShowing));
+        socket.on('timer', (timer: number) => console.log(timer));
 
         return () => socket.emit('leave');
     }, []);
