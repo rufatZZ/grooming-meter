@@ -245,7 +245,9 @@ aside {
     width: 0px;
     height: 0px;
     position: absolute;
+    display: none;
 }
+
 
 .voting-list > .voting-list-item input:checked + label {
     background-color: #308c6e;
