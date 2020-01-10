@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Helmet } from 'react-helmet';
 import { useHistory } from 'react-router-dom';
 
 import io from 'socket.io-client';
@@ -52,7 +53,7 @@ export const GroomingMeter: React.FC<IProps> = props => {
             // upgrade: false,
             // rejectUnauthorized: false
         });
-        
+
         username && socket.emit('join', { username });
 
         //@ts-ignore
@@ -80,6 +81,10 @@ export const GroomingMeter: React.FC<IProps> = props => {
 
     return (
         <>
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>Grooming - Voting</title>
+            </Helmet>
             <main className="content">
                 <Voting
                     options={options}
