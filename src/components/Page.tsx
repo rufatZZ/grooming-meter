@@ -45,13 +45,7 @@ export const GroomingMeter: React.FC<IProps> = props => {
     useEffect(() => {
         socket = io(endpoint, {
             query: `session=${12345}`,
-            // reconnectionDelay: 1000,
-            // reconnection: true,
-            // reconnectionAttempts: 10,
-            transports: ['websocket'],
-            // agent: false, // [2] Please don't set this to true
-            // upgrade: false,
-            // rejectUnauthorized: false
+            transports: ['websocket']
         });
 
         username && socket.emit('join', { username });
