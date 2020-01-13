@@ -36,7 +36,7 @@ export const GroomingMeter: React.FC<IProps> = props => {
     const { username, isLoggedIn } = useAuthContext();
     let history = useHistory();
 
-    const options: Array<any> = [{ value: '1' }, { value: '2' }, { value: '3' }, { value: '5' }, { value: '8' }, { value: '13' }];
+    const options: Array<any> = [{ value: '1' }, { value: '2' }, { value: '3' }, { value: '5' }, { value: '8' }, { value: '13' }, { value: '20' }, { value: '40' }, { value: '100' }, { value: '?' }];
 
     useEffect(() => {
         !isLoggedIn && history.push('/login');
