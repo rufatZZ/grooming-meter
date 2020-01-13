@@ -18,10 +18,10 @@ export const Voting: React.FC<IProps> = props => {
     const { votes, length: votesLen = 0, average } = votesList || ({} as IVoteRs);
 
     const renderOptions = () => (
-        <div className="voting-list mt-1 d-flex flex-row">
+        <div className="voting-list mt-1 d-flex flex-row flex-wrap">
             {options &&
                 options.map(opt => (
-                    <div className="voting-list-item" key={opt.value}>
+                    <div className="voting-list-item mb-1" key={opt.value}>
                         <input
                             type="radio"
                             name="optradio"
