@@ -1,12 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { useHistory } from 'react-router-dom';
+
 import { useAuthContext } from 'context/auth';
 
-export const Login = () => {
+import { login } from 'ducks/login';
+import { connect } from 'react-redux';
+
+interface IProps {
+    login: typeof login;
+}
+
+export const LoginComponent = (props: IProps) => {
+    const { login } = props;
     let history = useHistory();
     const [username, setUsername] = useState('');
-    const { handleLogin, isLoggedIn } = useAuthContext();
+    const { isLoggedIn } = useAuthContext();
 
     useEffect(() => {
         isLoggedIn && history.push('/groom');
@@ -24,7 +33,7 @@ export const Login = () => {
                         <form
                             onSubmit={e => {
                                 e.preventDefault();
-                                handleLogin(username);
+                                login(username);
                             }}
                         >
                             <input type="text" name="gm_username" value={username} onChange={e => setUsername(e.target.value)} />
@@ -36,3 +45,5 @@ export const Login = () => {
         </>
     );
 };
+
+export const Login = connect(null, { login })(LoginComponent);
