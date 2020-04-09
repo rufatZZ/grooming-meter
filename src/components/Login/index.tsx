@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
+import { ThunkDispatch } from 'redux-thunk';
 import { Helmet } from 'react-helmet';
 import { useHistory } from 'react-router-dom';
 
 import { useAuthContext } from 'context/auth';
 
-import { login } from 'ducks/login';
-import { connect } from 'react-redux';
+import { processLogin, ILoginState, IActionType } from 'ducks/login';
 
 interface IProps {
-    login: typeof login;
+    processLogin: typeof processLogin;
 }
 
 export const LoginComponent = (props: IProps) => {
-    const { login } = props;
+    const { processLogin } = props;
     let history = useHistory();
     const [username, setUsername] = useState('');
     const { isLoggedIn } = useAuthContext();
@@ -33,7 +34,7 @@ export const LoginComponent = (props: IProps) => {
                         <form
                             onSubmit={e => {
                                 e.preventDefault();
-                                login(username);
+                                processLogin(username);
                             }}
                         >
                             <input type="text" name="gm_username" value={username} onChange={e => setUsername(e.target.value)} />
@@ -46,4 +47,6 @@ export const LoginComponent = (props: IProps) => {
     );
 };
 
-export const Login = connect(null, { login })(LoginComponent);
+export const Login = connect<ILoginState>(null, (dispatch: ThunkDispatch<ILoginState, any, IActionType<string, string>>) => ({
+    processLogin: (username: string) => dispatch(processLogin(username)),
+}))(LoginComponent);
