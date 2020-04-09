@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
-import { useHistory } from 'react-router-dom';
+import { RouterProps, withRouter } from 'react-router';
 
 import io from 'socket.io-client';
 
@@ -12,21 +12,14 @@ import { Users } from 'components/Users';
 import { Voting } from 'components/Voting';
 import { useAuthContext } from 'context/auth';
 
-interface IProps { }
-interface IState {
-    endpoint?: any;
-    users?: IUser[];
-    username?: string;
-    userVote?: string;
-    options?: IOption[];
-    votesList?: IVoteRs;
-    timer?: string;
-    isShowing?: boolean;
-}
+interface IProps {}
 
 let socket: any;
 
-export const GroomingMeter: React.FC<IProps> = props => {
+type TProps = IProps & RouterProps;
+
+const GroomingMeterComponent: React.FC<TProps> = props => {
+    const { history } = props;
     const [timer, setTimer] = useState(0);
     const [userVote, setUserVote] = useState('');
     const [users, setUsers] = useState([]);
@@ -34,18 +27,30 @@ export const GroomingMeter: React.FC<IProps> = props => {
     const [isShowing, toggleShowing] = useState(false);
 
     const { username, isLoggedIn } = useAuthContext();
-    let history = useHistory();
 
-    const options: Array<any> = [{ value: '1' }, { value: '2' }, { value: '3' }, { value: '5' }, { value: '8' }, { value: '13' }, { value: '20' }, { value: '40' }, { value: '100' }, { value: '?' }];
+    const options: Array<any> = [
+        { value: '1' },
+        { value: '2' },
+        { value: '3' },
+        { value: '5' },
+        { value: '8' },
+        { value: '13' },
+        { value: '20' },
+        { value: '40' },
+        { value: '100' },
+        { value: '?' },
+    ];
 
     useEffect(() => {
-        !isLoggedIn && history.push('/login');
-    }, [isLoggedIn]);
+        if (!isLoggedIn) {
+            history.push('/login');
+        }
+    }, [isLoggedIn, history]);
 
     useEffect(() => {
         socket = io(endpoint, {
             query: `session=${12345}`,
-            transports: ['websocket']
+            transports: ['websocket'],
         });
 
         username && socket.emit('join', { username });
@@ -58,7 +63,7 @@ export const GroomingMeter: React.FC<IProps> = props => {
         socket.on('timer', (time: number) => setTimer(time));
 
         return () => socket.emit('leave');
-    }, []);
+    }, [username]);
 
     const handleVote = (value: string) => {
         setUserVote(value);
@@ -99,3 +104,5 @@ export const GroomingMeter: React.FC<IProps> = props => {
         </>
     );
 };
+
+export const GroomingMeter = withRouter(GroomingMeterComponent);

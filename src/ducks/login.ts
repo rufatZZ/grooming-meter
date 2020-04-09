@@ -34,7 +34,6 @@ const initialState = {
 
 //TODO fix types
 export const loginReducer = (state: ILoginState = initialState, action: IActionType<string, string>): ILoginState => {
-    console.log(action);
     switch (action.type) {
         case 'LOGIN_SUCCESS':
             console.log({ ...state, username: action.payload });
