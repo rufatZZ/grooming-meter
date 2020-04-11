@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { Helmet } from 'react-helmet';
-import { useHistory } from 'react-router-dom';
+import { RouterProps, withRouter } from 'react-router';
 
 import { useAuthContext } from 'context/auth';
 
@@ -12,15 +12,16 @@ interface IProps {
     processLogin: typeof processLogin;
 }
 
-export const LoginComponent = (props: IProps) => {
-    const { processLogin } = props;
-    let history = useHistory();
+type TProps = IProps & RouterProps;
+
+export const LoginComponent: React.FC<TProps> = (props: TProps) => {
+    const { history, processLogin } = props;
     const [username, setUsername] = useState('');
     const { isLoggedIn } = useAuthContext();
 
     useEffect(() => {
         isLoggedIn && history.push('/groom');
-    }, [isLoggedIn]);
+    }, [isLoggedIn, history]);
 
     return (
         <>
@@ -47,6 +48,8 @@ export const LoginComponent = (props: IProps) => {
     );
 };
 
-export const Login = connect<ILoginState>(null, (dispatch: ThunkDispatch<ILoginState, any, IActionType<string, string>>) => ({
-    processLogin: (username: string) => dispatch(processLogin(username)),
-}))(LoginComponent);
+export const Login = withRouter<any, React.FC<TProps>>(
+    connect<ILoginState>(null, (dispatch: ThunkDispatch<ILoginState, any, IActionType<string, string>>) => ({
+        processLogin: (username: string) => dispatch(processLogin(username)),
+    }))(LoginComponent),
+);
