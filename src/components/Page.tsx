@@ -1,28 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
-import { RouterProps, withRouter } from 'react-router';
-
+import { RouteComponentProps, withRouter } from 'react-router';
+import { connect } from 'react-redux';
+import { ThunkDispatch } from 'redux-thunk';
 import io from 'socket.io-client';
 
-import { IOption, IUser, IVoteRs } from 'models';
+import { IUser, IVoteRs } from 'models';
 import { endpoint } from 'consts';
-
 import { Timer } from 'components/Timer';
 import { Users } from 'components/Users';
 import { Voting } from 'components/Voting';
 import { useAuthContext } from 'context/auth';
-
-interface IProps {}
+import { IAppReduxState } from 'ducks';
+import { fetchUsers, IUsersState } from 'ducks/users';
+import { IActionType } from 'utils/redux';
 
 let socket: any;
 
-type TProps = IProps & RouterProps;
+interface IStateProps {
+    usersList: IUser[];
+}
+
+interface IDispatchProps {
+    getUsers: typeof fetchUsers;
+}
+
+interface IProps extends IStateProps, IDispatchProps {}
+
+type TProps = IProps & RouteComponentProps<{}>;
 
 const GroomingMeterComponent: React.FC<TProps> = props => {
-    const { history } = props;
+    const { history, getUsers, usersList } = props;
     const [timer, setTimer] = useState(0);
     const [userVote, setUserVote] = useState('');
-    const [users, setUsers] = useState([]);
     const [votesList, setVotesList] = useState({ votes: [], length: 0, average: 0 });
     const [isShowing, toggleShowing] = useState(false);
 
@@ -56,7 +66,9 @@ const GroomingMeterComponent: React.FC<TProps> = props => {
         username && socket.emit('join', { username });
 
         //@ts-ignore
-        socket.on('updateUsers', (users: IUser[]) => setUsers(users));
+        socket.on('updateUsers', async () => {
+            getUsers();
+        });
         //@ts-ignore
         socket.on('updateVotes', (votesList: IVoteRs) => setVotesList(votesList));
         socket.on('toggleShow', (isShowing: boolean) => toggleShowing(isShowing));
@@ -98,11 +110,19 @@ const GroomingMeterComponent: React.FC<TProps> = props => {
             <aside>
                 <div className="content-holder">
                     <Timer time={timer} />
-                    <Users users={users} currentUser={username} />
+                    <Users users={usersList} currentUser={username} />
                 </div>
             </aside>
         </>
     );
 };
-
-export const GroomingMeter = withRouter(GroomingMeterComponent);
+export const GroomingMeter = withRouter<TProps, React.FC<TProps>>(
+    connect<IStateProps, {}, {}, IAppReduxState>(
+        (state: IAppReduxState): IStateProps => ({
+            usersList: state.users.list,
+        }),
+        (dispatch: ThunkDispatch<IUsersState, any, IActionType<string, IUser[]>>) => ({
+            getUsers: () => dispatch(fetchUsers()),
+        }),
+    )(GroomingMeterComponent),
+);

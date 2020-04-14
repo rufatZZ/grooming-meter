@@ -1,26 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore, combineReducers, applyMiddleware } from 'redux';
-import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
 
 import './index.css';
 
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
-import { loginReducer } from 'ducks/login';
 import { composeEnhancers } from 'utils/redux';
+import { reducer, initialState } from 'ducks';
 
-const reducer = combineReducers({
-    login: loginReducer,
-    //TODO fix this types
-    users: {} as any,
-    votes: {} as any,
-    timer: {} as any,
-});
-
-const store = createStore(reducer, composeEnhancers(applyMiddleware(thunk)));
+const store = createStore(reducer, initialState, composeEnhancers(applyMiddleware(thunk)));
 
 ReactDOM.render(
     <Provider store={store}>

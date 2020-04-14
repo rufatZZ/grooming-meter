@@ -6,7 +6,9 @@ import { RouterProps, withRouter } from 'react-router';
 
 import { useAuthContext } from 'context/auth';
 
-import { processLogin, ILoginState, IActionType } from 'ducks/login';
+import { IAppReduxState } from 'ducks';
+import { processLogin, ILoginState } from 'ducks/login';
+import { IActionType } from 'utils/redux';
 
 interface IProps {
     processLogin: typeof processLogin;
@@ -49,7 +51,7 @@ export const LoginComponent: React.FC<TProps> = (props: TProps) => {
 };
 
 export const Login = withRouter<any, React.FC<TProps>>(
-    connect<ILoginState>(null, (dispatch: ThunkDispatch<ILoginState, any, IActionType<string, string>>) => ({
+    connect<IAppReduxState>(null, (dispatch: ThunkDispatch<ILoginState, any, IActionType<string, string>>) => ({
         processLogin: (username: string) => dispatch(processLogin(username)),
     }))(LoginComponent),
 );
