@@ -3,25 +3,27 @@ import { connect } from 'react-redux';
 
 import { AuthContext } from 'context/auth';
 import { IAppReduxState } from 'ducks';
+import { IAsyncData } from 'utils/redux';
 
 interface IProps {
-    username: string;
+    loginBranch: any;
 }
 
 const WithAuthInfoComponent: React.FC<IProps> = props => {
-    const { children, username } = props;
+    const { children, loginBranch } = props;
     const [isLoggedIn, setLoggedIn] = useState(false);
+    const { data: loginData, error: loginError } = loginBranch || ({} as IAsyncData<string | null>);
 
     useEffect(() => {
-        username && setLoggedIn(true);
-    }, [username]);
+        loginData && setLoggedIn(true);
+    }, [loginData]);
 
-    return <AuthContext.Provider value={{ username, isLoggedIn }}>{children}</AuthContext.Provider>;
+    return <AuthContext.Provider value={{ user: loginData || null, isLoggedIn }}>{children}</AuthContext.Provider>;
 };
 
 export const WithAuthInfo = connect(
     (state: IAppReduxState) => ({
-        username: state.login.username,
+        loginBranch: state.auth.login,
     }),
     {},
 )(WithAuthInfoComponent);

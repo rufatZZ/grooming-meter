@@ -36,7 +36,8 @@ const GroomingMeterComponent: React.FC<TProps> = props => {
     const [votesList, setVotesList] = useState({ votes: [], length: 0, average: 0 });
     const [isShowing, toggleShowing] = useState(false);
 
-    const { username, isLoggedIn } = useAuthContext();
+    const { user, isLoggedIn } = useAuthContext();
+    const { username } = user || ({} as IUser);
 
     const options: Array<any> = [
         { value: '1' },
@@ -58,8 +59,9 @@ const GroomingMeterComponent: React.FC<TProps> = props => {
     }, [isLoggedIn, history]);
 
     useEffect(() => {
+        // get session from state.
         socket = io(endpoint, {
-            query: `session=${12345}`,
+            query: `session=${123446}`,
             transports: ['websocket'],
         });
 

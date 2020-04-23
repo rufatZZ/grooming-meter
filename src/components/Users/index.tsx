@@ -18,7 +18,7 @@ export const Users: React.FC<IProps> = props => {
                 <ol className="users-list">
                     {users &&
                         users.map(user => (
-                            <li key={user.id} className={classnames({ 'user-list-item-voted': user.isVoted })}>
+                            <li key={user._id} className={classnames({ 'user-list-item-voted': user.isVoted })}>
                                 <span
                                     className={classnames({
                                         'font-bold': user.username === currentUser,
