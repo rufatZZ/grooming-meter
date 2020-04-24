@@ -1,23 +1,23 @@
 import { combineReducers } from 'redux';
 
-import { loginReducer } from 'ducks/login';
+import { authReducer } from 'ducks/auth';
 import { usersReducers } from 'ducks/users';
 
-import { ILoginState, initialState as loginInitialState } from './login';
+import { IAuthState, initialState as authInitialState } from './auth';
 import { IUsersState, initialState as usersInitialState } from './users';
 
 // TODO fix this types
 export interface IAppReduxState {
-    login: ILoginState;
+    auth: IAuthState;
     users: IUsersState;
 }
 
 export const reducer = combineReducers<IAppReduxState>({
-    login: loginReducer,
+    auth: authReducer,
     users: usersReducers
 });
 
 export const initialState: IAppReduxState = {
-    login: loginInitialState,
+    auth: authInitialState,
     users: usersInitialState,
 };
