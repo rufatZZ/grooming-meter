@@ -30,13 +30,13 @@ interface IProps extends IStateProps, IDispatchProps {}
 type TProps = IProps & RouteComponentProps<{}>;
 
 const GroomingMeterComponent: React.FC<TProps> = props => {
-    const { history, getUsers, usersList } = props;
+    const { getUsers, usersList } = props;
     const [timer, setTimer] = useState(0);
     const [userVote, setUserVote] = useState('');
     const [votesList, setVotesList] = useState({ votes: [], length: 0, average: 0 });
     const [isShowing, toggleShowing] = useState(false);
 
-    const { user, isLoggedIn } = useAuthContext();
+    const { user } = useAuthContext();
     const { username } = user || ({} as IUser);
 
     const options: Array<any> = [
@@ -53,16 +53,10 @@ const GroomingMeterComponent: React.FC<TProps> = props => {
     ];
 
     useEffect(() => {
-        if (!isLoggedIn) {
-            history.push('/login');
-        }
-    }, [isLoggedIn, history]);
-
-    useEffect(() => {
-        // get session from state.
+        // TODO get session from state.
         socket = io(endpoint, {
-            query: `session=${123446}`,
             transports: ['websocket'],
+            query: { session: `${123446}`, userId: user._id },
         });
 
         username && socket.emit('join', { username });
@@ -77,7 +71,7 @@ const GroomingMeterComponent: React.FC<TProps> = props => {
         socket.on('timer', (time: number) => setTimer(time));
 
         return () => socket.emit('leave');
-    }, [username]);
+    }, [user]);
 
     const handleVote = (value: string) => {
         setUserVote(value);
