@@ -13,10 +13,15 @@ export const initialState = {
     list: [] as IUser[],
 };
 
-export const fetchUsers = (): ThunkAction<Promise<void>, IUsersState, any, IActionType<string, IUser[]>> => async (
+export const fetchUsers = (session: string): ThunkAction<Promise<void>, IUsersState, any, IActionType<string, IUser[]>> => async (
     dispatch: ThunkDispatch<IUsersState, any, IActionType<string, IUser[]>>,
 ) => {
-    const response = await axios({ url: `${endpoint}/api/users`, method: 'GET', headers: { 'Content-Type': 'application/json;charset=UTF-8' } });
+    const response = await axios({
+        url: `${endpoint}/api/users`,
+        method: 'GET',
+        params: { session },
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+    });
 
     dispatch({ type: 'FETCH_USERS_STARTED', payload: [] as IUser[] });
 

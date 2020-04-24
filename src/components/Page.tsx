@@ -36,9 +36,11 @@ const GroomingMeterComponent: React.FC<TProps> = props => {
     const [votesList, setVotesList] = useState({ votes: [], length: 0, average: 0 });
     const [isShowing, toggleShowing] = useState(false);
 
+    const session = '123446'
     const { user } = useAuthContext();
-    const { username } = user || ({} as IUser);
+    const { username, _id: userId } = user || ({} as IUser);
 
+    // TODO make these from server
     const options: Array<any> = [
         { value: '1' },
         { value: '2' },
@@ -56,22 +58,23 @@ const GroomingMeterComponent: React.FC<TProps> = props => {
         // TODO get session from state.
         socket = io(endpoint, {
             transports: ['websocket'],
-            query: { session: `${123446}`, userId: user._id },
+            query: { session, userId },
         });
 
         username && socket.emit('join', { username });
 
         //@ts-ignore
-        socket.on('updateUsers', async () => {
-            getUsers();
+        socket.on('updateList', async () => {
+            getUsers(session);
+            // getVotes()
         });
         //@ts-ignore
-        socket.on('updateVotes', (votesList: IVoteRs) => setVotesList(votesList));
-        socket.on('toggleShow', (isShowing: boolean) => toggleShowing(isShowing));
+        // socket.on('updateVotes', (votesList: IVoteRs) => setVotesList(votesList));
+        // socket.on('toggleShow', (isShowing: boolean) => toggleShowing(isShowing));
         socket.on('timer', (time: number) => setTimer(time));
 
         return () => socket.emit('leave');
-    }, [user]);
+    }, [username, userId, getUsers]);
 
     const handleVote = (value: string) => {
         setUserVote(value);
@@ -118,7 +121,7 @@ export const GroomingMeter = withRouter<TProps, React.FC<TProps>>(
             usersList: state.users.list,
         }),
         (dispatch: ThunkDispatch<IUsersState, any, IActionType<string, IUser[]>>) => ({
-            getUsers: () => dispatch(fetchUsers()),
+            getUsers: (session: string) => dispatch(fetchUsers(session)),
         }),
     )(GroomingMeterComponent),
 );
