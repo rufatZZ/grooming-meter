@@ -12,7 +12,7 @@ interface IProps {
 const WithAuthInfoComponent: React.FC<IProps> = props => {
     const { children, loginBranch } = props;
     const [isLoggedIn, setLoggedIn] = useState(false);
-    const { data: loginData, error: loginError } = loginBranch || ({} as IAsyncData<string | null>);
+    const { data: loginData } = loginBranch || ({} as IAsyncData<string | null>);
 
     useEffect(() => {
         loginData && setLoggedIn(true);
