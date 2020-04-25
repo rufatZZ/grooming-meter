@@ -10,7 +10,7 @@ export interface IVote {
     vote?: string;
 }
 
-export interface IVoteRs {
+export interface IVotesInfo {
     votes: Array<IVote[]>;
     length: number;
     average: number;

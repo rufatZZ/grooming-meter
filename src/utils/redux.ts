@@ -6,7 +6,7 @@ export interface IActionType<T, P> {
 }
 
 export interface IAsyncData<T>{
-    data: T,
+    data: T | null,
     error: any
 }
 
