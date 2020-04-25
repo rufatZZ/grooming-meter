@@ -1,23 +1,24 @@
 import { combineReducers } from 'redux';
 
-import { authReducer } from 'ducks/auth';
-import { usersReducers } from 'ducks/users';
-
-import { IAuthState, initialState as authInitialState } from './auth';
-import { IUsersState, initialState as usersInitialState } from './users';
+import { IAuthState, authReducer, initialState as authInitialState } from './auth';
+import { IUsersState, usersReducers, initialState as usersInitialState } from './users';
+import { IVotesState, votesReducers, initialState as votesInitialState } from './votes';
 
 // TODO fix this types
 export interface IAppReduxState {
     auth: IAuthState;
     users: IUsersState;
+    votes: IVotesState;
 }
 
 export const reducer = combineReducers<IAppReduxState>({
     auth: authReducer,
-    users: usersReducers
+    users: usersReducers,
+    votes: votesReducers,
 });
 
 export const initialState: IAppReduxState = {
     auth: authInitialState,
     users: usersInitialState,
+    votes: votesInitialState,
 };

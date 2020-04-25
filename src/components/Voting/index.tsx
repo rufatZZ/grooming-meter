@@ -1,11 +1,11 @@
 import React from 'react';
 import { isEmpty } from 'lodash';
 
-import { IOption, IVoteRs } from 'models';
+import { IOption, IVotesInfo } from 'models';
 
 interface IProps {
     options?: IOption[];
-    votesList?: IVoteRs;
+    votesList?: IVotesInfo;
     userVote?: string;
     isShowing?: boolean;
     toggleShow: () => void;
@@ -15,7 +15,7 @@ interface IProps {
 
 export const Voting: React.FC<IProps> = props => {
     const { options, userVote, votesList, isShowing, toggleShow, handleReset, handleVoting } = props;
-    const { votes, length: votesLen = 0, average } = votesList || ({} as IVoteRs);
+    const { votes, length: votesLen = 0, average } = votesList || ({} as IVotesInfo);
 
     const renderOptions = () => (
         <div className="voting-list mt-1 d-flex flex-row flex-wrap">
