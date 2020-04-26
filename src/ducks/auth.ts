@@ -8,18 +8,23 @@ export interface IAuthState {
     login: IAsyncData<string | any>;
 }
 
+export interface ILoginRq {
+    username: string;
+    session: string;
+}
+
 export const initialState = {
     login: { data: null, error: null },
 };
 
-export const processLogin = (username: string, session: string): ThunkAction<Promise<void>, IAuthState, any, IActionType<string, string>> => async (
+export const processLogin = (data: ILoginRq): ThunkAction<Promise<void>, IAuthState, any, IActionType<string, string>> => async (
     dispatch: ThunkDispatch<IAuthState, any, IActionType<string, string>>,
 ) => {
     try {
         const response = await axios({
             url: `${endpoint}/api/login`,
             method: 'POST',
-            data: { username, session },
+            data: data,
             headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         });
 
