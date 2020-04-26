@@ -7,7 +7,7 @@ import { RouterProps, withRouter } from 'react-router';
 import { useAuthContext } from 'context/auth';
 
 import { IAppReduxState } from 'ducks';
-import { processLogin, IAuthState } from 'ducks/auth';
+import { processLogin, IAuthState, ILoginRq } from 'ducks/auth';
 import { IActionType } from 'utils/redux';
 
 interface IProps {
@@ -20,6 +20,8 @@ export const LoginComponent: React.FC<TProps> = (props: TProps) => {
     const { history, processLogin } = props;
     const [username, setUsername] = useState('');
     const { isLoggedIn } = useAuthContext();
+    // TODO get it from form.
+    const session = '123446';
 
     useEffect(() => {
         isLoggedIn && history.push('/groom');
@@ -35,10 +37,10 @@ export const LoginComponent: React.FC<TProps> = (props: TProps) => {
                 <div className="login-content">
                     <div className="d-flex flex-row flex-align-center flex-justify-center">
                         <form
-                            // fix manual session adding 
+                            // fix manual session adding
                             onSubmit={e => {
                                 e.preventDefault();
-                                processLogin(username, '123446');
+                                processLogin({ username, session });
                             }}
                         >
                             <input type="text" name="gm_username" value={username} onChange={e => setUsername(e.target.value)} />
@@ -53,6 +55,6 @@ export const LoginComponent: React.FC<TProps> = (props: TProps) => {
 
 export const Login = withRouter<any, React.FC<TProps>>(
     connect<IAppReduxState>(null, (dispatch: ThunkDispatch<IAuthState, any, IActionType<string, string>>) => ({
-        processLogin: (username: string, session: string) => dispatch(processLogin(username, session)),
+        processLogin: (data: ILoginRq) => dispatch(processLogin(data)),
     }))(LoginComponent),
 );

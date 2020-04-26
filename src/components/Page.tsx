@@ -39,9 +39,8 @@ const GroomingMeterComponent: React.FC<TProps> = props => {
     const [userVote, setUserVote] = useState('');
     const [isShowing, toggleShowing] = useState(false);
 
-    const session = '123446';
     const { user } = useAuthContext();
-    const { username, _id: userId } = user || ({} as IUser);
+    const { session, username, _id: userId } = user || ({} as IUser);
 
     // TODO make these from server
     const options: Array<any> = [
@@ -67,8 +66,10 @@ const GroomingMeterComponent: React.FC<TProps> = props => {
         socket.emit('join', { username });
 
         socket.on('updateList', async () => {
-            getUsers(session);
-            getVotes(session);
+            if (session) {
+                getUsers(session);
+                getVotes(session);
+            }
         });
         //@ts-ignore
         // socket.on('toggleShow', (isShowing: boolean) => toggleShowing(isShowing));
@@ -79,7 +80,7 @@ const GroomingMeterComponent: React.FC<TProps> = props => {
 
     const handleVote = (vote: string) => {
         setUserVote(vote);
-        userId && submitVote({ userId, session, vote });
+        userId && session && submitVote({ userId, session, vote });
     };
 
     const toggleShow = () => {
