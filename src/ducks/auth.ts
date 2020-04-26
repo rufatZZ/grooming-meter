@@ -10,7 +10,7 @@ export interface IAuthState {
 
 export interface ILoginRq {
     username: string;
-    session: string;
+    sessionId: string;
 }
 
 export const initialState = {

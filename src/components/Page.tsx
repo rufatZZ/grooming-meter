@@ -40,7 +40,7 @@ const GroomingMeterComponent: React.FC<TProps> = props => {
     const [isShowing, toggleShowing] = useState(false);
 
     const { user } = useAuthContext();
-    const { session, username, _id: userId } = user || ({} as IUser);
+    const { sessionId, username, _id: userId } = user || ({} as IUser);
 
     // TODO make these from server
     const options: Array<any> = [
@@ -60,27 +60,28 @@ const GroomingMeterComponent: React.FC<TProps> = props => {
         // TODO get session from state.
         socket = io(endpoint, {
             transports: ['websocket'],
-            query: { session, userId },
+            query: { sessionId, userId },
         });
 
         socket.emit('join', { username });
 
-        socket.on('updateList', async () => {
-            if (session) {
-                getUsers(session);
-                getVotes(session);
-            }
+        socket.on('updateUsersList', async () => {
+            sessionId && getUsers(sessionId);
         });
-        //@ts-ignore
+
+        socket.on('updateVotesList', async () => {
+            sessionId && getVotes(sessionId);
+        });
+
         // socket.on('toggleShow', (isShowing: boolean) => toggleShowing(isShowing));
         socket.on('timer', (time: number) => setTimer(time));
 
         return () => socket.emit('leave');
-    }, [username, userId, getUsers]);
+    }, [username, userId, sessionId, getUsers, getVotes]);
 
     const handleVote = (vote: string) => {
         setUserVote(vote);
-        userId && session && submitVote({ userId, session, vote });
+        userId && sessionId && submitVote({ userId, sessionId, vote });
     };
 
     const toggleShow = () => {
@@ -124,8 +125,8 @@ export const GroomingMeter = withRouter<TProps, React.FC<TProps>>(
             votesList: state.votes.list,
         }),
         (dispatch: ThunkDispatch<IUsersState & IVotesState, any, IActionType<string, IUser[] & IVote[]>>) => ({
-            getUsers: (session: string) => dispatch(fetchUsers(session)),
-            getVotes: (session: string) => dispatch(fetchVotes(session)),
+            getUsers: (sessionId: string) => dispatch(fetchUsers(sessionId)),
+            getVotes: (sessionId: string) => dispatch(fetchVotes(sessionId)),
             submitVote: (data: IVoteRq) => dispatch(addVote(data)),
         }),
     )(GroomingMeterComponent),
