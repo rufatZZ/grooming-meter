@@ -11,7 +11,7 @@ export interface IVotesState {
 
 export interface IVoteRq {
     userId: string;
-    session: string;
+    sessionId: string;
     vote: string;
 }
 
@@ -19,13 +19,13 @@ export const initialState = {
     list: { votes: [] as IVote[], length: 0, average: 0 } as IVotesInfo,
 };
 
-export const fetchVotes = (session: string): ThunkAction<Promise<void>, IVotesState, any, IActionType<string, IVotesInfo>> => async (
+export const fetchVotes = (sessionId: string): ThunkAction<Promise<void>, IVotesState, any, IActionType<string, IVotesInfo>> => async (
     dispatch: ThunkDispatch<IVotesState, any, IActionType<string, IVotesInfo>>,
 ) => {
     const response = await axios({
         url: `${endpoint}/api/votes`,
         method: 'GET',
-        params: { session },
+        params: { sessionId },
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
     });
 

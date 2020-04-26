@@ -21,7 +21,7 @@ export const LoginComponent: React.FC<TProps> = (props: TProps) => {
     const [username, setUsername] = useState('');
     const { isLoggedIn } = useAuthContext();
     // TODO get it from form.
-    const session = '123446';
+    const sessionId = '123446';
 
     useEffect(() => {
         isLoggedIn && history.push('/groom');
@@ -37,10 +37,9 @@ export const LoginComponent: React.FC<TProps> = (props: TProps) => {
                 <div className="login-content">
                     <div className="d-flex flex-row flex-align-center flex-justify-center">
                         <form
-                            // fix manual session adding
                             onSubmit={e => {
                                 e.preventDefault();
-                                processLogin({ username, session });
+                                processLogin({ username, sessionId });
                             }}
                         >
                             <input type="text" name="gm_username" value={username} onChange={e => setUsername(e.target.value)} />

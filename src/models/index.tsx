@@ -1,7 +1,7 @@
 export interface IUser {
     _id?: string;
     username?: string;
-    session?: string;
+    sessionId?: string;
     isVoted?: boolean;
 }
 
