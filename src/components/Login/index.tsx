@@ -5,7 +5,6 @@ import { Helmet } from 'react-helmet';
 import { RouterProps, withRouter } from 'react-router';
 
 import { useAuthContext } from 'context/auth';
-
 import { IAppReduxState } from 'ducks';
 import { createSession, processLogin, IAuthState, ILoginRq } from 'ducks/auth';
 import { EAuthAction } from 'shared/enums';
@@ -62,7 +61,17 @@ export const LoginComponent: React.FC<TProps> = (props: TProps) => {
                 processLogin({ username, sessionId });
             }}
         >
-            <input type="text" name="gm_username" value={username} onChange={e => setUsername(e.target.value)} />
+            {!sessionData && (
+                <input
+                    type="text"
+                    name="gm_session"
+                    placeholder="Session ID"
+                    required
+                    value={sessionId}
+                    onChange={e => setSessionId(e.target.value)}
+                />
+            )}
+            <input type="text" name="gm_username" placeholder="Username" required value={username} onChange={e => setUsername(e.target.value)} />
             <button type="submit">Join</button>
         </form>
     );
