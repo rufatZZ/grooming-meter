@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react';
 
-import { IUser } from 'models';
+import { IUser } from 'shared/models';
 
 export const useAuthContext = () => useContext(AuthContext);
 

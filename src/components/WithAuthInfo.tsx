@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 
 import { AuthContext } from 'context/auth';
 import { IAppReduxState } from 'ducks';
-import { IAsyncData } from 'utils/redux';
-import { IUser } from 'models';
+import { IUser } from 'shared/models';
+import { IAsyncData } from 'shared/utils/redux';
 
 interface IProps {
     loginBranch: IAsyncData<IUser>;

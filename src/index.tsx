@@ -9,7 +9,7 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
-import { composeEnhancers } from 'utils/redux';
+import { composeEnhancers } from 'shared/utils/redux';
 import { reducer, initialState } from 'ducks';
 
 const store = createStore(reducer, initialState, composeEnhancers(applyMiddleware(thunk)));

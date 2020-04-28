@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { ThunkDispatch, ThunkAction } from 'redux-thunk';
 
-import { endpoint } from 'consts';
-import { IVotesInfo, IVote } from 'models';
-import { IActionType } from 'utils/redux';
+import { endpoint } from 'shared/consts';
+import { IVotesInfo, IVote } from 'shared/models';
+import { IActionType } from 'shared/utils/redux';
 
 export interface IVotesState {
     list: IVotesInfo;
