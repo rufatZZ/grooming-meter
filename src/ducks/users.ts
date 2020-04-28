@@ -1,9 +1,9 @@
 import axios from 'axios';
-
-import { IUser } from 'models';
-import { IActionType } from 'utils/redux';
-import { endpoint } from 'consts';
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
+
+import { endpoint } from 'shared/consts';
+import { IUser } from 'shared/models';
+import { IActionType } from 'shared/utils/redux';
 
 export interface IUsersState {
     list: IUser[];

@@ -5,8 +5,7 @@ import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import io from 'socket.io-client';
 
-import { IUser, IVotesInfo, IVote } from 'models';
-import { endpoint } from 'consts';
+
 import { Timer } from 'components/Timer';
 import { Users } from 'components/Users';
 import { Voting } from 'components/Voting';
@@ -14,7 +13,9 @@ import { useAuthContext } from 'context/auth';
 import { IAppReduxState } from 'ducks';
 import { fetchUsers, IUsersState } from 'ducks/users';
 import { fetchVotes, IVotesState, IVoteRq, addVote } from 'ducks/votes';
-import { IActionType } from 'utils/redux';
+import { endpoint } from 'shared/consts';
+import { IUser, IVotesInfo, IVote } from 'shared/models';
+import { IActionType } from 'shared/utils/redux';
 
 let socket: any;
 

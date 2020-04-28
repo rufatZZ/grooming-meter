@@ -7,25 +7,65 @@ import { RouterProps, withRouter } from 'react-router';
 import { useAuthContext } from 'context/auth';
 
 import { IAppReduxState } from 'ducks';
-import { processLogin, IAuthState, ILoginRq } from 'ducks/auth';
-import { IActionType } from 'utils/redux';
+import { createSession, processLogin, IAuthState, ILoginRq } from 'ducks/auth';
+import { EAuthAction } from 'shared/enums';
+import { ISession } from 'shared/models';
+import { IActionType, IAsyncData } from 'shared/utils/redux';
 
-interface IProps {
+interface IStateProps {
+    sessionBranch: IAsyncData<ISession>;
+}
+
+interface IDispatchProps {
+    createSession: typeof createSession;
     processLogin: typeof processLogin;
 }
+
+interface IProps extends IStateProps, IDispatchProps {}
 
 type TProps = IProps & RouterProps;
 
 export const LoginComponent: React.FC<TProps> = (props: TProps) => {
-    const { history, processLogin } = props;
+    const { history, createSession, processLogin, sessionBranch } = props;
+    const { data: sessionData } = sessionBranch || ({} as IAsyncData<ISession>);
     const [username, setUsername] = useState('');
+    const [formAction, setFormAction] = useState('');
+    const [sessionId, setSessionId] = useState('');
     const { isLoggedIn } = useAuthContext();
-    // TODO get it from form.
-    const sessionId = '123446';
 
     useEffect(() => {
         isLoggedIn && history.push('/groom');
     }, [isLoggedIn, history]);
+
+    useEffect(() => {
+        if (sessionData) {
+            setFormAction(EAuthAction.JOIN_SESSION);
+            setSessionId(sessionData._id);
+        }
+    }, [sessionData]);
+
+    const renderAuthOptions = () => (
+        <>
+            <button className="mr-1" onClick={createSession}>
+                Create Session
+            </button>
+            <button className="ml-1" onClick={() => setFormAction(EAuthAction.JOIN_SESSION)}>
+                Join Session
+            </button>
+        </>
+    );
+
+    const renderJoinSession = () => (
+        <form
+            onSubmit={e => {
+                e.preventDefault();
+                processLogin({ username, sessionId });
+            }}
+        >
+            <input type="text" name="gm_username" value={username} onChange={e => setUsername(e.target.value)} />
+            <button type="submit">Join</button>
+        </form>
+    );
 
     return (
         <>
@@ -33,18 +73,24 @@ export const LoginComponent: React.FC<TProps> = (props: TProps) => {
                 <meta charSet="utf-8" />
                 <title>Grooming - Login</title>
             </Helmet>
-            <main className="login">
-                <div className="login-content">
-                    <div className="d-flex flex-row flex-align-center flex-justify-center">
-                        <form
-                            onSubmit={e => {
-                                e.preventDefault();
-                                processLogin({ username, sessionId });
-                            }}
-                        >
-                            <input type="text" name="gm_username" value={username} onChange={e => setUsername(e.target.value)} />
-                            <button type="submit">Join</button>
-                        </form>
+            <main className="auth">
+                <div className="auth-content">
+                    <div className="d-flex flex-column flex-align-center flex-justify-center">
+                        <div className="d-flex flex-row flex-align-center flex-justify-center">
+                            {(() => {
+                                switch (formAction) {
+                                    case EAuthAction.JOIN_SESSION:
+                                        return renderJoinSession();
+                                    default:
+                                        return renderAuthOptions();
+                                }
+                            })()}
+                        </div>
+                        {formAction && (
+                            <div>
+                                <button onClick={() => setFormAction('')}>Back</button>
+                            </div>
+                        )}
                     </div>
                 </div>
             </main>
@@ -53,7 +99,13 @@ export const LoginComponent: React.FC<TProps> = (props: TProps) => {
 };
 
 export const Login = withRouter<any, React.FC<TProps>>(
-    connect<IAppReduxState>(null, (dispatch: ThunkDispatch<IAuthState, any, IActionType<string, string>>) => ({
-        processLogin: (data: ILoginRq) => dispatch(processLogin(data)),
-    }))(LoginComponent),
+    connect<IStateProps, {}, {}, IAppReduxState>(
+        (state: IAppReduxState) => ({
+            sessionBranch: state.auth.session,
+        }),
+        (dispatch: ThunkDispatch<IAuthState, any, IActionType<string, string>>) => ({
+            processLogin: (data: ILoginRq) => dispatch(processLogin(data)),
+            createSession: () => dispatch(createSession()),
+        }),
+    )(LoginComponent),
 );

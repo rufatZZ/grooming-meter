@@ -19,3 +19,10 @@ export interface IVotesInfo {
 export interface IOption {
     value?: string;
 }
+
+export interface ISession {
+    _id: string;
+    createdAt: number;
+    updatedAt: number;
+    isVotesShowing: boolean;
+}

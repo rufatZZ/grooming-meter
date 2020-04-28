@@ -38,14 +38,13 @@
     height: inherit;
 }
 
-.d-block{
+.d-block {
     display: block;
 }
 
-.d-inline-block{
+.d-inline-block {
     display: inline-block;
 }
-
 
 .flex-column {
     flex-direction: column;
@@ -55,7 +54,7 @@
     flex-direction: row;
 }
 
-.flex-wrap{
+.flex-wrap {
     flex-wrap: wrap;
 }
 
@@ -173,19 +172,19 @@ nav {
     text-align: center;
 }
 
-main.login {
+main.auth {
     background-color: #f0f3f8;
     width: calc(100% - 100px);
     height: 100%;
-    margin-left: 100px;    
+    margin-left: 100px;
 }
 
-main.login .login-content{
-    height: 400px;
+main.auth .auth-content {
+    padding: 100px 0px;
+    height: 200px;
 }
 
-
-main.login input{
+main.auth input {
     font-size: 24px;
     border: 1px solid lightgrey;
     border-radius: 5px;
@@ -193,7 +192,7 @@ main.login input{
     margin-right: 10px;
 }
 
-main.login button {
+main.auth button {
     background-color: #51c19d;
     color: white;
     font-size: 24px;
@@ -202,7 +201,7 @@ main.login button {
     border-radius: 5px;
 }
 
-main.login button:hover{
+main.auth button:hover {
     cursor: pointer;
     background-color: #3ba582;
 }
@@ -253,7 +252,6 @@ aside {
     display: none;
 }
 
-
 .voting-list > .voting-list-item input:checked + label {
     background-color: #308c6e;
 }
@@ -275,12 +273,12 @@ aside {
     width: 100%;
 }
 
-.final-result-title{
+.final-result-title {
     font-size: 24px;
     font-weight: 600;
-} 
+}
 
-.final-result-body{
+.final-result-body {
     font-size: 36px;
     font-weight: 700;
 }

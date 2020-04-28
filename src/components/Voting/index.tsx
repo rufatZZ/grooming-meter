@@ -1,7 +1,7 @@
 import React from 'react';
-import { isEmpty } from 'lodash';
+import isEmpty from 'lodash/isEmpty';
 
-import { IOption, IVotesInfo } from 'models';
+import { IOption, IVotesInfo } from 'shared/models';
 
 interface IProps {
     options?: IOption[];
