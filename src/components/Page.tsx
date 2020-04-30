@@ -5,28 +5,32 @@ import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import io from 'socket.io-client';
 
-
 import { Timer } from 'components/Timer';
 import { Users } from 'components/Users';
 import { Voting } from 'components/Voting';
 import { useAuthContext } from 'context/auth';
 import { IAppReduxState } from 'ducks';
+import { fetchSession, resetSession, updateSession, IAuthState, ISessionRq } from 'ducks/auth';
 import { fetchUsers, IUsersState } from 'ducks/users';
 import { fetchVotes, IVotesState, IVoteRq, addVote } from 'ducks/votes';
 import { endpoint } from 'shared/consts';
-import { IUser, IVotesInfo, IVote } from 'shared/models';
-import { IActionType } from 'shared/utils/redux';
+import { IUser, IVotesInfo, IVote, ISession } from 'shared/models';
+import { IActionType, IAsyncData } from 'shared/utils/redux';
 
 let socket: any;
 
 interface IStateProps {
+    sessionBranch: IAsyncData<ISession>;
     usersList: IUser[];
     votesList: IVotesInfo;
 }
 
 interface IDispatchProps {
+    getSession: typeof fetchSession;
     getUsers: typeof fetchUsers;
     getVotes: typeof fetchVotes;
+    updateSession: typeof updateSession;
+    resetSession: typeof resetSession;
     submitVote: typeof addVote;
 }
 
@@ -35,11 +39,10 @@ interface IProps extends IStateProps, IDispatchProps {}
 type TProps = IProps & RouteComponentProps<{}>;
 
 const GroomingMeterComponent: React.FC<TProps> = props => {
-    const { getUsers, getVotes, submitVote, usersList, votesList } = props;
-    const [timer, setTimer] = useState(0);
+    const { getSession, getUsers, getVotes, resetSession, updateSession, submitVote, sessionBranch, usersList, votesList } = props;
+    const { data: sessionData } = sessionBranch || ({} as IAsyncData<ISession>);
+    const { isVotesShowing: isShowing, updatedAt: timer } = sessionData || ({} as ISession);
     const [userVote, setUserVote] = useState('');
-    const [isShowing, toggleShowing] = useState(false);
-
     const { user } = useAuthContext();
     const { sessionId, username, _id: userId } = user || ({} as IUser);
 
@@ -58,13 +61,16 @@ const GroomingMeterComponent: React.FC<TProps> = props => {
     ];
 
     useEffect(() => {
-        // TODO get session from state.
         socket = io(endpoint, {
             transports: ['websocket'],
             query: { sessionId, userId },
         });
 
         socket.emit('join', { username });
+
+        socket.on('updateSession', async () => {
+            sessionId && getSession(sessionId);
+        });
 
         socket.on('updateUsersList', async () => {
             sessionId && getUsers(sessionId);
@@ -74,11 +80,21 @@ const GroomingMeterComponent: React.FC<TProps> = props => {
             sessionId && getVotes(sessionId);
         });
 
-        // socket.on('toggleShow', (isShowing: boolean) => toggleShowing(isShowing));
-        socket.on('timer', (time: number) => setTimer(time));
+        socket.on('toggleChanged', () => {
+            //TODO disable hide/show buttons;
+        });
+
+        socket.on('sessionReset', () => {
+            //TODO disable every action
+        });
 
         return () => socket.emit('leave');
     }, [username, userId, sessionId, getUsers, getVotes]);
+
+    useEffect(() => {
+        if (sessionData) {
+        }
+    }, [sessionData]);
 
     const handleVote = (vote: string) => {
         setUserVote(vote);
@@ -86,11 +102,11 @@ const GroomingMeterComponent: React.FC<TProps> = props => {
     };
 
     const toggleShow = () => {
-        socket.emit('handleShow', { isShowing: !isShowing });
+        sessionId && updateSession(sessionId, { isVotesShowing: !isShowing });
     };
 
     const handleReset = () => {
-        socket.emit('resetVotes');
+        sessionId && resetSession(sessionId);
     };
 
     return (
@@ -122,10 +138,14 @@ const GroomingMeterComponent: React.FC<TProps> = props => {
 export const GroomingMeter = withRouter<TProps, React.FC<TProps>>(
     connect<IStateProps, {}, {}, IAppReduxState>(
         (state: IAppReduxState): IStateProps => ({
+            sessionBranch: state.auth.session,
             usersList: state.users.list,
             votesList: state.votes.list,
         }),
-        (dispatch: ThunkDispatch<IUsersState & IVotesState, any, IActionType<string, IUser[] & IVote[]>>) => ({
+        (dispatch: ThunkDispatch<IUsersState & IVotesState & IAuthState, any, IActionType<string, IUser[] & IVote[] & IAsyncData<ISession>>>) => ({
+            getSession: (sessionId: string) => dispatch(fetchSession(sessionId)),
+            updateSession: (sessionId: string, data: ISessionRq) => dispatch(updateSession(sessionId, data)),
+            resetSession: (sessionId: string) => dispatch(resetSession(sessionId)),
             getUsers: (sessionId: string) => dispatch(fetchUsers(sessionId)),
             getVotes: (sessionId: string) => dispatch(fetchVotes(sessionId)),
             submitVote: (data: IVoteRq) => dispatch(addVote(data)),

@@ -43,12 +43,12 @@ export const addVote = (data: IVoteRq): ThunkAction<Promise<void>, IVotesState, 
 ) => {
     const response = await axios({
         url: `${endpoint}/api/votes/add`,
-        method: 'POST',
+        method: 'PUT',
         data: data,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
     });
 
-    dispatch({ type: '  ADD_VOTE_STARTED', payload: response.data.data });
+    dispatch({ type: 'ADD_VOTE_STARTED', payload: response.data.data });
 
     if (response.status === 200) {
         dispatch({ type: 'ADD_VOTES_SUCCESS', payload: response.data.data });
