@@ -15,6 +15,8 @@ export interface ILoginRq {
     sessionId: string;
 }
 
+export interface ISessionRq extends Partial<ISession> {}
+
 export const initialState = {
     login: { data: null, error: null },
     session: { data: null, error: null },
@@ -38,6 +40,71 @@ export const createSession = (): ThunkAction<Promise<void>, IAuthState, any, IAc
         }
     } catch (error) {
         dispatch({ type: 'CREATE_SESSION_FAILED', payload: error });
+    }
+};
+
+export const updateSession = (
+    sessionId: string,
+    data: ISessionRq,
+): ThunkAction<Promise<void>, IAuthState, any, IActionType<string, string>> => async (
+    dispatch: ThunkDispatch<IAuthState, any, IActionType<string, string>>,
+) => {
+    try {
+        const response = await axios({
+            url: `${endpoint}/api/session/${sessionId}`,
+            method: 'PUT',
+            data: data,
+            headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        });
+
+        dispatch({ type: 'UPDATE_SESSION_STARED', payload: '' });
+
+        if (response.status === 200) {
+            dispatch({ type: 'UPDATE_SESSION_SUCCESS', payload: response.data.data });
+        }
+    } catch (error) {
+        dispatch({ type: 'UPDATE_SESSION_FAILED', payload: error });
+    }
+};
+
+export const resetSession = (sessionId: string): ThunkAction<Promise<void>, IAuthState, any, IActionType<string, string>> => async (
+    dispatch: ThunkDispatch<IAuthState, any, IActionType<string, string>>,
+) => {
+    try {
+        const response = await axios({
+            url: `${endpoint}/api/session/${sessionId}/reset`,
+            method: 'PUT',
+            data: {},
+            headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        });
+
+        dispatch({ type: 'RESET_SESSION_STARED', payload: '' });
+
+        if (response.status === 200) {
+            dispatch({ type: 'RESET_SESSION_SUCCESS', payload: response.data.data });
+        }
+    } catch (error) {
+        dispatch({ type: 'RESET_SESSION_FAILED', payload: error });
+    }
+};
+
+export const fetchSession = (sessionId: string): ThunkAction<Promise<void>, IAuthState, any, IActionType<string, string>> => async (
+    dispatch: ThunkDispatch<IAuthState, any, IActionType<string, string>>,
+) => {
+    try {
+        const response = await axios({
+            url: `${endpoint}/api/session/${sessionId}`,
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        });
+
+        dispatch({ type: 'FETCH_SESSION_STARED', payload: '' });
+
+        if (response.status === 200) {
+            dispatch({ type: 'FETCH_SESSION_SUCCESS', payload: response.data.data });
+        }
+    } catch (error) {
+        dispatch({ type: 'FETCH_SESSION_FAILED', payload: error });
     }
 };
 
@@ -70,8 +137,22 @@ export const authReducer = (state: IAuthState = initialState, action: IActionTyp
             return { ...state, login: { data: action.payload, error: null } };
         case 'LOGIN_FAILED':
             return { ...state, login: { data: null, error: action.payload } };
+
         case 'CREATE_SESSION_SUCCESS':
             return { ...state, session: { data: action.payload, error: null } };
+        case 'CREATE_SESSION_FAILED':
+            return { ...state, login: { data: null, error: action.payload } };
+
+        case 'UPDATE_SESSION_SUCCESS':
+            return { ...state, session: { data: action.payload, error: null } };
+        case 'UPDATE_SESSION_FAILED':
+            return { ...state, login: { data: null, error: action.payload } };
+
+        case 'FETCH_SESSION_SUCCESS':
+            return { ...state, session: { data: action.payload, error: null } };
+        case 'FETCH_SESSION_FAILED':
+            return { ...state, login: { data: null, error: action.payload } };
+
         default:
             return { ...state };
     }
