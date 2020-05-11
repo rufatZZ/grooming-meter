@@ -129,7 +129,7 @@ const GroomingMeterComponent: React.FC<TProps> = props => {
                 <title>Grooming - Voting</title>
             </Helmet>
             <main className="content">
-                <WithLoading isLoading={sessionBranch.status === EProccessStatus.PENDING}>
+                <WithLoading isLoading={sessionBranch.status === EProccessStatus.PENDING || votesBranch.status === EProccessStatus.PENDING}>
                     <div className="content-holder">
                         <div className="panel text-left">
                             {usersBranch.status === EProccessStatus.ERROR && (
