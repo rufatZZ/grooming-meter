@@ -52,10 +52,12 @@ export const createSession = (): ThunkAction<Promise<void>, IAuthState, any, IAc
 export const updateSession = (
     sessionId: string,
     data: ISessionRq,
-): ThunkAction<Promise<void>, IAuthState, any, IActionType<string, string>> => async (
-    dispatch: ThunkDispatch<IAuthState, any, IActionType<string, string>>,
+): ThunkAction<Promise<void>, IAuthState, any, IActionAsyncType<string, ISession>> => async (
+    dispatch: ThunkDispatch<IAuthState, any, IActionAsyncType<string, ISession>>,
 ) => {
     try {
+        dispatch({ type: 'UPDATE_SESSION_STARED', payload: { data: null, error: null, status: EProccessStatus.PENDING } });
+
         const response = await axios({
             url: `${endpoint}/api/session/${sessionId}`,
             method: 'PUT',
@@ -63,20 +65,24 @@ export const updateSession = (
             headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         });
 
-        dispatch({ type: 'UPDATE_SESSION_STARED', payload: '' });
-
         if (response.status === 200) {
-            dispatch({ type: 'UPDATE_SESSION_SUCCESS', payload: response.data.data });
+            dispatch({ type: 'UPDATE_SESSION_SUCCESS', payload: { data: response.data.data, error: null, status: EProccessStatus.SUCCESS } });
         }
     } catch (error) {
-        dispatch({ type: 'UPDATE_SESSION_FAILED', payload: error });
+        if (error.response) {
+            dispatch({ type: 'UPDATE_SESSION_FAILED', payload: { data: null, error: error.response.data.error, status: EProccessStatus.ERROR } });
+        } else {
+            dispatch({ type: 'UPDATE_SESSION_FAILED', payload: { data: null, error: { message: 'Unknown error' }, status: EProccessStatus.ERROR } });
+        }
     }
 };
 
-export const resetSession = (sessionId: string): ThunkAction<Promise<void>, IAuthState, any, IActionType<string, string>> => async (
-    dispatch: ThunkDispatch<IAuthState, any, IActionType<string, string>>,
+export const resetSession = (sessionId: string): ThunkAction<Promise<void>, IAuthState, any, IActionAsyncType<string, ISession>> => async (
+    dispatch: ThunkDispatch<IAuthState, any, IActionAsyncType<string, ISession>>,
 ) => {
     try {
+        dispatch({ type: 'RESET_SESSION_STARTED', payload: { data: null, error: null, status: EProccessStatus.PENDING } });
+
         const response = await axios({
             url: `${endpoint}/api/session/${sessionId}/reset`,
             method: 'PUT',
@@ -84,37 +90,43 @@ export const resetSession = (sessionId: string): ThunkAction<Promise<void>, IAut
             headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         });
 
-        dispatch({ type: 'RESET_SESSION_STARTED', payload: '' });
-
         if (response.status === 200) {
-            dispatch({ type: 'RESET_SESSION_SUCCESS', payload: response.data.data });
+            dispatch({ type: 'RESET_SESSION_SUCCESS', payload: { data: response.data.data, error: null, status: EProccessStatus.SUCCESS } });
         }
     } catch (error) {
-        dispatch({ type: 'RESET_SESSION_FAILED', payload: error });
+        if (error.response) {
+            dispatch({ type: 'RESET_SESSION_FAILED', payload: { data: null, error: error.response.data.error, status: EProccessStatus.ERROR } });
+        } else {
+            dispatch({ type: 'RESET_SESSION_FAILED', payload: { data: null, error: { message: 'Unknown error' }, status: EProccessStatus.ERROR } });
+        }
     }
 };
 
-export const fetchSession = (sessionId: string): ThunkAction<Promise<void>, IAuthState, any, IActionType<string, string>> => async (
-    dispatch: ThunkDispatch<IAuthState, any, IActionType<string, string>>,
+export const fetchSession = (sessionId: string): ThunkAction<Promise<void>, IAuthState, any, IActionAsyncType<string, ISession>> => async (
+    dispatch: ThunkDispatch<IAuthState, any, IActionAsyncType<string, ISession>>,
 ) => {
     try {
+        dispatch({ type: 'FETCH_SESSION_STARTED', payload: { data: null, error: null, status: EProccessStatus.PENDING } });
+
         const response = await axios({
             url: `${endpoint}/api/session/${sessionId}`,
             method: 'GET',
             headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         });
 
-        dispatch({ type: 'FETCH_SESSION_STARTED', payload: '' });
-
         if (response.status === 200) {
-            dispatch({ type: 'FETCH_SESSION_SUCCESS', payload: response.data.data });
+            dispatch({ type: 'FETCH_SESSION_SUCCESS', payload: { data: response.data.data, error: null, status: EProccessStatus.SUCCESS } });
         }
     } catch (error) {
-        dispatch({ type: 'FETCH_SESSION_FAILED', payload: error });
+        if (error.response) {
+            dispatch({ type: 'FETCH_SESSION_FAILED', payload: { data: null, error: error.response.data.error, status: EProccessStatus.ERROR } });
+        } else {
+            dispatch({ type: 'FETCH_SESSION_FAILED', payload: { data: null, error: { message: 'Unknown error' }, status: EProccessStatus.ERROR } });
+        }
     }
 };
 
-export const cleanSessionBranch = () => (dispatch: Dispatch<IActionType<string, IAsyncData<ISession>>>) => {
+export const cleanSessionBranch = () => (dispatch: Dispatch<IActionAsyncType<string, ISession>>) => {
     dispatch({ type: 'CLEAR_SESSION', payload: { data: null, error: null, status: EProccessStatus.IDLE } });
 };
 
@@ -143,7 +155,7 @@ export const processLogin = (data: ILoginRq): ThunkAction<Promise<void>, IAuthSt
     }
 };
 
-export const cleanLoginBranch = () => (dispatch: Dispatch<IActionType<string, IAsyncData<IUser>>>) => {
+export const cleanLoginBranch = () => (dispatch: Dispatch<IActionAsyncType<string, IUser>>) => {
     dispatch({ type: 'CLEAR_LOGIN', payload: { data: null, error: null, status: EProccessStatus.IDLE } });
 };
 

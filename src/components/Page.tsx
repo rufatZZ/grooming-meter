@@ -16,6 +16,8 @@ import { fetchVotes, IVotesState, IVoteRq, addVote } from 'ducks/votes';
 import { endpoint } from 'shared/consts';
 import { IUser, IVotesInfo, IVote, ISession } from 'shared/models';
 import { IActionType, IAsyncData } from 'shared/utils/redux';
+import { EProccessStatus } from 'shared/enums';
+import { WithLoading } from 'shared/components/WithLoading';
 
 let socket: any;
 
@@ -40,8 +42,8 @@ type TProps = IProps & RouteComponentProps<{}>;
 
 const GroomingMeterComponent: React.FC<TProps> = props => {
     const { getSession, getUsers, getVotes, resetSession, updateSession, submitVote, sessionBranch, usersList, votesList } = props;
-    const { data: sessionData } = sessionBranch || ({} as IAsyncData<ISession>);
-    const { isVotesShowing: isShowing, updatedAt: timer } = sessionData || ({} as ISession);
+    const { data: sessionData, error: sessionError } = sessionBranch || ({} as IAsyncData<ISession>);
+    const { isVotesShowing: isShowing, updatedAt: timeData } = sessionData || ({} as ISession);
     const [userVote, setUserVote] = useState('');
     const { user } = useAuthContext();
     const { sessionId, username, _id: userId } = user || ({} as IUser);
@@ -116,19 +118,21 @@ const GroomingMeterComponent: React.FC<TProps> = props => {
                 <title>Grooming - Voting</title>
             </Helmet>
             <main className="content">
-                <Voting
-                    options={options}
-                    votesList={votesList}
-                    userVote={userVote}
-                    handleVoting={handleVote}
-                    isShowing={isShowing}
-                    toggleShow={toggleShow}
-                    handleReset={handleReset}
-                />
+                <WithLoading isLoading={sessionBranch.status === EProccessStatus.PENDING}>
+                    <Voting
+                        options={options}
+                        votesList={votesList}
+                        userVote={userVote}
+                        handleVoting={handleVote}
+                        isShowing={isShowing}
+                        toggleShow={toggleShow}
+                        handleReset={handleReset}
+                    />
+                </WithLoading>
             </main>
             <aside>
                 <div className="content-holder">
-                    <Timer time={timer} />
+                    <Timer time={timeData} loading={sessionBranch.status === EProccessStatus.PENDING} />
                     <Users users={usersList} currentUser={username} />
                 </div>
             </aside>

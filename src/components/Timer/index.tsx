@@ -3,11 +3,13 @@ import moment from 'moment';
 
 interface IProps {
     time?: number;
+    loading?: boolean;
 }
 
 export const Timer: React.FC<IProps> = props => {
-    const { time } = props;
-    const [currentTime, setTime] = useState('--:--');
+    const { time, loading } = props;
+    const initialValue = '--.--';
+    const [currentTime, setTime] = useState(initialValue);
 
     /** setInterval side effect for timer  */
     useEffect(() => {
@@ -31,7 +33,7 @@ export const Timer: React.FC<IProps> = props => {
                 <span className="subtitle">Time</span>
                 <br />
                 <div className="timer-time text-center">
-                    <span>{currentTime}</span>
+                    <span>{loading ? `${initialValue}` : currentTime}</span>
                 </div>
             </div>
         </div>
