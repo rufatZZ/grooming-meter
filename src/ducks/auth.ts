@@ -5,6 +5,7 @@ import { endpoint } from 'shared/consts';
 import { EProccessStatus } from 'shared/enums';
 import { ISession, IUser } from 'shared/models';
 import { IActionType, IActionAsyncType, IAsyncData } from 'shared/utils/redux';
+import { Dispatch } from 'redux';
 
 export interface IAuthState {
     login: IAsyncData<string | any>;
@@ -113,6 +114,10 @@ export const fetchSession = (sessionId: string): ThunkAction<Promise<void>, IAut
     }
 };
 
+export const cleanSessionBranch = () => (dispatch: Dispatch<IActionType<string, IAsyncData<ISession>>>) => {
+    dispatch({ type: 'CLEAR_SESSION', payload: { data: null, error: null, status: EProccessStatus.IDLE } });
+};
+
 export const processLogin = (data: ILoginRq): ThunkAction<Promise<void>, IAuthState, any, IActionAsyncType<string, IUser>> => async (
     dispatch: ThunkDispatch<IAuthState, any, IActionAsyncType<string, IUser>>,
 ) => {
@@ -138,13 +143,19 @@ export const processLogin = (data: ILoginRq): ThunkAction<Promise<void>, IAuthSt
     }
 };
 
+export const cleanLoginBranch = () => (dispatch: Dispatch<IActionType<string, IAsyncData<IUser>>>) => {
+    dispatch({ type: 'CLEAR_LOGIN', payload: { data: null, error: null, status: EProccessStatus.IDLE } });
+};
+
 export const authReducer = (state: IAuthState = initialState, action: IActionAsyncType<string, IUser | any>): IAuthState => {
     switch (action.type) {
+        case 'CLEAR_LOGIN':
         case 'LOGIN_STARTED':
         case 'LOGIN_SUCCESS':
         case 'LOGIN_FAILED':
             return { ...state, login: action.payload };
 
+        case 'CLEAR_SESSION':
         case 'CREATE_SESSION_STARTED':
         case 'CREATE_SESSION_SUCCESS':
         case 'CREATE_SESSION_FAILED':

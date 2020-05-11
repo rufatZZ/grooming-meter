@@ -7,7 +7,7 @@ import isEmpty from 'lodash/isEmpty';
 
 import { useAuthContext } from 'context/auth';
 import { IAppReduxState } from 'ducks';
-import { createSession, processLogin, IAuthState, ILoginRq } from 'ducks/auth';
+import { createSession, processLogin, cleanLoginBranch, cleanSessionBranch, IAuthState, ILoginRq } from 'ducks/auth';
 import { WithLoading } from 'shared/components/WithLoading';
 import { EAuthAction, EProccessStatus } from 'shared/enums';
 import { ISession, IUser } from 'shared/models';
@@ -21,6 +21,8 @@ interface IStateProps {
 interface IDispatchProps {
     createSession: typeof createSession;
     processLogin: typeof processLogin;
+    cleanLoginBranch: typeof cleanLoginBranch;
+    cleanSessionBranch: typeof cleanSessionBranch;
 }
 
 interface IProps extends IStateProps, IDispatchProps {}
@@ -28,7 +30,7 @@ interface IProps extends IStateProps, IDispatchProps {}
 type TProps = IProps & RouterProps;
 
 export const LoginComponent: React.FC<TProps> = (props: TProps) => {
-    const { history, createSession, processLogin, loginBranch, sessionBranch } = props;
+    const { history, createSession, processLogin, loginBranch, sessionBranch, cleanLoginBranch, cleanSessionBranch } = props;
     const { error: loginError } = loginBranch || ({} as IAsyncData<IUser>);
     const { data: sessionData, error: sessionError } = sessionBranch || ({} as IAsyncData<ISession>);
     const [username, setUsername] = useState('');
@@ -36,7 +38,12 @@ export const LoginComponent: React.FC<TProps> = (props: TProps) => {
     const [sessionId, setSessionId] = useState('');
     const { isLoggedIn } = useAuthContext();
 
-    console.log(sessionBranch);
+    const goToAuthOptions = () => {
+        setFormAction('');
+        setSessionId('');
+        cleanLoginBranch();
+        cleanSessionBranch();
+    };
 
     useEffect(() => {
         isLoggedIn && history.push('/groom');
@@ -51,10 +58,10 @@ export const LoginComponent: React.FC<TProps> = (props: TProps) => {
 
     const renderAuthOptions = () => (
         <>
-            <button className="mr-1" onClick={createSession}>
+            <button type="button" className="mr-1" onClick={createSession}>
                 Create Session
             </button>
-            <button className="ml-1" onClick={() => setFormAction(EAuthAction.JOIN_SESSION)}>
+            <button type="button" className="ml-1" onClick={() => setFormAction(EAuthAction.JOIN_SESSION)}>
                 Join Session
             </button>
         </>
@@ -68,7 +75,6 @@ export const LoginComponent: React.FC<TProps> = (props: TProps) => {
             }}
         >
             <div className="d-flex flex-column">
-                {/* TODO check show options for clean session data after create and back button. */}
                 {!sessionData && (
                     <input
                         type="text"
@@ -82,7 +88,11 @@ export const LoginComponent: React.FC<TProps> = (props: TProps) => {
                 <input type="text" name="gm_username" placeholder="Username" required value={username} onChange={e => setUsername(e.target.value)} />
             </div>
             <div className="auth-actions">
-                {formAction && <button onClick={() => setFormAction('')}>Back</button>}
+                {formAction && (
+                    <button type="button" onClick={() => goToAuthOptions()}>
+                        Back
+                    </button>
+                )}
                 <button type="submit">Join</button>
             </div>
         </form>
@@ -135,6 +145,8 @@ export const Login = withRouter<any, React.FC<TProps>>(
         (dispatch: ThunkDispatch<IAuthState, any, IActionType<string, string>>) => ({
             processLogin: (data: ILoginRq) => dispatch(processLogin(data)),
             createSession: () => dispatch(createSession()),
+            cleanLoginBranch: () => dispatch(cleanLoginBranch()),
+            cleanSessionBranch: () => dispatch(cleanSessionBranch()),
         }),
     )(LoginComponent),
 );
