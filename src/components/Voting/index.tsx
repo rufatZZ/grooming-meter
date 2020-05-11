@@ -5,7 +5,7 @@ import { IOption, IVotesInfo } from 'shared/models';
 
 interface IProps {
     options?: IOption[];
-    votesList?: IVotesInfo;
+    votesList: IVotesInfo;
     userVote?: string;
     isShowing?: boolean;
     toggleShow: () => void;
@@ -36,7 +36,7 @@ export const Voting: React.FC<IProps> = props => {
     );
 
     return (
-        <div className="content-holder">
+        <>
             <div className="panel panel-primary">
                 <div className="subtitle">Vote</div>
                 {renderOptions()}
@@ -86,6 +86,6 @@ export const Voting: React.FC<IProps> = props => {
                     </div>
                 )}
             </div>
-        </div>
+        </>
     );
 };

@@ -4,7 +4,7 @@ import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { endpoint } from 'shared/consts';
 import { EProccessStatus } from 'shared/enums';
 import { ISession, IUser } from 'shared/models';
-import { IActionType, IActionAsyncType, IAsyncData } from 'shared/utils/redux';
+import { IActionAsyncType, IAsyncData } from 'shared/utils/redux';
 import { Dispatch } from 'redux';
 
 export interface IAuthState {
@@ -159,7 +159,7 @@ export const cleanLoginBranch = () => (dispatch: Dispatch<IActionAsyncType<strin
     dispatch({ type: 'CLEAR_LOGIN', payload: { data: null, error: null, status: EProccessStatus.IDLE } });
 };
 
-export const authReducer = (state: IAuthState = initialState, action: IActionAsyncType<string, IUser | any>): IAuthState => {
+export const authReducer = (state: IAuthState = initialState, action: IActionAsyncType<string, IUser | ISession>): IAuthState => {
     switch (action.type) {
         case 'CLEAR_LOGIN':
         case 'LOGIN_STARTED':
