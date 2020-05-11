@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
+import isEmpty from 'lodash/isEmpty';
 import io from 'socket.io-client';
 
 import { Timer } from 'components/Timer';
@@ -12,17 +13,20 @@ import { useAuthContext } from 'context/auth';
 import { IAppReduxState } from 'ducks';
 import { fetchSession, resetSession, updateSession, IAuthState, ISessionRq } from 'ducks/auth';
 import { fetchUsers, IUsersState } from 'ducks/users';
-import { fetchVotes, IVotesState, IVoteRq, addVote } from 'ducks/votes';
+import { fetchVotes, IVotesState, IVoteRq, submitVote } from 'ducks/votes';
+import { WithLoading } from 'shared/components/WithLoading';
 import { endpoint } from 'shared/consts';
+import { EProccessStatus } from 'shared/enums';
 import { IUser, IVotesInfo, IVote, ISession } from 'shared/models';
-import { IActionType, IAsyncData } from 'shared/utils/redux';
+import { IAsyncData, IActionAsyncType } from 'shared/utils/redux';
 
 let socket: any;
 
 interface IStateProps {
     sessionBranch: IAsyncData<ISession>;
-    usersList: IUser[];
-    votesList: IVotesInfo;
+    usersBranch: IAsyncData<IUser[]>;
+    votesBranch: IAsyncData<IVotesInfo>;
+    votesSubmitBranch: IAsyncData<null>;
 }
 
 interface IDispatchProps {
@@ -31,7 +35,7 @@ interface IDispatchProps {
     getVotes: typeof fetchVotes;
     updateSession: typeof updateSession;
     resetSession: typeof resetSession;
-    submitVote: typeof addVote;
+    addVote: typeof submitVote;
 }
 
 interface IProps extends IStateProps, IDispatchProps {}
@@ -39,9 +43,23 @@ interface IProps extends IStateProps, IDispatchProps {}
 type TProps = IProps & RouteComponentProps<{}>;
 
 const GroomingMeterComponent: React.FC<TProps> = props => {
-    const { getSession, getUsers, getVotes, resetSession, updateSession, submitVote, sessionBranch, usersList, votesList } = props;
-    const { data: sessionData } = sessionBranch || ({} as IAsyncData<ISession>);
-    const { isVotesShowing: isShowing, updatedAt: timer } = sessionData || ({} as ISession);
+    const {
+        getSession,
+        getUsers,
+        getVotes,
+        resetSession,
+        updateSession,
+        addVote,
+        sessionBranch,
+        usersBranch,
+        votesBranch,
+        votesSubmitBranch,
+    } = props;
+    const { data: sessionData, error: sessionError } = sessionBranch || ({} as IAsyncData<ISession>);
+    const { data: usersData, error: usersError } = usersBranch || ({} as IAsyncData<IUser[]>);
+    const { data: votesData, error: votesError } = votesBranch || ({} as IAsyncData<IVotesInfo>);
+    const { error: votesSubmitError } = votesSubmitBranch || ({} as IAsyncData<null>);
+    const { isVotesShowing: isShowing, updatedAt: timeData } = sessionData || ({} as ISession);
     const [userVote, setUserVote] = useState('');
     const { user } = useAuthContext();
     const { sessionId, username, _id: userId } = user || ({} as IUser);
@@ -89,16 +107,11 @@ const GroomingMeterComponent: React.FC<TProps> = props => {
         });
 
         return () => socket.emit('leave');
-    }, [username, userId, sessionId, getUsers, getVotes]);
-
-    useEffect(() => {
-        if (sessionData) {
-        }
-    }, [sessionData]);
+    }, [username, userId, sessionId, getSession, getUsers, getVotes]);
 
     const handleVote = (vote: string) => {
         setUserVote(vote);
-        userId && sessionId && submitVote({ userId, sessionId, vote });
+        userId && sessionId && addVote({ userId, sessionId, vote });
     };
 
     const toggleShow = () => {
@@ -116,20 +129,46 @@ const GroomingMeterComponent: React.FC<TProps> = props => {
                 <title>Grooming - Voting</title>
             </Helmet>
             <main className="content">
-                <Voting
-                    options={options}
-                    votesList={votesList}
-                    userVote={userVote}
-                    handleVoting={handleVote}
-                    isShowing={isShowing}
-                    toggleShow={toggleShow}
-                    handleReset={handleReset}
-                />
+                <WithLoading isLoading={sessionBranch.status === EProccessStatus.PENDING}>
+                    <div className="content-holder">
+                        <div className="panel text-left">
+                            {usersBranch.status === EProccessStatus.ERROR && (
+                                <div className="panel panel-error bg-danger" style={{ color: 'white' }}>
+                                    Users - {!isEmpty(usersError) ? usersError.message : 'Unknown Error'}
+                                </div>
+                            )}
+                            {votesBranch.status === EProccessStatus.ERROR && (
+                                <div className="panel panel-error bg-danger" style={{ color: 'white' }}>
+                                    Users - {!isEmpty(votesError) ? votesError.message : 'Unknown Error'}
+                                </div>
+                            )}
+                            {votesSubmitBranch.status === EProccessStatus.ERROR && (
+                                <div className="panel panel-error bg-danger" style={{ color: 'white' }}>
+                                    Users - {!isEmpty(votesSubmitError) ? votesSubmitError.message : 'Unknown Error'}
+                                </div>
+                            )}
+                            {sessionBranch.status === EProccessStatus.ERROR && (
+                                <div className="panel panel-error bg-danger" style={{ color: 'white' }}>
+                                    Session - {!isEmpty(sessionError) ? sessionError.message : 'Unknown Error'}
+                                </div>
+                            )}
+                        </div>
+                        <Voting
+                            options={options}
+                            votesList={votesData || ({ votes: [] as IVote[], length: 0, average: 0 } as IVotesInfo)}
+                            userVote={userVote}
+                            handleVoting={handleVote}
+                            isShowing={isShowing}
+                            toggleShow={toggleShow}
+                            handleReset={handleReset}
+                        />
+                    </div>
+                </WithLoading>
             </main>
             <aside>
                 <div className="content-holder">
-                    <Timer time={timer} />
-                    <Users users={usersList} currentUser={username} />
+                    <Timer time={timeData} loading={sessionBranch.status === EProccessStatus.PENDING} />
+                    <Users users={usersData || []} currentUser={username} loading={usersBranch.status === EProccessStatus.PENDING} />
                 </div>
             </aside>
         </>
@@ -139,16 +178,17 @@ export const GroomingMeter = withRouter<TProps, React.FC<TProps>>(
     connect<IStateProps, {}, {}, IAppReduxState>(
         (state: IAppReduxState): IStateProps => ({
             sessionBranch: state.auth.session,
-            usersList: state.users.list,
-            votesList: state.votes.list,
+            usersBranch: state.users.list,
+            votesBranch: state.votes.list,
+            votesSubmitBranch: state.votes.submit,
         }),
-        (dispatch: ThunkDispatch<IUsersState & IVotesState & IAuthState, any, IActionType<string, IUser[] & IVote[] & IAsyncData<ISession>>>) => ({
+        (dispatch: ThunkDispatch<IUsersState & IVotesState & IAuthState, any, IActionAsyncType<string, IUser[] & IVote[] & ISession>>) => ({
             getSession: (sessionId: string) => dispatch(fetchSession(sessionId)),
             updateSession: (sessionId: string, data: ISessionRq) => dispatch(updateSession(sessionId, data)),
             resetSession: (sessionId: string) => dispatch(resetSession(sessionId)),
             getUsers: (sessionId: string) => dispatch(fetchUsers(sessionId)),
             getVotes: (sessionId: string) => dispatch(fetchVotes(sessionId)),
-            submitVote: (data: IVoteRq) => dispatch(addVote(data)),
+            addVote: (data: IVoteRq) => dispatch(submitVote(data)),
         }),
     )(GroomingMeterComponent),
 );

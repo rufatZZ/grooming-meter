@@ -2,11 +2,13 @@ import axios from 'axios';
 import { ThunkDispatch, ThunkAction } from 'redux-thunk';
 
 import { endpoint } from 'shared/consts';
-import { IVotesInfo, IVote } from 'shared/models';
-import { IActionType } from 'shared/utils/redux';
+import { EProccessStatus } from 'shared/enums';
+import { IVotesInfo } from 'shared/models';
+import { IActionAsyncType, IAsyncData } from 'shared/utils/redux';
 
 export interface IVotesState {
-    list: IVotesInfo;
+    submit: IAsyncData<null>;
+    list: IAsyncData<IVotesInfo>;
 }
 
 export interface IVoteRq {
@@ -16,50 +18,70 @@ export interface IVoteRq {
 }
 
 export const initialState = {
-    list: { votes: [] as IVote[], length: 0, average: 0 } as IVotesInfo,
+    submit: { data: null, error: null, status: EProccessStatus.IDLE },
+    list: { data: null, error: null, status: EProccessStatus.IDLE },
 };
 
-export const fetchVotes = (sessionId: string): ThunkAction<Promise<void>, IVotesState, any, IActionType<string, IVotesInfo>> => async (
-    dispatch: ThunkDispatch<IVotesState, any, IActionType<string, IVotesInfo>>,
+export const fetchVotes = (sessionId: string): ThunkAction<Promise<void>, IVotesState, any, IActionAsyncType<string, IVotesInfo>> => async (
+    dispatch: ThunkDispatch<IVotesState, any, IActionAsyncType<string, IVotesInfo>>,
 ) => {
-    const response = await axios({
-        url: `${endpoint}/api/votes`,
-        method: 'GET',
-        params: { sessionId },
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-    });
+    try {
+        dispatch({ type: 'FETCH_VOTES_STARTED', payload: { data: null, error: null, status: EProccessStatus.PENDING } });
 
-    dispatch({ type: 'FETCH_VOTES_STARTED', payload: { votes: [] as IVote[], length: 0, average: 0 } as IVotesInfo });
+        const response = await axios({
+            url: `${endpoint}/api/votes`,
+            method: 'GET',
+            params: { sessionId },
+            headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        });
 
-    if (response.status === 200) {
-        dispatch({ type: 'FETCH_VOTES_SUCCESS', payload: response.data.data });
-    } else {
-        dispatch({ type: 'FETCH_VOTES_FAILED', payload: { votes: [] as IVote[], length: 0, average: 0 } as IVotesInfo });
+        if (response.status === 200) {
+            dispatch({ type: 'FETCH_VOTES_SUCCESS', payload: { data: response.data.data, error: null, status: EProccessStatus.SUCCESS } });
+        }
+    } catch (error) {
+        if (error.response) {
+            dispatch({ type: 'FETCH_VOTES_FAILED', payload: { data: null, error: error.response.data.error, status: EProccessStatus.ERROR } });
+        } else {
+            dispatch({ type: 'FETCH_VOTES_FAILED', payload: { data: null, error: { message: 'Unknown error' }, status: EProccessStatus.ERROR } });
+        }
     }
 };
 
-export const addVote = (data: IVoteRq): ThunkAction<Promise<void>, IVotesState, any, IActionType<string, void>> => async (
-    dispatch: ThunkDispatch<IVotesState, any, IActionType<string, void>>,
+export const submitVote = (data: IVoteRq): ThunkAction<Promise<void>, IVotesState, any, IActionAsyncType<string, null>> => async (
+    dispatch: ThunkDispatch<IVotesState, any, IActionAsyncType<string, null>>,
 ) => {
-    const response = await axios({
-        url: `${endpoint}/api/votes/add`,
-        method: 'PUT',
-        data: data,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-    });
+    try {
+        dispatch({ type: 'SUBMIT_VOTE_STARTED', payload: { data: null, error: null, status: EProccessStatus.PENDING } });
 
-    dispatch({ type: 'ADD_VOTE_STARTED', payload: response.data.data });
+        const response = await axios({
+            url: `${endpoint}/api/votes/add`,
+            method: 'PUT',
+            data: data,
+            headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        });
 
-    if (response.status === 200) {
-        dispatch({ type: 'ADD_VOTES_SUCCESS', payload: response.data.data });
-    } else {
-        dispatch({ type: 'ADD_VOTES_FAILED', payload: response.data });
+        if (response.status === 200) {
+            dispatch({ type: 'SUBMIT_VOTE_SUCCESS', payload: { data: response.data.data, error: null, status: EProccessStatus.SUCCESS } });
+        }
+    } catch (error) {
+        if (error.response) {
+            dispatch({ type: 'SUBMIT_VOTE_FAILED', payload: { data: null, error: error.response.data.error, status: EProccessStatus.ERROR } });
+        } else {
+            dispatch({ type: 'SUBMIT_VOTE_FAILED', payload: { data: null, error: { message: 'Unknown error' }, status: EProccessStatus.ERROR } });
+        }
     }
 };
 
-export const votesReducers = (state: IVotesState = initialState, action: IActionType<string, IVotesInfo>) => {
+export const votesReducers = (state: IVotesState = initialState, action: IActionAsyncType<string, IVotesInfo> & IActionAsyncType<string, null>) => {
     switch (action.type) {
+        case 'SUBMIT_VOTE_STARTED':
+        case 'SUBMIT_VOTE_SUCCESS':
+        case 'SUBMIT_VOTE_FAILED':
+            return { ...state, submit: action.payload };
+
+        case 'FETCH_VOTES_STARTED':
         case 'FETCH_VOTES_SUCCESS':
+        case 'FETCH_VOTES_FAILED':
             return { ...state, list: action.payload };
         default:
             return { ...state };
