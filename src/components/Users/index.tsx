@@ -16,7 +16,7 @@ export const Users: React.FC<IProps> = props => {
 
     return (
         <div className="users">
-            <div className="panel">
+            <div className="panel mt-1">
                 <span className="subtitle">Users {users && `{ ${users.length} }`}</span>
                 <WithLoading isLoading={loading}>
                     <ol className="users-list text-left">

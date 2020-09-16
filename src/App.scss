@@ -9,14 +9,14 @@
     padding: 5px 15px;
     font-size: 16px;
     color: white;
-}
 
-.btn:hover {
-    cursor: pointer;
-}
+    &:hover {
+        cursor: pointer;
+    }
 
-.btn:focus {
-    outline: none;
+    &:focus {
+        outline: none;
+    }
 }
 
 .global-container {
@@ -187,55 +187,57 @@ nav {
     text-align: center;
 }
 
-main.auth {
-    background-color: #f0f3f8;
-    width: calc(100% - 100px);
-    height: 100%;
-    margin-left: 100px;
-}
+main {
+    &.auth {
+        background-color: #f0f3f8;
+        width: calc(100% - 100px);
+        height: 100%;
+        margin-left: 100px;
 
-main.auth .auth-content {
-    padding: 100px 0px;
-    height: 200px;
-    margin: 0 auto;
-    width: 500px;
-}
+        .auth-content {
+            padding: 100px 0px;
+            height: 200px;
+            margin: 0 auto;
+            width: 600px;
+        }
 
-main.auth input {
-    width: 100%;
-    font-size: 24px;
-    border: 1px solid lightgrey;
-    border-radius: 5px;
-    padding: 12px 16px;
-    margin-bottom: 10px;
-}
+        input {
+            width: 100%;
+            font-size: 24px;
+            border: 1px solid lightgrey;
+            border-radius: 5px;
+            padding: 12px 16px;
+            margin-bottom: 10px;
+        }
 
-main.auth button {
-    background-color: #51c19d;
-    color: white;
-    font-size: 24px;
-    padding: 12px 36px;
-    border: 1px solid lightgrey;
-    border-radius: 5px;
-}
+        button {
+            background-color: #51c19d;
+            color: white;
+            font-size: 24px;
+            padding: 20px 40px;
+            border: 1px solid transparent;
+            border-radius: 5px;
 
-main.auth button:hover {
-    cursor: pointer;
-    background-color: #3ba582;
-}
+            &:hover {
+                cursor: pointer;
+                background-color: #3ba582;
+            }
+        }
 
-main.auth .auth-actions {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(48%, 1fr));
-    grid-auto-rows: minmax(50px, auto);
-    column-gap: 10px;
-}
+        .auth-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(48%, 1fr));
+            grid-auto-rows: minmax(50px, auto);
+            column-gap: 10px;
+        }
+    }
 
-main.content {
-    background-color: #f0f3f8;
-    width: calc(70% - 100px);
-    height: inherit;
-    margin-left: 100px;
+    &.content {
+        background-color: #f0f3f8;
+        width: calc(70% - 100px);
+        height: inherit;
+        margin-left: 100px;
+    }
 }
 
 .content-holder {
@@ -308,15 +310,73 @@ aside {
     font-weight: 700;
 }
 
-aside .timer .timer-time {
-    font-size: 56px;
-    font-weight: 600;
-}
+aside {
+    .timer .timer-time {
+        font-size: 56px;
+        font-weight: 600;
+    }
 
-aside .users .users-list li {
-    margin-bottom: 2px;
-}
+    .session--settings {
+        .copy-options {
+            display: table;
+            width: 80%;
+            height: 35px;
 
-aside .users .users-list .user-list-item-voted {
-    background-color: #51c19d;
+            & > .copy-options-input,
+            & > .copy-options-button {
+                display: table-cell;
+                height: 100%;
+                padding: 0 15px;
+                border: 1px solid #51c19d;
+            }
+
+            .copy-options-input {
+                width: 100%;
+                border: 1px solid #51c19d;
+                border-radius: 5px 0px 0px 5px;
+                font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+                font-size: 14px;
+                outline: none;
+
+                &:focus {
+                    box-shadow: 0 0 0 3px rgba(211, 211, 211, 0.7);
+                }
+            }
+
+            .copy-options-button {
+                width: 50px;
+                background-color: white;
+                border-left: none;
+                border-radius: 0px 5px 5px 0px;
+                color: #989898;
+                cursor: pointer;
+                font-weight: 700;
+
+                &:hover {
+                    color: white;
+                    background-color: rgba(81, 193, 157, 0.6);
+                }
+
+                &:focus,
+                &:active {
+                    background-color: rgba(81, 193, 157, 1);
+                }
+            }
+        }
+    }
+
+    .users {
+        .users-list {
+            li {
+                margin-bottom: 2px;
+            }
+
+            .user-list-item-voted {
+                background-color: #51c19d;
+                border-radius: 5px;
+                line-height: 16px;
+                padding: 4px 5px;
+            }
+        }
+    }
 }

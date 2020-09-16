@@ -7,6 +7,7 @@ import isEmpty from 'lodash/isEmpty';
 import io from 'socket.io-client';
 
 import { Timer } from 'components/Timer';
+import { SessionSettings } from 'components/SessionSettings';
 import { Users } from 'components/Users';
 import { Voting } from 'components/Voting';
 import { useAuthContext } from 'context/auth';
@@ -168,6 +169,7 @@ const GroomingMeterComponent: React.FC<TProps> = props => {
             <aside>
                 <div className="content-holder">
                     <Timer time={timeData} loading={sessionBranch.status === EProccessStatus.PENDING} />
+                    <SessionSettings sessionInfo={sessionData || {} as ISession}/>
                     <Users users={usersData || []} currentUser={username} loading={usersBranch.status === EProccessStatus.PENDING} />
                 </div>
             </aside>

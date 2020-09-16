@@ -6,7 +6,7 @@ import { GroomingMeter } from 'components/Page';
 import { PrivateRoute } from 'components/PrivateRoute';
 import { WithAuthInfo } from 'components/WithAuthInfo';
 
-import './App.css';
+import './App.scss';
 
 interface IProps {}
 
