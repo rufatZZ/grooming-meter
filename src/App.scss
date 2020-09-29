@@ -9,6 +9,7 @@
     padding: 5px 15px;
     font-size: 16px;
     color: white;
+    user-select: none;
 
     &:hover {
         cursor: pointer;
@@ -16,6 +17,40 @@
 
     &:focus {
         outline: none;
+    }
+}
+
+.loading {
+    position: relative;
+
+    .loading-overlay {
+        background-color: rgba(255, 255, 255, 0.7);
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: none;
+        z-index: 90;
+
+        .indicator-wrapper {
+            text-align: center;
+            width: 100%;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+
+            .loading-indicator {
+                transform: translate(-50%, -50%);
+                position: absolute;
+                top: 50%;
+                left: 50%;
+            }
+        }
+
+        &.overlay-open {
+            display: block;
+        }
     }
 }
 
@@ -79,6 +114,7 @@
 }
 
 .panel {
+    position: relative;
     background-color: #f0f3f8;
     border-radius: 5px;
     padding: 10px 15px;
@@ -188,6 +224,7 @@ nav {
 }
 
 main {
+    position: relative;
     &.auth {
         background-color: #f0f3f8;
         width: calc(100% - 100px);
@@ -359,6 +396,7 @@ aside {
 
                 &:focus,
                 &:active {
+                    color: white;
                     background-color: rgba(81, 193, 157, 1);
                 }
             }

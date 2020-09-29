@@ -16,9 +16,9 @@ export const Users: React.FC<IProps> = props => {
 
     return (
         <div className="users">
-            <div className="panel mt-1">
-                <span className="subtitle">Users {users && `{ ${users.length} }`}</span>
-                <WithLoading isLoading={loading}>
+            <WithLoading isLoading={loading}>
+                <div className="panel mt-1">
+                    <span className="subtitle">Users {users && `{ ${users.length} }`}</span>
                     <ol className="users-list text-left">
                         {!isEmpty(users) &&
                             users.map(user => (
@@ -33,8 +33,8 @@ export const Users: React.FC<IProps> = props => {
                                 </li>
                             ))}
                     </ol>
-                </WithLoading>
-            </div>
+                </div>
+            </WithLoading>
         </div>
     );
 };

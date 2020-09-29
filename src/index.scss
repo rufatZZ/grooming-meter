@@ -1,7 +1,10 @@
 * {
     box-sizing: border-box;
+}
+
+ input, button, div{
     transition-property: all;
-    transition-duration: .2s;
+    transition-duration: 0.2s;
     transition-timing-function: ease-in;
 }
 
