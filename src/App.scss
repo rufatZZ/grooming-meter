@@ -351,6 +351,17 @@ aside {
     .timer .timer-time {
         font-size: 56px;
         font-weight: 600;
+
+        transform: scale(1);
+
+        &.off-limit {
+            color: #c55653;
+            animation: pulse 1s infinite;
+        }
+
+        &.on-limit {
+            color: #308c6e;
+        }
     }
 
     .session--settings {
@@ -416,5 +427,19 @@ aside {
                 padding: 4px 5px;
             }
         }
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.9);
+    }
+
+    70% {
+        transform: scale(1);
+    }
+
+    100% {
+        transform: scale(0.9);
     }
 }
