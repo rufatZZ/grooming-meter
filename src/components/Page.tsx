@@ -130,7 +130,7 @@ const GroomingMeterComponent: React.FC<TProps> = props => {
                 <title>Grooming - Voting</title>
             </Helmet>
             <main className="content">
-                <WithLoading isLoading={sessionBranch.status === EProccessStatus.PENDING || votesBranch.status === EProccessStatus.PENDING}>
+                <WithLoading isLoading={sessionBranch.status === EProccessStatus.PENDING && sessionBranch.data === null}>
                     <div className="content-holder">
                         <div className="panel text-left">
                             {usersBranch.status === EProccessStatus.ERROR && (
@@ -162,6 +162,7 @@ const GroomingMeterComponent: React.FC<TProps> = props => {
                             isShowing={isShowing}
                             toggleShow={toggleShow}
                             handleReset={handleReset}
+                            loading={votesBranch.status === EProccessStatus.PENDING}
                         />
                     </div>
                 </WithLoading>
@@ -169,7 +170,7 @@ const GroomingMeterComponent: React.FC<TProps> = props => {
             <aside>
                 <div className="content-holder">
                     <Timer time={timeData} loading={sessionBranch.status === EProccessStatus.PENDING} />
-                    <SessionSettings sessionInfo={sessionData || {} as ISession}/>
+                    <SessionSettings sessionInfo={sessionData || ({} as ISession)} />
                     <Users users={usersData || []} currentUser={username} loading={usersBranch.status === EProccessStatus.PENDING} />
                 </div>
             </aside>

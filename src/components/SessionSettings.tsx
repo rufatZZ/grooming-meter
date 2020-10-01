@@ -10,15 +10,13 @@ export const SessionSettings: React.FC<IProps> = props => {
     const { sessionInfo } = props;
     const { _id: sessionId = '---' } = sessionInfo || ({} as ISession);
 
-    console.log(sessionInfo);
-
     const handleSelect = (e: SyntheticEvent<HTMLInputElement>) => {
         const currentTarget = e.currentTarget;
         currentTarget.setSelectionRange(0, currentTarget.value.length);
     };
 
     const handleCopy = async () => {
-        await navigator.clipboard.writeText(sessionId);
+        await navigator.clipboard && navigator.clipboard.writeText(sessionId || "");
     };
 
     return (

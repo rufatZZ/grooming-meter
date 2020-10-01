@@ -3,7 +3,7 @@
 }
 
  input, button, div{
-    transition-property: all;
+    transition-property: color, background-color;
     transition-duration: 0.2s;
     transition-timing-function: ease-in;
 }

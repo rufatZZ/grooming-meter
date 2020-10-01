@@ -206,6 +206,16 @@
     padding-right: 1em;
 }
 
+.px-2 {
+    padding-top: 2em;
+    padding-bottom: 2em;
+}
+
+.py-2 {
+    padding-left: 2em;
+    padding-right: 2em;
+}
+
 ul {
     list-style-type: none;
 }
@@ -294,30 +304,43 @@ aside {
     position: relative;
 }
 
-.voting-list-item label {
-    color: white;
-    font-size: 18px;
-    font-weight: 700;
-    padding: 5px 20px;
-    margin-right: 5px;
+.voting-list-item {
+    position: relative;
+    color: #51c19d;
+    width: 150px;
+    height: 100px;
+    border: 2px solid #308c6e;
     border-radius: 5px;
-    background-color: #51c19d;
-}
-
-.voting-list-item label:hover {
+    box-sizing: border-box;
+    margin-right: 10px;
+    user-select: none;
     cursor: pointer;
-    background-color: #3ba582;
-}
+    
+    > span {
+        position: absolute;
+        font-size: 36px;
+        font-weight: 600;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
 
-.voting-list-item input {
-    width: 0px;
-    height: 0px;
-    position: absolute;
-    display: none;
-}
+    &:hover,
+    &:focus,
+    &:active,
+    &.selected {
+        color: white;
+    }
 
-.voting-list > .voting-list-item input:checked + label {
-    background-color: #308c6e;
+    &:hover {
+        background-color: #3ba582;
+    }
+
+    &:focus,
+    &:active,
+    &.selected {
+        background-color: #308c6e;
+    }
 }
 
 .result-list-item {
@@ -351,12 +374,11 @@ aside {
     .timer .timer-time {
         font-size: 56px;
         font-weight: 600;
-
-        transform: scale(1);
+        opacity: 1;
 
         &.off-limit {
             color: #c55653;
-            animation: pulse 1s infinite;
+            animation: opacity 1s infinite;
         }
 
         &.on-limit {
@@ -430,16 +452,17 @@ aside {
     }
 }
 
-@keyframes pulse {
+@keyframes opacity {
     0% {
-        transform: scale(0.9);
+        opacity: 0.4;
     }
 
-    70% {
-        transform: scale(1);
+    50% {
+        opacity: 1;
+
     }
 
     100% {
-        transform: scale(0.9);
+        opacity: 0.4;
     }
 }
