@@ -129,51 +129,53 @@ const GroomingMeterComponent: React.FC<TProps> = props => {
                 <meta charSet="utf-8" />
                 <title>Grooming - Voting</title>
             </Helmet>
-            <main className="content">
-                <WithLoading isLoading={sessionBranch.status === EProccessStatus.PENDING && sessionBranch.data === null}>
-                    <div className="content-holder">
-                        <div className="panel text-left">
-                            {usersBranch.status === EProccessStatus.ERROR && (
-                                <div className="panel panel-error bg-danger" style={{ color: 'white' }}>
-                                    Users - {!isEmpty(usersError) ? usersError.message : 'Unknown Error'}
-                                </div>
-                            )}
-                            {votesBranch.status === EProccessStatus.ERROR && (
-                                <div className="panel panel-error bg-danger" style={{ color: 'white' }}>
-                                    Users - {!isEmpty(votesError) ? votesError.message : 'Unknown Error'}
-                                </div>
-                            )}
-                            {votesSubmitBranch.status === EProccessStatus.ERROR && (
-                                <div className="panel panel-error bg-danger" style={{ color: 'white' }}>
-                                    Users - {!isEmpty(votesSubmitError) ? votesSubmitError.message : 'Unknown Error'}
-                                </div>
-                            )}
-                            {sessionBranch.status === EProccessStatus.ERROR && (
-                                <div className="panel panel-error bg-danger" style={{ color: 'white' }}>
-                                    Session - {!isEmpty(sessionError) ? sessionError.message : 'Unknown Error'}
-                                </div>
-                            )}
+            <div className="d-flex full-window-height">
+                <main className="content">
+                    <WithLoading isLoading={sessionBranch.status === EProccessStatus.PENDING && sessionBranch.data === null}>
+                        <div className="content-holder">
+                            <div className="panel text-left">
+                                {usersBranch.status === EProccessStatus.ERROR && (
+                                    <div className="panel panel-error bg-danger" style={{ color: 'white' }}>
+                                        Users - {!isEmpty(usersError) ? usersError.message : 'Unknown Error'}
+                                    </div>
+                                )}
+                                {votesBranch.status === EProccessStatus.ERROR && (
+                                    <div className="panel panel-error bg-danger" style={{ color: 'white' }}>
+                                        Users - {!isEmpty(votesError) ? votesError.message : 'Unknown Error'}
+                                    </div>
+                                )}
+                                {votesSubmitBranch.status === EProccessStatus.ERROR && (
+                                    <div className="panel panel-error bg-danger" style={{ color: 'white' }}>
+                                        Users - {!isEmpty(votesSubmitError) ? votesSubmitError.message : 'Unknown Error'}
+                                    </div>
+                                )}
+                                {sessionBranch.status === EProccessStatus.ERROR && (
+                                    <div className="panel panel-error bg-danger" style={{ color: 'white' }}>
+                                        Session - {!isEmpty(sessionError) ? sessionError.message : 'Unknown Error'}
+                                    </div>
+                                )}
+                            </div>
+                            <Voting
+                                options={options}
+                                votesList={votesData || ({ votes: [] as IVote[], length: 0, average: 0 } as IVotesInfo)}
+                                userVote={userVote}
+                                handleVoting={handleVote}
+                                isShowing={isShowing}
+                                toggleShow={toggleShow}
+                                handleReset={handleReset}
+                                loading={votesBranch.status === EProccessStatus.PENDING}
+                            />
                         </div>
-                        <Voting
-                            options={options}
-                            votesList={votesData || ({ votes: [] as IVote[], length: 0, average: 0 } as IVotesInfo)}
-                            userVote={userVote}
-                            handleVoting={handleVote}
-                            isShowing={isShowing}
-                            toggleShow={toggleShow}
-                            handleReset={handleReset}
-                            loading={votesBranch.status === EProccessStatus.PENDING}
-                        />
+                    </WithLoading>
+                </main>
+                <aside>
+                    <div className="content-holder">
+                        <Timer time={timeData} loading={sessionBranch.status === EProccessStatus.PENDING} />
+                        <SessionSettings sessionInfo={sessionData || ({} as ISession)} />
+                        <Users users={usersData || []} currentUser={username} loading={usersBranch.status === EProccessStatus.PENDING} />
                     </div>
-                </WithLoading>
-            </main>
-            <aside>
-                <div className="content-holder">
-                    <Timer time={timeData} loading={sessionBranch.status === EProccessStatus.PENDING} />
-                    <SessionSettings sessionInfo={sessionData || ({} as ISession)} />
-                    <Users users={usersData || []} currentUser={username} loading={usersBranch.status === EProccessStatus.PENDING} />
-                </div>
-            </aside>
+                </aside>
+            </div>
         </>
     );
 };

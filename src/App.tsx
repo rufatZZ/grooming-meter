@@ -12,22 +12,17 @@ interface IProps {}
 
 const App: React.FC<IProps> = () => {
     return (
-        <div className="App">
-            <div className="global-container">
-                <div className="d-flex flex-row">
-                    <nav className="sidebar">
-                        <img className="mt-1" src={process.env.PUBLIC_URL + '/logo.png'} alt="logo" width="60" height="60" />
-                    </nav>  
-                    <WithAuthInfo>
-                        <Router>
-                            <Switch>
-                                <Route exact path="/" render={() => <Redirect to="/login" />} />
-                                <Route exact path="/login" component={Login} />
-                                <PrivateRoute exact path="/groom" component={GroomingMeter} />
-                            </Switch>
-                        </Router>
-                    </WithAuthInfo>
-                </div>
+        <div className="global-container">
+            <div className="d-flex flex-row flex-align-center flex-justify-center">
+                <WithAuthInfo>
+                    <Router>
+                        <Switch>
+                            <Route exact path="/" render={() => <Redirect to="/login" />} />
+                            <Route exact path="/login" component={Login} />
+                            <PrivateRoute exact path="/groom" component={GroomingMeter} />
+                        </Switch>
+                    </Router>
+                </WithAuthInfo>
             </div>
         </div>
     );

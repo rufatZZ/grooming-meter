@@ -57,14 +57,14 @@ export const LoginComponent: React.FC<TProps> = (props: TProps) => {
     }, [sessionData]);
 
     const renderAuthOptions = () => (
-        <>
-            <button type="button" className="mr-1" onClick={createSession}>
+        <div className="auth-actions">
+            <button type="button" className="mb-1" onClick={createSession}>
                 Create Session
             </button>
-            <button type="button" className="ml-1" onClick={() => setFormAction(EAuthAction.JOIN_SESSION)}>
+            <button type="button" onClick={() => setFormAction(EAuthAction.JOIN_SESSION)}>
                 Join Session
             </button>
-        </>
+        </div>
     );
 
     const renderJoinSession = () => (
@@ -87,7 +87,7 @@ export const LoginComponent: React.FC<TProps> = (props: TProps) => {
                 )}
                 <input type="text" name="gm_username" placeholder="Username" required value={username} onChange={e => setUsername(e.target.value)} />
             </div>
-            <div className="auth-actions">
+            <div className="login-actions">
                 {formAction && (
                     <button type="button" onClick={() => goToAuthOptions()}>
                         Back
@@ -105,7 +105,6 @@ export const LoginComponent: React.FC<TProps> = (props: TProps) => {
                 <title>Grooming - Login</title>
             </Helmet>
             <main className="auth">
-                <div className="auth-content">
                     <div className="d-flex flex-column flex-align-center flex-justify-center">
                         <div>
                             {!isEmpty(loginError) && (
@@ -130,7 +129,6 @@ export const LoginComponent: React.FC<TProps> = (props: TProps) => {
                             })()}
                         </WithLoading>
                     </div>
-                </div>
             </main>
         </>
     );
