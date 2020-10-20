@@ -222,18 +222,6 @@ ul {
 }
 
 /* Custom styles */
-
-nav {
-    width: 100px;
-    background-color: white;
-    position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    color: #09d3ac;
-    text-align: center;
-}
-
 main {
     position: relative;
     &.auth {
@@ -272,6 +260,7 @@ main {
             padding: 16px 40px;
             border: 1px solid transparent;
             border-radius: 5px;
+            white-space: nowrap;
 
             &:hover {
                 cursor: pointer;
