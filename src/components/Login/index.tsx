@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
-import { ThunkDispatch } from 'redux-thunk';
-import { Helmet } from 'react-helmet';
-import { RouterProps, withRouter } from 'react-router';
 import isEmpty from 'lodash/isEmpty';
+import React, { useState, useEffect } from 'react';
+import { Helmet } from 'react-helmet';
+import { connect } from 'react-redux';
+import { RouterProps, withRouter } from 'react-router';
+import { ThunkDispatch } from 'redux-thunk';
 
 import { useAuthContext } from 'context/auth';
 import { IAppReduxState } from 'ducks';
 import { createSession, processLogin, cleanLoginBranch, cleanSessionBranch, IAuthState, ILoginRq } from 'ducks/auth';
 import { WithLoading } from 'shared/components/WithLoading';
-import { EAuthAction, EProccessStatus } from 'shared/enums';
+import { EAuthAction } from 'shared/enums';
 import { ISession, IUser } from 'shared/models';
-import { IActionType, IAsyncData } from 'shared/utils/redux';
+import { IActionType, IAsyncData, isPending } from 'shared/utils/redux';
 
 interface IStateProps {
     sessionBranch: IAsyncData<ISession>;
@@ -37,6 +37,8 @@ export const LoginComponent: React.FC<TProps> = (props: TProps) => {
     const [formAction, setFormAction] = useState('');
     const [sessionId, setSessionId] = useState('');
     const { isLoggedIn } = useAuthContext();
+
+    const loading = isPending(loginBranch) || isPending(sessionBranch);
 
     const goToAuthOptions = () => {
         setFormAction('');
@@ -66,6 +68,22 @@ export const LoginComponent: React.FC<TProps> = (props: TProps) => {
             </button>
         </div>
     );
+
+    const renderError = () =>
+        (loginError || sessionError) && (
+            <div>
+                {!isEmpty(loginError) && (
+                    <div className="panel panel-error bg-danger" style={{ color: 'white' }}>
+                        {loginError.message}
+                    </div>
+                )}
+                {!isEmpty(sessionError) && (
+                    <div className="panel panel-error bg-danger" style={{ color: 'white' }}>
+                        {sessionError.message}
+                    </div>
+                )}
+            </div>
+        );
 
     const renderJoinSession = () => (
         <form
@@ -105,30 +123,19 @@ export const LoginComponent: React.FC<TProps> = (props: TProps) => {
                 <title>Grooming - Login</title>
             </Helmet>
             <main className="auth">
-                    <div className="d-flex flex-column flex-align-center flex-justify-center">
-                        <div>
-                            {!isEmpty(loginError) && (
-                                <div className="panel panel-error bg-danger" style={{ color: 'white' }}>
-                                    {loginError.message}
-                                </div>
-                            )}
-                            {!isEmpty(sessionError) && (
-                                <div className="panel panel-error bg-danger" style={{ color: 'white' }}>
-                                    {sessionError.message}
-                                </div>
-                            )}
-                        </div>
-                        <WithLoading isLoading={loginBranch.status === EProccessStatus.PENDING || sessionBranch.status === EProccessStatus.PENDING}>
-                            {(() => {
-                                switch (formAction) {
-                                    case EAuthAction.JOIN_SESSION:
-                                        return renderJoinSession();
-                                    default:
-                                        return renderAuthOptions();
-                                }
-                            })()}
-                        </WithLoading>
-                    </div>
+                <div className="d-flex flex-column flex-align-center flex-justify-center">
+                    {renderError()}
+                    <WithLoading isLoading={loading}>
+                        {(() => {
+                            switch (formAction) {
+                                case EAuthAction.JOIN_SESSION:
+                                    return renderJoinSession();
+                                default:
+                                    return renderAuthOptions();
+                            }
+                        })()}
+                    </WithLoading>
+                </div>
             </main>
         </>
     );
