@@ -17,9 +17,8 @@ import { fetchUsers, IUsersState } from 'ducks/users';
 import { fetchVotes, IVotesState, IVoteRq, submitVote } from 'ducks/votes';
 import { WithLoading } from 'shared/components/WithLoading';
 import { endpoint } from 'shared/consts';
-import { EProccessStatus } from 'shared/enums';
 import { IUser, IVotesInfo, IVote, ISession } from 'shared/models';
-import { IAsyncData, IActionAsyncType } from 'shared/utils/redux';
+import { IAsyncData, IActionAsyncType, isError, isPending } from 'shared/utils/redux';
 
 let socket: any;
 
@@ -64,6 +63,8 @@ const GroomingMeterComponent: React.FC<TProps> = props => {
     const [userVote, setUserVote] = useState('');
     const { user } = useAuthContext();
     const { sessionId, username, _id: userId } = user || ({} as IUser);
+    const initialVotesData = { votes: [] as IVote[], length: 0, average: 0 } as IVotesInfo;
+    const hasError = isError(usersBranch) || isError(votesBranch) || isError(votesSubmitBranch) || isError(sessionBranch);
 
     // TODO make these from server
     const options: Array<any> = [
@@ -123,57 +124,44 @@ const GroomingMeterComponent: React.FC<TProps> = props => {
         sessionId && resetSession(sessionId);
     };
 
+    const renderError = () =>
+        hasError && (
+            <div className="panel text-left">
+                <div className="panel panel-error bg-danger">Users - {!isEmpty(usersError) ? usersError.message : 'Unknown Error'}</div>
+                <div className="panel panel-error bg-danger">Users - {!isEmpty(votesError) ? votesError.message : 'Unknown Error'}</div>
+                <div className="panel panel-error bg-danger">Users - {!isEmpty(votesSubmitError) ? votesSubmitError.message : 'Unknown Error'}</div>
+                <div className="panel panel-error bg-danger">Session - {!isEmpty(sessionError) ? sessionError.message : 'Unknown Error'}</div>
+            </div>
+        );
+
     return (
         <>
             <Helmet>
                 <meta charSet="utf-8" />
                 <title>Grooming - Voting</title>
             </Helmet>
-            <div className="d-flex full-window-height">
-                <main className="content">
-                    <WithLoading isLoading={sessionBranch.status === EProccessStatus.PENDING && sessionBranch.data === null}>
+            <div className="d-flex groom-content">
+                <div className="content">
+                    <WithLoading isLoading={isPending(sessionBranch) && isEmpty(sessionData)}>
                         <div className="content-holder">
-                            <div className="panel text-left">
-                                {usersBranch.status === EProccessStatus.ERROR && (
-                                    <div className="panel panel-error bg-danger" style={{ color: 'white' }}>
-                                        Users - {!isEmpty(usersError) ? usersError.message : 'Unknown Error'}
-                                    </div>
-                                )}
-                                {votesBranch.status === EProccessStatus.ERROR && (
-                                    <div className="panel panel-error bg-danger" style={{ color: 'white' }}>
-                                        Users - {!isEmpty(votesError) ? votesError.message : 'Unknown Error'}
-                                    </div>
-                                )}
-                                {votesSubmitBranch.status === EProccessStatus.ERROR && (
-                                    <div className="panel panel-error bg-danger" style={{ color: 'white' }}>
-                                        Users - {!isEmpty(votesSubmitError) ? votesSubmitError.message : 'Unknown Error'}
-                                    </div>
-                                )}
-                                {sessionBranch.status === EProccessStatus.ERROR && (
-                                    <div className="panel panel-error bg-danger" style={{ color: 'white' }}>
-                                        Session - {!isEmpty(sessionError) ? sessionError.message : 'Unknown Error'}
-                                    </div>
-                                )}
-                            </div>
+                            {renderError()}
                             <Voting
                                 options={options}
-                                votesList={votesData || ({ votes: [] as IVote[], length: 0, average: 0 } as IVotesInfo)}
+                                votesList={votesData || initialVotesData}
                                 userVote={userVote}
                                 handleVoting={handleVote}
                                 isShowing={isShowing}
                                 toggleShow={toggleShow}
                                 handleReset={handleReset}
-                                loading={votesBranch.status === EProccessStatus.PENDING}
+                                loading={isPending(votesBranch)}
                             />
                         </div>
                     </WithLoading>
-                </main>
-                <aside>
-                    <div className="content-holder">
-                        <Timer time={timeData} loading={sessionBranch.status === EProccessStatus.PENDING} />
-                        <SessionSettings sessionInfo={sessionData || ({} as ISession)} />
-                        <Users users={usersData || []} currentUser={username} loading={usersBranch.status === EProccessStatus.PENDING} />
-                    </div>
+                </div>
+                <aside className="content-holder">
+                    <Timer time={timeData} loading={isPending(sessionBranch)} />
+                    <SessionSettings sessionInfo={sessionData || ({} as ISession)} />
+                    <Users users={usersData || []} currentUser={username} loading={isPending(usersBranch)} />
                 </aside>
             </div>
         </>

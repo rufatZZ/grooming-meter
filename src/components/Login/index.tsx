@@ -72,16 +72,8 @@ export const LoginComponent: React.FC<TProps> = (props: TProps) => {
     const renderError = () =>
         (loginError || sessionError) && (
             <div>
-                {!isEmpty(loginError) && (
-                    <div className="panel panel-error bg-danger" style={{ color: 'white' }}>
-                        {loginError.message}
-                    </div>
-                )}
-                {!isEmpty(sessionError) && (
-                    <div className="panel panel-error bg-danger" style={{ color: 'white' }}>
-                        {sessionError.message}
-                    </div>
-                )}
+                {!isEmpty(loginError) && <div className="panel panel-error bg-danger">{loginError.message}</div>}
+                {!isEmpty(sessionError) && <div className="panel panel-error bg-danger">{sessionError.message}</div>}
             </div>
         );
 
@@ -122,21 +114,23 @@ export const LoginComponent: React.FC<TProps> = (props: TProps) => {
                 <meta charSet="utf-8" />
                 <title>Grooming - Login</title>
             </Helmet>
-            <main className="auth">
-                <div className="d-flex flex-column flex-align-center flex-justify-center">
-                    {renderError()}
-                    <WithLoading isLoading={loading}>
-                        {(() => {
-                            switch (formAction) {
-                                case EAuthAction.JOIN_SESSION:
-                                    return renderJoinSession();
-                                default:
-                                    return renderAuthOptions();
-                            }
-                        })()}
-                    </WithLoading>
+            <div className="d-flex flex-row flex-align-center flex-justify-center full-window-height">
+                <div className="auth">
+                    <div className="d-flex flex-column flex-align-center flex-justify-center">
+                        {renderError()}
+                        <WithLoading isLoading={loading}>
+                            {(() => {
+                                switch (formAction) {
+                                    case EAuthAction.JOIN_SESSION:
+                                        return renderJoinSession();
+                                    default:
+                                        return renderAuthOptions();
+                                }
+                            })()}
+                        </WithLoading>
+                    </div>
                 </div>
-            </main>
+            </div>
         </>
     );
 };

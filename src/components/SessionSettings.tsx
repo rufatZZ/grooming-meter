@@ -16,12 +16,12 @@ export const SessionSettings: React.FC<IProps> = props => {
     };
 
     const handleCopy = async () => {
-        await navigator.clipboard && navigator.clipboard.writeText(sessionId || "");
+        navigator.clipboard && await navigator.clipboard.writeText(sessionId || "");
     };
 
     return (
         <div className="session--settings">
-            <div className="panel mt-1">
+            <div className="panel">
                 <span className="subtitle"> Session </span>
 
                 <div className="copy-options mt-1">

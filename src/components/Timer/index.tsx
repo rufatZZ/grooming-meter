@@ -38,7 +38,7 @@ export const Timer: React.FC<IProps> = props => {
 
     return (
         <div className="timer">
-            <div className="panel mb-1">
+            <div className="panel">
                 <span className="subtitle">Time</span>
                 <br />
                 <div className={`${classNames('timer-time', 'text-center', { 'off-limit': isTimeUp(), 'on-limit': !isTimeUp() })}`}>
