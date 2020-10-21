@@ -106,6 +106,7 @@ const GroomingMeterComponent: React.FC<TProps> = props => {
 
         socket.on('sessionReset', () => {
             //TODO disable every action
+            setUserVote('');
         });
 
         return () => socket.emit('leave');
