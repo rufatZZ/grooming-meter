@@ -1,4 +1,3 @@
-import isEmpty from 'lodash/isEmpty';
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
@@ -39,9 +38,7 @@ export const LoginComponent: React.FC<TProps> = (props: TProps) => {
     const [sessionId, setSessionId] = useState('');
     const { isLoggedIn } = useAuthContext();
     const isJoinSession = formAction === EAuthAction.JOIN_SESSION;
-    const {
-        location: { state: locationState },
-    } = history;
+    const { location } = history;
 
     const loading = isPending(loginBranch) || isPending(sessionBranch);
 
@@ -52,12 +49,19 @@ export const LoginComponent: React.FC<TProps> = (props: TProps) => {
         cleanSessionBranch();
     };
 
+    const goToJoinSession = () => {
+        cleanLoginBranch();
+        cleanSessionBranch();
+        setFormAction(EAuthAction.JOIN_SESSION);
+    };
+
     useEffect(() => {
-        if (locationState.from) {
+        if (location.state && location.state.from) {
+            const locationState = location.state;
             const groomingPath = locationState.from.pathname.split('groom/');
             getSession(groomingPath[1]);
         }
-    }, [getSession, locationState]);
+    }, [getSession, location]);
 
     useEffect(() => {
         isLoggedIn && history.push(`/groom/${sessionId}`);
@@ -70,30 +74,25 @@ export const LoginComponent: React.FC<TProps> = (props: TProps) => {
         }
     }, [sessionData]);
 
-    const AuthOptions = () => (
+    const renderError = () =>
+        (isError(loginBranch) || isError(sessionBranch)) && (
+            <div>
+                <div className="panel panel-error bg-danger">{(sessionError || loginError).message || 'Unknown Error'}</div>
+            </div>
+        );
+
+    const renderAuthOptions = () => (
         <div className="auth-actions">
             <button type="button" className="mb-1" onClick={createSession}>
                 Create Session
             </button>
-            <button type="button" onClick={() => setFormAction(EAuthAction.JOIN_SESSION)}>
+            <button type="button" onClick={goToJoinSession}>
                 Join Session
             </button>
         </div>
     );
 
-    const renderError = () =>
-        (isError(loginBranch) || isError(sessionBranch)) && (
-            <div>
-                {isError(loginBranch) && (
-                    <div className="panel panel-error bg-danger">Login - {!isEmpty(loginError) ? loginError.message : 'Unknown Error'}</div>
-                )}
-                {isError(sessionBranch) && (
-                    <div className="panel panel-error bg-danger">Session - {!isEmpty(sessionError) ? sessionError.message : 'Unknown Error'}</div>
-                )}
-            </div>
-        );
-
-    const JoinSession = () => (
+    const renderJoinSession = () => (
         <form
             onSubmit={e => {
                 e.preventDefault();
@@ -134,7 +133,7 @@ export const LoginComponent: React.FC<TProps> = (props: TProps) => {
                 <div className="auth">
                     <div className="d-flex flex-column flex-align-center flex-justify-center">
                         {renderError()}
-                        <WithLoading isLoading={loading}>{isJoinSession ? <JoinSession /> : <AuthOptions />}</WithLoading>
+                        <WithLoading isLoading={loading}>{isJoinSession ? renderJoinSession() : renderAuthOptions()}</WithLoading>
                     </div>
                 </div>
             </div>
