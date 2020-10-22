@@ -1,0 +1,33 @@
+.loading {
+    position: relative;
+
+    .loading-overlay {
+        background-color: rgba(255, 255, 255, 0.7);
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: none;
+        z-index: 90;
+
+        .indicator-wrapper {
+            text-align: center;
+            width: 100%;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+
+            .loading-indicator {
+                transform: translate(-50%, -50%);
+                position: absolute;
+                top: 50%;
+                left: 50%;
+            }
+        }
+
+        &.overlay-open {
+            display: block;
+        }
+    }
+}

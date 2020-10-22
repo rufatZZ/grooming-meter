@@ -1,9 +1,9 @@
-import React from 'react';
 import classnames from 'classnames';
 import isEmpty from 'lodash/isEmpty';
+import React from 'react';
 
+import { Loading } from 'shared/components/Loading';
 import { IUser } from 'shared/models';
-import { WithLoading } from 'shared/components/WithLoading';
 
 interface IProps {
     users: IUser[];
@@ -16,7 +16,7 @@ export const Users: React.FC<IProps> = props => {
 
     return (
         <div className="users">
-            <WithLoading isLoading={loading}>
+            <Loading isLoading={loading}>
                 <div className="panel">
                     <span className="subtitle">Users {users && `( ${users.length} )`}</span>
                     <ol className="users-list text-left">
@@ -34,7 +34,7 @@ export const Users: React.FC<IProps> = props => {
                             ))}
                     </ol>
                 </div>
-            </WithLoading>
+            </Loading>
         </div>
     );
 };

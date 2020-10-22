@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, SyntheticEvent } from 'react';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import { RouterProps, withRouter } from 'react-router';
@@ -7,10 +7,12 @@ import { ThunkDispatch } from 'redux-thunk';
 import { useAuthContext } from 'context/auth';
 import { IAppReduxState } from 'ducks';
 import { createSession, processLogin, cleanLoginBranch, cleanSessionBranch, IAuthState, ILoginRq, fetchSession } from 'ducks/auth';
-import { WithLoading } from 'shared/components/WithLoading';
+import { Loading } from 'shared/components/Loading';
 import { EAuthAction } from 'shared/enums';
 import { ISession, IUser } from 'shared/models';
 import { IActionType, IAsyncData, isError, isPending } from 'shared/utils/redux';
+
+import './index.scss';
 
 interface IStateProps {
     sessionBranch: IAsyncData<ISession>;
@@ -37,9 +39,9 @@ export const LoginComponent: React.FC<TProps> = (props: TProps) => {
     const [formAction, setFormAction] = useState('');
     const [sessionId, setSessionId] = useState('');
     const { isLoggedIn } = useAuthContext();
-    const isJoinSession = formAction === EAuthAction.JOIN_SESSION;
     const { location } = history;
 
+    const isJoinSession = formAction === EAuthAction.JOIN_SESSION;
     const loading = isPending(loginBranch) || isPending(sessionBranch);
 
     const goToAuthOptions = () => {
@@ -53,6 +55,11 @@ export const LoginComponent: React.FC<TProps> = (props: TProps) => {
         cleanLoginBranch();
         cleanSessionBranch();
         setFormAction(EAuthAction.JOIN_SESSION);
+    };
+
+    const handleSubmit = (e: SyntheticEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        processLogin({ username, sessionId });
     };
 
     useEffect(() => {
@@ -93,12 +100,7 @@ export const LoginComponent: React.FC<TProps> = (props: TProps) => {
     );
 
     const renderJoinSession = () => (
-        <form
-            onSubmit={e => {
-                e.preventDefault();
-                processLogin({ username, sessionId });
-            }}
-        >
+        <form onSubmit={handleSubmit}>
             <div className="d-flex flex-column">
                 {!sessionData && (
                     <input
@@ -129,11 +131,12 @@ export const LoginComponent: React.FC<TProps> = (props: TProps) => {
                 <meta charSet="utf-8" />
                 <title>Grooming - Login</title>
             </Helmet>
+
             <div className="d-flex flex-row flex-align-center flex-justify-center full-window-height">
                 <div className="auth">
                     <div className="d-flex flex-column flex-align-center flex-justify-center">
                         {renderError()}
-                        <WithLoading isLoading={loading}>{isJoinSession ? renderJoinSession() : renderAuthOptions()}</WithLoading>
+                        <Loading isLoading={loading}>{isJoinSession ? renderJoinSession() : renderAuthOptions()}</Loading>
                     </div>
                 </div>
             </div>

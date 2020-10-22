@@ -1,12 +1,12 @@
 import classNames from 'classnames';
-import React from 'react';
 import isEmpty from 'lodash/isEmpty';
+import React from 'react';
 
+import { Loading } from 'shared/components/Loading';
 import { IOption, IVotesInfo } from 'shared/models';
-import { WithLoading } from 'shared/components/WithLoading';
 
 interface IProps {
-    options?: IOption[];
+    options: IOption[];
     votesList: IVotesInfo;
     loading: boolean;
     userVote?: string;
@@ -20,43 +20,39 @@ export const Voting: React.FC<IProps> = props => {
     const { options, loading, userVote, votesList, isShowing, toggleShow, handleReset, handleVoting } = props;
     const { votes, length: votesLen = 0, average } = votesList || ({} as IVotesInfo);
 
+    const getClassNames = (opt: IOption) => classNames('voting-list-item', 'mb-1', { selected: opt.value === userVote });
+
     const renderOptions = () => (
         <div className="voting-list mt-1 d-flex flex-row flex-wrap">
-            {options &&
+            {!isEmpty(options) &&
                 options.map(opt => (
-                    <div
-                        className={`${classNames('voting-list-item', 'mb-1', { selected: opt.value === userVote })}`}
-                        key={opt.value}
-                        onClick={() => handleVoting(opt.value || '')}
-                    >
+                    <div className={getClassNames(opt)} key={opt.value} onClick={() => handleVoting(opt.value || '')}>
                         <span>{opt.value}</span>
                     </div>
                 ))}
         </div>
     );
 
+    const renderVotingVisual = () =>
+        votes.map(
+            (vote, index) =>
+                vote && (
+                    <div key={index} className="panel bg-warning result-list-item" style={{ width: `${(vote.length / votesLen) * 100}%` }}>
+                        {index}
+                    </div>
+                ),
+        );
+
     const renderResults = () => (
         <div className="mt-1">
-            <WithLoading isLoading={loading}>
+            <Loading isLoading={loading}>
                 {!isEmpty(votes) ? (
                     <div className="d-flex flex-row flex-align-center bg-primary px-1 py-1">
+
                         <div style={{ width: '75%' }}>
-                            <div className="d-flex flex-column">
-                                {votes.map((vote, index) => {
-                                    return (
-                                        vote && (
-                                            <div
-                                                key={index}
-                                                className="panel bg-warning result-list-item"
-                                                style={{ width: `${(vote.length / votesLen) * 100}%` }}
-                                            >
-                                                {index}
-                                            </div>
-                                        )
-                                    );
-                                })}
-                            </div>
+                            <div className="d-flex flex-column">{renderVotingVisual()}</div>
                         </div>
+
                         <div className="ml-1" style={{ width: '25%' }}>
                             <div className="panel final-result text-center">
                                 <span className="d-block final-result-title">Final</span>
@@ -67,7 +63,7 @@ export const Voting: React.FC<IProps> = props => {
                 ) : (
                     <div className="panel bg-primary text-center  px-2 py-2">{loading ? 'Calculating...' : 'Empty results'}</div>
                 )}
-            </WithLoading>
+            </Loading>
         </div>
     );
 

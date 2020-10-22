@@ -2,15 +2,11 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
 
 import { Login } from 'components/Login';
-import { GroomingMeter } from 'components/Page';
+import { GroomingMeter } from 'components/Groom';
 import { PrivateRoute } from 'components/PrivateRoute';
 import { WithAuthInfo } from 'components/WithAuthInfo';
 
-import './App.scss';
-
-interface IProps {}
-
-const App: React.FC<IProps> = () => {
+const App: React.FC = () => {
     return (
         <div className="global-container">
             <WithAuthInfo>

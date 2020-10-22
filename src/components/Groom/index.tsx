@@ -1,23 +1,26 @@
+import isEmpty from 'lodash/isEmpty';
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
-import isEmpty from 'lodash/isEmpty';
 import io from 'socket.io-client';
 
-import { Timer } from 'components/Timer';
-import { SessionSettings } from 'components/SessionSettings';
-import { Users } from 'components/Users';
-import { Voting } from 'components/Voting';
 import { useAuthContext } from 'context/auth';
 import { IAppReduxState } from 'ducks';
 import { fetchSession, resetSession, updateSession, IAuthState, ISessionRq } from 'ducks/auth';
 import { fetchUsers, IUsersState } from 'ducks/users';
 import { fetchVotes, IVotesState, IVoteRq, submitVote } from 'ducks/votes';
-import { WithLoading } from 'shared/components/WithLoading';
+import { Loading } from 'shared/components/Loading';
 import { endpoint } from 'shared/consts';
 import { IUser, IVotesInfo, IVote, ISession } from 'shared/models';
 import { IAsyncData, IActionAsyncType, isError, isPending } from 'shared/utils/redux';
+
+import { SessionSettings } from './SessionSettings';
+import { Timer } from './Timer';
+import { Users } from './Users';
+import { Voting } from './Voting';
+
+import './index.scss';
 
 let socket: any;
 
@@ -148,9 +151,10 @@ const GroomingMeterComponent: React.FC<IProps> = props => {
                 <meta charSet="utf-8" />
                 <title>Grooming - Voting</title>
             </Helmet>
+
             <div className="d-flex groom-content">
                 <div className="content">
-                    <WithLoading isLoading={isPending(sessionBranch) && isEmpty(sessionData)}>
+                    <Loading isLoading={isPending(sessionBranch) && isEmpty(sessionData)}>
                         <div className="content-holder">
                             {renderError()}
                             <Voting
@@ -164,11 +168,12 @@ const GroomingMeterComponent: React.FC<IProps> = props => {
                                 loading={isPending(votesBranch)}
                             />
                         </div>
-                    </WithLoading>
+                    </Loading>
                 </div>
+
                 <aside className="content-holder">
                     <Timer time={timeData} loading={isPending(sessionBranch)} />
-                    <SessionSettings sessionInfo={sessionData || ({} as ISession)} />
+                    <SessionSettings />
                     <Users users={usersData || []} currentUser={username} loading={isPending(usersBranch)} />
                 </aside>
             </div>

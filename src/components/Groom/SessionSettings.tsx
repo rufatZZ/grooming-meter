@@ -1,14 +1,6 @@
 import React, { SyntheticEvent } from 'react';
 
-import { ISession } from 'shared/models';
-
-interface IProps {
-    sessionInfo: ISession;
-}
-
-export const SessionSettings: React.FC<IProps> = props => {
-    // const { sessionInfo } = props;
-    // const { _id: sessionId = '---' } = sessionInfo || ({} as ISession);
+export const SessionSettings: React.FC = () => {
     const location = window.location;
 
     const handleSelect = (e: SyntheticEvent<HTMLInputElement>) => {
