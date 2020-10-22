@@ -125,10 +125,20 @@ const GroomingMeterComponent: React.FC<IProps> = props => {
     const renderError = () =>
         hasError && (
             <div className="panel text-left">
-                <div className="panel panel-error bg-danger">Users - {!isEmpty(usersError) ? usersError.message : 'Unknown Error'}</div>
-                <div className="panel panel-error bg-danger">Users - {!isEmpty(votesError) ? votesError.message : 'Unknown Error'}</div>
-                <div className="panel panel-error bg-danger">Users - {!isEmpty(votesSubmitError) ? votesSubmitError.message : 'Unknown Error'}</div>
-                <div className="panel panel-error bg-danger">Session - {!isEmpty(sessionError) ? sessionError.message : 'Unknown Error'}</div>
+                {isError(usersBranch) && (
+                    <div className="panel panel-error bg-danger">Users - {!isEmpty(usersError) ? usersError.message : 'Unknown Error'}</div>
+                )}
+                {isError(votesBranch) && (
+                    <div className="panel panel-error bg-danger">Users - {!isEmpty(votesError) ? votesError.message : 'Unknown Error'}</div>
+                )}
+                {isError(votesSubmitBranch) && (
+                    <div className="panel panel-error bg-danger">
+                        Users - {!isEmpty(votesSubmitError) ? votesSubmitError.message : 'Unknown Error'}
+                    </div>
+                )}
+                {isError(sessionBranch) && (
+                    <div className="panel panel-error bg-danger">Session - {!isEmpty(sessionError) ? sessionError.message : 'Unknown Error'}</div>
+                )}
             </div>
         );
 

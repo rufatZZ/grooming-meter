@@ -11,7 +11,7 @@ import { createSession, processLogin, cleanLoginBranch, cleanSessionBranch, IAut
 import { WithLoading } from 'shared/components/WithLoading';
 import { EAuthAction } from 'shared/enums';
 import { ISession, IUser } from 'shared/models';
-import { IActionType, IAsyncData, isPending } from 'shared/utils/redux';
+import { IActionType, IAsyncData, isError, isPending } from 'shared/utils/redux';
 
 interface IStateProps {
     sessionBranch: IAsyncData<ISession>;
@@ -82,10 +82,14 @@ export const LoginComponent: React.FC<TProps> = (props: TProps) => {
     );
 
     const renderError = () =>
-        (loginError || sessionError) && (
+        (isError(loginBranch) || isError(sessionBranch)) && (
             <div>
-                {!isEmpty(loginError) && <div className="panel panel-error bg-danger">{loginError.message}</div>}
-                {!isEmpty(sessionError) && <div className="panel panel-error bg-danger">{sessionError.message}</div>}
+                {isError(loginBranch) && (
+                    <div className="panel panel-error bg-danger">Login - {!isEmpty(loginError) ? loginError.message : 'Unknown Error'}</div>
+                )}
+                {isError(sessionBranch) && (
+                    <div className="panel panel-error bg-danger">Session - {!isEmpty(sessionError) ? sessionError.message : 'Unknown Error'}</div>
+                )}
             </div>
         );
 
