@@ -18,7 +18,8 @@ const App: React.FC<IProps> = () => {
                     <Switch>
                         <Route exact path="/" render={() => <Redirect to="/login" />} />
                         <Route exact path="/login" component={Login} />
-                        <PrivateRoute exact path="/groom" component={GroomingMeter} />
+                        <PrivateRoute exact strict path="/groom/:sessionId" component={GroomingMeter} />
+                        <Redirect to="/login" />
                     </Switch>
                 </Router>
             </WithAuthInfo>

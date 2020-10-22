@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
-import { RouteComponentProps, withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import isEmpty from 'lodash/isEmpty';
@@ -40,9 +39,7 @@ interface IDispatchProps {
 
 interface IProps extends IStateProps, IDispatchProps {}
 
-type TProps = IProps & RouteComponentProps<{}>;
-
-const GroomingMeterComponent: React.FC<TProps> = props => {
+const GroomingMeterComponent: React.FC<IProps> = props => {
     const {
         getSession,
         getUsers,
@@ -168,21 +165,19 @@ const GroomingMeterComponent: React.FC<TProps> = props => {
         </>
     );
 };
-export const GroomingMeter = withRouter<TProps, React.FC<TProps>>(
-    connect<IStateProps, {}, {}, IAppReduxState>(
-        (state: IAppReduxState): IStateProps => ({
-            sessionBranch: state.auth.session,
-            usersBranch: state.users.list,
-            votesBranch: state.votes.list,
-            votesSubmitBranch: state.votes.submit,
-        }),
-        (dispatch: ThunkDispatch<IUsersState & IVotesState & IAuthState, any, IActionAsyncType<string, IUser[] & IVote[] & ISession>>) => ({
-            getSession: (sessionId: string) => dispatch(fetchSession(sessionId)),
-            updateSession: (sessionId: string, data: ISessionRq) => dispatch(updateSession(sessionId, data)),
-            resetSession: (sessionId: string) => dispatch(resetSession(sessionId)),
-            getUsers: (sessionId: string) => dispatch(fetchUsers(sessionId)),
-            getVotes: (sessionId: string) => dispatch(fetchVotes(sessionId)),
-            addVote: (data: IVoteRq) => dispatch(submitVote(data)),
-        }),
-    )(GroomingMeterComponent),
-);
+export const GroomingMeter = connect<IStateProps, {}, {}, IAppReduxState>(
+    (state: IAppReduxState): IStateProps => ({
+        sessionBranch: state.auth.session,
+        usersBranch: state.users.list,
+        votesBranch: state.votes.list,
+        votesSubmitBranch: state.votes.submit,
+    }),
+    (dispatch: ThunkDispatch<IUsersState & IVotesState & IAuthState, any, IActionAsyncType<string, IUser[] & IVote[] & ISession>>) => ({
+        getSession: (sessionId: string) => dispatch(fetchSession(sessionId)),
+        updateSession: (sessionId: string, data: ISessionRq) => dispatch(updateSession(sessionId, data)),
+        resetSession: (sessionId: string) => dispatch(resetSession(sessionId)),
+        getUsers: (sessionId: string) => dispatch(fetchUsers(sessionId)),
+        getVotes: (sessionId: string) => dispatch(fetchVotes(sessionId)),
+        addVote: (data: IVoteRq) => dispatch(submitVote(data)),
+    }),
+)(GroomingMeterComponent);

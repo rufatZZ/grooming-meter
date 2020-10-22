@@ -10,6 +10,11 @@ div {
     transition-timing-function: ease-in;
 }
 
+button,
+span {
+    user-select: none;
+}
+
 body,
 input,
 button {

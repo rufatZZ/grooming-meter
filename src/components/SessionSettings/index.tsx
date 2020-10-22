@@ -7,8 +7,9 @@ interface IProps {
 }
 
 export const SessionSettings: React.FC<IProps> = props => {
-    const { sessionInfo } = props;
-    const { _id: sessionId = '---' } = sessionInfo || ({} as ISession);
+    // const { sessionInfo } = props;
+    // const { _id: sessionId = '---' } = sessionInfo || ({} as ISession);
+    const location = window.location;
 
     const handleSelect = (e: SyntheticEvent<HTMLInputElement>) => {
         const currentTarget = e.currentTarget;
@@ -16,7 +17,7 @@ export const SessionSettings: React.FC<IProps> = props => {
     };
 
     const handleCopy = async () => {
-        navigator.clipboard && await navigator.clipboard.writeText(sessionId || "");
+        navigator.clipboard && (await navigator.clipboard.writeText(location.href || ''));
     };
 
     return (
@@ -25,7 +26,7 @@ export const SessionSettings: React.FC<IProps> = props => {
                 <span className="subtitle"> Session </span>
 
                 <div className="copy-options mt-1">
-                    <input className="copy-options-input" type="text" readOnly value={sessionId} onClick={handleSelect} />
+                    <input className="copy-options-input" type="text" readOnly value={location.pathname.replace('/', '')} onClick={handleSelect} />
                     <div className="copy-options-button" onClick={handleCopy}>
                         Copy
                     </div>

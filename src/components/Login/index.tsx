@@ -7,7 +7,7 @@ import { ThunkDispatch } from 'redux-thunk';
 
 import { useAuthContext } from 'context/auth';
 import { IAppReduxState } from 'ducks';
-import { createSession, processLogin, cleanLoginBranch, cleanSessionBranch, IAuthState, ILoginRq } from 'ducks/auth';
+import { createSession, processLogin, cleanLoginBranch, cleanSessionBranch, IAuthState, ILoginRq, fetchSession } from 'ducks/auth';
 import { WithLoading } from 'shared/components/WithLoading';
 import { EAuthAction } from 'shared/enums';
 import { ISession, IUser } from 'shared/models';
@@ -20,6 +20,7 @@ interface IStateProps {
 
 interface IDispatchProps {
     createSession: typeof createSession;
+    getSession: typeof fetchSession;
     processLogin: typeof processLogin;
     cleanLoginBranch: typeof cleanLoginBranch;
     cleanSessionBranch: typeof cleanSessionBranch;
@@ -30,13 +31,17 @@ interface IProps extends IStateProps, IDispatchProps {}
 type TProps = IProps & RouterProps;
 
 export const LoginComponent: React.FC<TProps> = (props: TProps) => {
-    const { history, createSession, processLogin, loginBranch, sessionBranch, cleanLoginBranch, cleanSessionBranch } = props;
+    const { history, createSession, getSession, processLogin, loginBranch, sessionBranch, cleanLoginBranch, cleanSessionBranch } = props;
     const { error: loginError } = loginBranch || ({} as IAsyncData<IUser>);
     const { data: sessionData, error: sessionError } = sessionBranch || ({} as IAsyncData<ISession>);
     const [username, setUsername] = useState('');
     const [formAction, setFormAction] = useState('');
     const [sessionId, setSessionId] = useState('');
     const { isLoggedIn } = useAuthContext();
+    const isJoinSession = formAction === EAuthAction.JOIN_SESSION;
+    const {
+        location: { state: locationState },
+    } = history;
 
     const loading = isPending(loginBranch) || isPending(sessionBranch);
 
@@ -48,8 +53,15 @@ export const LoginComponent: React.FC<TProps> = (props: TProps) => {
     };
 
     useEffect(() => {
-        isLoggedIn && history.push('/groom');
-    }, [isLoggedIn, history]);
+        if (locationState.from) {
+            const groomingPath = locationState.from.pathname.split('groom/');
+            getSession(groomingPath[1]);
+        }
+    }, [getSession, locationState]);
+
+    useEffect(() => {
+        isLoggedIn && history.push(`/groom/${sessionId}`);
+    }, [isLoggedIn, history, sessionId]);
 
     useEffect(() => {
         if (sessionData) {
@@ -58,7 +70,7 @@ export const LoginComponent: React.FC<TProps> = (props: TProps) => {
         }
     }, [sessionData]);
 
-    const renderAuthOptions = () => (
+    const AuthOptions = () => (
         <div className="auth-actions">
             <button type="button" className="mb-1" onClick={createSession}>
                 Create Session
@@ -77,7 +89,7 @@ export const LoginComponent: React.FC<TProps> = (props: TProps) => {
             </div>
         );
 
-    const renderJoinSession = () => (
+    const JoinSession = () => (
         <form
             onSubmit={e => {
                 e.preventDefault();
@@ -118,16 +130,7 @@ export const LoginComponent: React.FC<TProps> = (props: TProps) => {
                 <div className="auth">
                     <div className="d-flex flex-column flex-align-center flex-justify-center">
                         {renderError()}
-                        <WithLoading isLoading={loading}>
-                            {(() => {
-                                switch (formAction) {
-                                    case EAuthAction.JOIN_SESSION:
-                                        return renderJoinSession();
-                                    default:
-                                        return renderAuthOptions();
-                                }
-                            })()}
-                        </WithLoading>
+                        <WithLoading isLoading={loading}>{isJoinSession ? <JoinSession /> : <AuthOptions />}</WithLoading>
                     </div>
                 </div>
             </div>
@@ -143,6 +146,7 @@ export const Login = withRouter<any, React.FC<TProps>>(
         }),
         (dispatch: ThunkDispatch<IAuthState, any, IActionType<string, string>>) => ({
             processLogin: (data: ILoginRq) => dispatch(processLogin(data)),
+            getSession: (sessionId: string) => dispatch(fetchSession(sessionId)),
             createSession: () => dispatch(createSession()),
             cleanLoginBranch: () => dispatch(cleanLoginBranch()),
             cleanSessionBranch: () => dispatch(cleanSessionBranch()),
