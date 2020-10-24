@@ -3,6 +3,7 @@ export interface IUser {
     username?: string;
     sessionId?: string;
     isVoted?: boolean;
+    isValidVote: boolean;
 }
 
 export interface IVote {

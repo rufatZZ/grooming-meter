@@ -8,15 +8,13 @@ import { isEmpty } from 'shared/utils/object';
 interface IProps {
     users: IUser[];
     currentUser?: string;
-    userVote: string;
     loading: boolean;
 }
 
 export const Users: React.FC<IProps> = props => {
-    const { users, userVote, currentUser = null, loading } = props;
+    const { users, currentUser = null, loading } = props;
     const [isVisible, toggleVisibility] = useState(false);
     const [isMobile, toggleMobile] = useState(window.innerWidth <= 767);
-    const isVoteInvalid = (): boolean => !isEmpty(userVote) && userVote === '?';
 
     useEffect(() => {
         window.addEventListener('resize', () => toggleMobile(window.innerWidth <= 767));
@@ -49,8 +47,8 @@ export const Users: React.FC<IProps> = props => {
                                             key={user._id}
                                             className={clsx({
                                                 'voted-user': user.isVoted,
-                                                'bg-success': user.isVoted && !isVoteInvalid(),
-                                                'bg-warning': user.isVoted && isVoteInvalid(),
+                                                'bg-success': user.isVoted && user.isValidVote,
+                                                'bg-warning': user.isVoted && !user.isValidVote,
                                             })}
                                         >
                                             <span
@@ -58,7 +56,7 @@ export const Users: React.FC<IProps> = props => {
                                                     'font-bold': user.username === currentUser,
                                                 })}
                                             >
-                                                {user.username} {user.isVoted && isVoteInvalid() && `\u2014 ?`}
+                                                {user.username} {user.isVoted && !user.isValidVote && `\u2014 ?`}
                                             </span>
                                         </li>
                                     ))}
