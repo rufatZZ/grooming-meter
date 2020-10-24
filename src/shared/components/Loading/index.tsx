@@ -9,7 +9,7 @@ interface IProps {
     isLoading?: boolean;
 }
 
-export const Loading: React.FC<IProps> = ({ isLoading= true, children }) => {
+export const Loading: React.FC<IProps> = ({ isLoading = true, children }) => {
     const getClassNames = () => clsx('loading-overlay', { 'overlay-open': isLoading });
 
     return (

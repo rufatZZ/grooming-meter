@@ -1,4 +1,4 @@
-@import "src/shared/styles/variables.scss";
+@import 'src/shared/styles/variables.scss';
 
 * {
     box-sizing: border-box;
@@ -11,8 +11,8 @@ body,
 input,
 button {
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-        sans-serif, serif, monospace !important;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',
+        'Droid Sans', 'Helvetica Neue', sans-serif, serif, monospace !important;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
@@ -100,6 +100,10 @@ ul {
     justify-content: center;
 }
 
+.flex-justify-space-between {
+    justify-content: space-between;
+}
+
 .btn {
     border: none;
     border-radius: 5px;
@@ -107,10 +111,7 @@ ul {
     font-size: 16px;
     color: white;
     user-select: none;
-
-    &:hover {
-        cursor: pointer;
-    }
+    cursor: pointer;
 
     &:focus {
         outline: none;
@@ -121,11 +122,20 @@ ul {
     position: relative;
     background-color: #f0f3f8;
     border-radius: 5px;
-    padding: 10px 15px;
     margin: 5px 0px;
 }
 
+.panel-clickable {
+    cursor: pointer;
+    background-color: #f0f3f8;
+
+    &:active {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+}
+
 .panel-error {
+    padding: 10px 15px;
     width: 100%;
     color: white;
     font-weight: 700;
@@ -220,6 +230,34 @@ ul {
     padding-right: 2em;
 }
 
+@for $i from 1 through 3 {
+    .pt-#{$i}x {
+        padding-top: #{$i * 5}px;
+    }
+
+    .pb-#{$i}x {
+        padding-bottom: #{$i * 5}px;
+    }
+
+    .pr-#{$i}x {
+        padding-right: #{$i * 5}px;
+    }
+
+    .pl-#{$i}x {
+        padding-left: #{$i * 5}px;
+    }
+
+    .px-#{$i}x {
+        padding-right: #{$i * 5}px;
+        padding-left: #{$i * 5}px;
+    }
+
+    .py-#{$i}x {
+        padding-top: #{$i * 5}px;
+        padding-bottom: #{$i * 5}px;
+    }
+}
+
 .content-holder {
     padding: 15px 20px;
 }
@@ -231,7 +269,7 @@ ul {
     font-weight: 700;
 }
 
-@media screen and (max-width: var(--mobilePortraitMaxWidth)px) {
+@media screen and (max-width: $mobileMaxWidth) {
     .subtitle {
         font-size: 18px;
     }

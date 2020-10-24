@@ -47,7 +47,7 @@
     }
 }
 
-@media (min-width: $mobilePortraitMinWidth) and (max-width: $mobilePortraitMaxWidth) {
+@media screen and (max-width: $mobileMaxWidth   ) {
     .auth {
         padding: 30px 18px;
 

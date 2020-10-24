@@ -14,11 +14,16 @@ export const initialState = {
     list: { data: null, error: null, status: EProccessStatus.IDLE },
 };
 
-export const fetchUsers = (sessionId: string): ThunkAction<Promise<void>, IUsersState, any, IActionAsyncType<string, IUser[]>> => async (
+export const fetchUsers = (
+    sessionId: string,
+): ThunkAction<Promise<void>, IUsersState, any, IActionAsyncType<string, IUser[]>> => async (
     dispatch: ThunkDispatch<IUsersState, any, IActionAsyncType<string, IUser[]>>,
 ) => {
     try {
-        dispatch({ type: 'FETCH_USERS_STARTED', payload: { data: null, error: null, status: EProccessStatus.PENDING } });
+        dispatch({
+            type: 'FETCH_USERS_STARTED',
+            payload: { data: null, error: null, status: EProccessStatus.PENDING },
+        });
 
         const response = await axios({
             url: `${endpoint}/api/users`,
@@ -28,13 +33,22 @@ export const fetchUsers = (sessionId: string): ThunkAction<Promise<void>, IUsers
         });
 
         if (response.status === 200) {
-            dispatch({ type: 'FETCH_USERS_SUCCESS', payload: { data: response.data.data, error: null, status: EProccessStatus.SUCCESS } });
+            dispatch({
+                type: 'FETCH_USERS_SUCCESS',
+                payload: { data: response.data.data, error: null, status: EProccessStatus.SUCCESS },
+            });
         }
     } catch (error) {
         if (error.response) {
-            dispatch({ type: 'FETCH_USERS_FAILED', payload: { data: null, error: error.response.data.error, status: EProccessStatus.ERROR } });
+            dispatch({
+                type: 'FETCH_USERS_FAILED',
+                payload: { data: null, error: error.response.data.error, status: EProccessStatus.ERROR },
+            });
         } else {
-            dispatch({ type: 'FETCH_USERS_FAILED', payload: { data: null, error: { message: 'Unknown error' }, status: EProccessStatus.ERROR } });
+            dispatch({
+                type: 'FETCH_USERS_FAILED',
+                payload: { data: null, error: { message: 'Unknown error' }, status: EProccessStatus.ERROR },
+            });
         }
     }
 };

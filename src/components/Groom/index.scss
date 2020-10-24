@@ -171,7 +171,7 @@
     }
 }
 
-@media screen and (max-width: $mobilePortraitMaxWidth) {
+@media screen and (max-width: $mobileMaxWidth) {
     .groom-content {
         flex-direction: column-reverse;
 
@@ -213,7 +213,7 @@
                 margin-bottom: -1em;
 
                 .users-list {
-                    display: none;
+                    margin-left: -1em;
                 }
             }
         }

@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Loading } from 'shared/components/Loading';
 import { IUser } from 'shared/models';
@@ -13,26 +13,49 @@ interface IProps {
 
 export const Users: React.FC<IProps> = props => {
     const { users, currentUser = null, loading } = props;
+    const [isVisible, toggleVisibilty] = useState(false);
+    const [isMobile, toggleMobile] = useState(window.innerWidth <= 767);
+
+    useEffect(() => {
+        window.addEventListener('resize', () => toggleMobile(window.innerWidth <= 767));
+    }, []);
 
     return (
         <div className="users">
             <Loading isLoading={loading}>
                 <div className="panel">
-                    <span className="subtitle">Users {users && `( ${users.length} )`}</span>
-                    <ol className="users-list text-left">
-                        {!isEmpty(users) &&
-                            users.map(user => (
-                                <li key={user._id} className={clsx({ 'user-list-item-voted': user.isVoted })}>
-                                    <span
-                                        className={clsx({
-                                            'font-bold': user.username === currentUser,
-                                        })}
-                                    >
-                                        {user.username}
-                                    </span>
-                                </li>
-                            ))}
-                    </ol>
+                    {!isMobile ? (
+                        <div className="panel px-3x py-2x">
+                            <span className="subtitle">Users {users && `( ${users.length} )`}</span>
+                        </div>
+                    ) : (
+                        <div
+                            className="panel px-3x py-2x d-flex flex-justify-space-between flex-align-center panel-clickable"
+                            onClick={() => toggleVisibilty(!isVisible)}
+                        >
+                            <span className="subtitle">Users {users && `( ${users.length} )`}</span>
+                            <span>{!isVisible ? 'Show' : 'Hide'}</span>
+                        </div>
+                    )}
+
+                    {(!isMobile || (isMobile && isVisible)) && (
+                        <div className="panel px-3x pb-2x">
+                            <ol className="users-list text-left">
+                                {!isEmpty(users) &&
+                                    users.map(user => (
+                                        <li key={user._id} className={clsx({ 'user-list-item-voted': user.isVoted })}>
+                                            <span
+                                                className={clsx({
+                                                    'font-bold': user.username === currentUser,
+                                                })}
+                                            >
+                                                {user.username}
+                                            </span>
+                                        </li>
+                                    ))}
+                            </ol>
+                        </div>
+                    )}
                 </div>
             </Loading>
         </div>

@@ -22,11 +22,16 @@ export const initialState = {
     list: { data: null, error: null, status: EProccessStatus.IDLE },
 };
 
-export const fetchVotes = (sessionId: string): ThunkAction<Promise<void>, IVotesState, any, IActionAsyncType<string, IVotesInfo>> => async (
+export const fetchVotes = (
+    sessionId: string,
+): ThunkAction<Promise<void>, IVotesState, any, IActionAsyncType<string, IVotesInfo>> => async (
     dispatch: ThunkDispatch<IVotesState, any, IActionAsyncType<string, IVotesInfo>>,
 ) => {
     try {
-        dispatch({ type: 'FETCH_VOTES_STARTED', payload: { data: null, error: null, status: EProccessStatus.PENDING } });
+        dispatch({
+            type: 'FETCH_VOTES_STARTED',
+            payload: { data: null, error: null, status: EProccessStatus.PENDING },
+        });
 
         const response = await axios({
             url: `${endpoint}/api/votes`,
@@ -36,22 +41,36 @@ export const fetchVotes = (sessionId: string): ThunkAction<Promise<void>, IVotes
         });
 
         if (response.status === 200) {
-            dispatch({ type: 'FETCH_VOTES_SUCCESS', payload: { data: response.data.data, error: null, status: EProccessStatus.SUCCESS } });
+            dispatch({
+                type: 'FETCH_VOTES_SUCCESS',
+                payload: { data: response.data.data, error: null, status: EProccessStatus.SUCCESS },
+            });
         }
     } catch (error) {
         if (error.response) {
-            dispatch({ type: 'FETCH_VOTES_FAILED', payload: { data: null, error: error.response.data.error, status: EProccessStatus.ERROR } });
+            dispatch({
+                type: 'FETCH_VOTES_FAILED',
+                payload: { data: null, error: error.response.data.error, status: EProccessStatus.ERROR },
+            });
         } else {
-            dispatch({ type: 'FETCH_VOTES_FAILED', payload: { data: null, error: { message: 'Unknown error' }, status: EProccessStatus.ERROR } });
+            dispatch({
+                type: 'FETCH_VOTES_FAILED',
+                payload: { data: null, error: { message: 'Unknown error' }, status: EProccessStatus.ERROR },
+            });
         }
     }
 };
 
-export const submitVote = (data: IVoteRq): ThunkAction<Promise<void>, IVotesState, any, IActionAsyncType<string, null>> => async (
+export const submitVote = (
+    data: IVoteRq,
+): ThunkAction<Promise<void>, IVotesState, any, IActionAsyncType<string, null>> => async (
     dispatch: ThunkDispatch<IVotesState, any, IActionAsyncType<string, null>>,
 ) => {
     try {
-        dispatch({ type: 'SUBMIT_VOTE_STARTED', payload: { data: null, error: null, status: EProccessStatus.PENDING } });
+        dispatch({
+            type: 'SUBMIT_VOTE_STARTED',
+            payload: { data: null, error: null, status: EProccessStatus.PENDING },
+        });
 
         const response = await axios({
             url: `${endpoint}/api/votes/add`,
@@ -61,18 +80,30 @@ export const submitVote = (data: IVoteRq): ThunkAction<Promise<void>, IVotesStat
         });
 
         if (response.status === 200) {
-            dispatch({ type: 'SUBMIT_VOTE_SUCCESS', payload: { data: response.data.data, error: null, status: EProccessStatus.SUCCESS } });
+            dispatch({
+                type: 'SUBMIT_VOTE_SUCCESS',
+                payload: { data: response.data.data, error: null, status: EProccessStatus.SUCCESS },
+            });
         }
     } catch (error) {
         if (error.response) {
-            dispatch({ type: 'SUBMIT_VOTE_FAILED', payload: { data: null, error: error.response.data.error, status: EProccessStatus.ERROR } });
+            dispatch({
+                type: 'SUBMIT_VOTE_FAILED',
+                payload: { data: null, error: error.response.data.error, status: EProccessStatus.ERROR },
+            });
         } else {
-            dispatch({ type: 'SUBMIT_VOTE_FAILED', payload: { data: null, error: { message: 'Unknown error' }, status: EProccessStatus.ERROR } });
+            dispatch({
+                type: 'SUBMIT_VOTE_FAILED',
+                payload: { data: null, error: { message: 'Unknown error' }, status: EProccessStatus.ERROR },
+            });
         }
     }
 };
 
-export const votesReducers = (state: IVotesState = initialState, action: IActionAsyncType<string, IVotesInfo> & IActionAsyncType<string, null>) => {
+export const votesReducers = (
+    state: IVotesState = initialState,
+    action: IActionAsyncType<string, IVotesInfo> & IActionAsyncType<string, null>,
+) => {
     switch (action.type) {
         case 'SUBMIT_VOTE_STARTED':
         case 'SUBMIT_VOTE_SUCCESS':

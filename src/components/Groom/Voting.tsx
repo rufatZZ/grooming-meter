@@ -37,7 +37,11 @@ export const Voting: React.FC<IProps> = props => {
         votes.map(
             (vote, index) =>
                 vote && (
-                    <div key={index} className="panel bg-warning result-list-item" style={{ width: `${(vote.length / votesLen) * 100}%` }}>
+                    <div
+                        key={index}
+                        className="panel px-3x py-2x bg-warning result-list-item"
+                        style={{ width: `${(vote.length / votesLen) * 100}%` }}
+                    >
                         {index}
                     </div>
                 ),
@@ -53,14 +57,16 @@ export const Voting: React.FC<IProps> = props => {
                         </div>
 
                         <div className="ml-1" style={{ width: '25%' }}>
-                            <div className="panel final-result text-center">
+                            <div className="panel px-3x py-2x final-result text-center">
                                 <span className="d-block final-result-title">Final</span>
                                 <span className="d-block final-result-body">{average}</span>
                             </div>
                         </div>
                     </div>
                 ) : (
-                    <div className="panel bg-primary text-center  px-2 py-2">{loading ? 'Calculating...' : 'Empty results'}</div>
+                    <div className="panel bg-primary text-center  px-2 py-2">
+                        {loading ? 'Calculating...' : 'Empty results'}
+                    </div>
                 )}
             </Loading>
         </div>
@@ -68,12 +74,12 @@ export const Voting: React.FC<IProps> = props => {
 
     return (
         <>
-            <div className="panel panel-primary">
+            <div className="panel px-3x py-2x panel-primary">
                 <div className="subtitle">Vote</div>
                 {renderOptions()}
             </div>
 
-            <div className="panel panel-primary">
+            <div className="panel px-3x py-2x panel-primary">
                 <div className="d-flex flex-row flex-align-baseline">
                     <div className="subtitle">Results</div>
                     <button className="btn ml-1 mr-1 bg-success" onClick={toggleShow}>

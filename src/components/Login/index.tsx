@@ -6,7 +6,15 @@ import { ThunkDispatch } from 'redux-thunk';
 
 import { useAuthContext } from 'context/auth';
 import { IAppReduxState } from 'ducks';
-import { createSession, processLogin, cleanLoginBranch, cleanSessionBranch, IAuthState, ILoginRq, fetchSession } from 'ducks/auth';
+import {
+    createSession,
+    processLogin,
+    cleanLoginBranch,
+    cleanSessionBranch,
+    IAuthState,
+    ILoginRq,
+    fetchSession,
+} from 'ducks/auth';
 import { Loading } from 'shared/components/Loading';
 import { EAuthAction } from 'shared/enums';
 import { ISession, IUser } from 'shared/models';
@@ -32,7 +40,16 @@ interface IProps extends IStateProps, IDispatchProps {}
 type TProps = IProps & RouterProps;
 
 const LoginComponent: React.FC<TProps> = (props: TProps) => {
-    const { history, createSession, getSession, processLogin, loginBranch, sessionBranch, cleanLoginBranch, cleanSessionBranch } = props;
+    const {
+        history,
+        createSession,
+        getSession,
+        processLogin,
+        loginBranch,
+        sessionBranch,
+        cleanLoginBranch,
+        cleanSessionBranch,
+    } = props;
     const { error: loginError } = loginBranch || ({} as IAsyncData<IUser>);
     const { data: sessionData, error: sessionError } = sessionBranch || ({} as IAsyncData<ISession>);
     const [username, setUsername] = useState('');
@@ -84,7 +101,9 @@ const LoginComponent: React.FC<TProps> = (props: TProps) => {
     const renderError = () =>
         (isError(loginBranch) || isError(sessionBranch)) && (
             <div>
-                <div className="panel panel-error bg-danger">{(sessionError || loginError).message || 'Unknown Error'}</div>
+                <div className="panel panel-error bg-danger">
+                    {(sessionError || loginError).message || 'Unknown Error'}
+                </div>
             </div>
         );
 
@@ -112,7 +131,14 @@ const LoginComponent: React.FC<TProps> = (props: TProps) => {
                         onChange={e => setSessionId(e.target.value)}
                     />
                 )}
-                <input type="text" name="gm_username" placeholder="Username" required value={username} onChange={e => setUsername(e.target.value)} />
+                <input
+                    type="text"
+                    name="gm_username"
+                    placeholder="Username"
+                    required
+                    value={username}
+                    onChange={e => setUsername(e.target.value)}
+                />
             </div>
             <div className="login-actions">
                 {formAction && (
@@ -136,7 +162,9 @@ const LoginComponent: React.FC<TProps> = (props: TProps) => {
                 <div className="auth">
                     <div className="d-flex flex-column flex-align-center flex-justify-center">
                         {renderError()}
-                        <Loading isLoading={loading}>{isJoinSession ? renderJoinSession() : renderAuthOptions()}</Loading>
+                        <Loading isLoading={loading}>
+                            {isJoinSession ? renderJoinSession() : renderAuthOptions()}
+                        </Loading>
                     </div>
                 </div>
             </div>

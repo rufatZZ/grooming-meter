@@ -39,7 +39,7 @@ export const Timer: React.FC<IProps> = props => {
 
     return (
         <div className="timer">
-            <div className="panel">
+            <div className="panel py-2x px-3x">
                 <span className="subtitle">Time</span>
                 <div className={getClassNames()}>
                     <span>{loading ? `${initialValue}` : currentTime}</span>

@@ -64,7 +64,8 @@ const GroomingMeterComponent: React.FC<IProps> = props => {
     const { user } = useAuthContext();
     const { sessionId, username, _id: userId } = user || ({} as IUser);
     const initialVotesData = { votes: [] as IVote[], length: 0, average: 0 } as IVotesInfo;
-    const hasError = isError(usersBranch) || isError(votesBranch) || isError(votesSubmitBranch) || isError(sessionBranch);
+    const hasError =
+        isError(usersBranch) || isError(votesBranch) || isError(votesSubmitBranch) || isError(sessionBranch);
 
     // TODO make these from server
     const options: Array<any> = [
@@ -127,12 +128,16 @@ const GroomingMeterComponent: React.FC<IProps> = props => {
 
     const renderError = () =>
         hasError && (
-            <div className="panel text-left">
+            <div className="panel px-3x py-2x text-left">
                 {isError(usersBranch) && (
-                    <div className="panel panel-error bg-danger">Users - {!isEmpty(usersError) ? usersError.message : 'Unknown Error'}</div>
+                    <div className="panel panel-error bg-danger">
+                        Users - {!isEmpty(usersError) ? usersError.message : 'Unknown Error'}
+                    </div>
                 )}
                 {isError(votesBranch) && (
-                    <div className="panel panel-error bg-danger">Users - {!isEmpty(votesError) ? votesError.message : 'Unknown Error'}</div>
+                    <div className="panel panel-error bg-danger">
+                        Users - {!isEmpty(votesError) ? votesError.message : 'Unknown Error'}
+                    </div>
                 )}
                 {isError(votesSubmitBranch) && (
                     <div className="panel panel-error bg-danger">
@@ -140,7 +145,9 @@ const GroomingMeterComponent: React.FC<IProps> = props => {
                     </div>
                 )}
                 {isError(sessionBranch) && (
-                    <div className="panel panel-error bg-danger">Session - {!isEmpty(sessionError) ? sessionError.message : 'Unknown Error'}</div>
+                    <div className="panel panel-error bg-danger">
+                        Session - {!isEmpty(sessionError) ? sessionError.message : 'Unknown Error'}
+                    </div>
                 )}
             </div>
         );
@@ -187,7 +194,13 @@ const GroomingMeter = connect<IStateProps, {}, {}, IAppReduxState>(
         votesBranch: state.votes.list,
         votesSubmitBranch: state.votes.submit,
     }),
-    (dispatch: ThunkDispatch<IUsersState & IVotesState & IAuthState, any, IActionAsyncType<string, IUser[] & IVote[] & ISession>>) => ({
+    (
+        dispatch: ThunkDispatch<
+            IUsersState & IVotesState & IAuthState,
+            any,
+            IActionAsyncType<string, IUser[] & IVote[] & ISession>
+        >,
+    ) => ({
         getSession: (sessionId: string) => dispatch(fetchSession(sessionId)),
         updateSession: (sessionId: string, data: ISessionRq) => dispatch(updateSession(sessionId, data)),
         resetSession: (sessionId: string) => dispatch(resetSession(sessionId)),
