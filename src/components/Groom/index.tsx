@@ -114,8 +114,10 @@ const GroomingMeterComponent: React.FC<IProps> = props => {
     }, [username, userId, sessionId, getSession, getUsers, getVotes]);
 
     const handleVote = (vote: string) => {
-        setUserVote(vote);
-        userId && sessionId && addVote({ userId, sessionId, vote });
+        if (vote !== userVote) {
+            setUserVote(vote);
+            userId && sessionId && addVote({ userId, sessionId, vote });
+        }
     };
 
     const toggleShow = () => {
@@ -181,7 +183,7 @@ const GroomingMeterComponent: React.FC<IProps> = props => {
                 <aside className="content-holder">
                     <Timer time={timeData} loading={isPending(sessionBranch)} />
                     <SessionSettings />
-                    <Users users={usersData || []} currentUser={username} loading={isPending(usersBranch)} />
+                    <Users users={usersData || []} userVote={userVote} currentUser={username} loading={isPending(usersBranch)} />
                 </aside>
             </div>
         </>

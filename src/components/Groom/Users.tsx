@@ -8,13 +8,15 @@ import { isEmpty } from 'shared/utils/object';
 interface IProps {
     users: IUser[];
     currentUser?: string;
+    userVote: string;
     loading: boolean;
 }
 
 export const Users: React.FC<IProps> = props => {
-    const { users, currentUser = null, loading } = props;
-    const [isVisible, toggleVisibilty] = useState(false);
+    const { users, userVote, currentUser = null, loading } = props;
+    const [isVisible, toggleVisibility] = useState(false);
     const [isMobile, toggleMobile] = useState(window.innerWidth <= 767);
+    const isVoteInvalid = (): boolean => !isEmpty(userVote) && userVote === '?';
 
     useEffect(() => {
         window.addEventListener('resize', () => toggleMobile(window.innerWidth <= 767));
@@ -31,7 +33,7 @@ export const Users: React.FC<IProps> = props => {
                     ) : (
                         <div
                             className="panel px-3x py-2x d-flex flex-justify-space-between flex-align-center panel-clickable"
-                            onClick={() => toggleVisibilty(!isVisible)}
+                            onClick={() => toggleVisibility(!isVisible)}
                         >
                             <span className="subtitle">Users {users && `( ${users.length} )`}</span>
                             <span>{!isVisible ? 'Show' : 'Hide'}</span>
@@ -43,13 +45,20 @@ export const Users: React.FC<IProps> = props => {
                             <ol className="users-list text-left">
                                 {!isEmpty(users) &&
                                     users.map(user => (
-                                        <li key={user._id} className={clsx({ 'user-list-item-voted': user.isVoted })}>
+                                        <li
+                                            key={user._id}
+                                            className={clsx({
+                                                'voted-user': user.isVoted,
+                                                'bg-success': user.isVoted && !isVoteInvalid(),
+                                                'bg-warning': user.isVoted && isVoteInvalid(),
+                                            })}
+                                        >
                                             <span
                                                 className={clsx({
                                                     'font-bold': user.username === currentUser,
                                                 })}
                                             >
-                                                {user.username}
+                                                {user.username} {user.isVoted && isVoteInvalid() && `\u2014 ?`}
                                             </span>
                                         </li>
                                     ))}
