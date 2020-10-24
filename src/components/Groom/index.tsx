@@ -183,7 +183,7 @@ const GroomingMeterComponent: React.FC<IProps> = props => {
                 <aside className="content-holder">
                     <Timer time={timeData} loading={isPending(sessionBranch)} />
                     <SessionSettings />
-                    <Users users={usersData || []} userVote={userVote} currentUser={username} loading={isPending(usersBranch)} />
+                    <Users users={usersData || []} currentUser={username} loading={isPending(usersBranch)} />
                 </aside>
             </div>
         </>
