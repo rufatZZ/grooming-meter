@@ -1,39 +1,89 @@
+@import 'src/shared/styles/variables.scss';
+
 .groom-content {
     position: relative;
 
-    @media screen and (max-width: 430px) {
-        flex-direction: column-reverse;
-    }
-
     .content {
-        @media screen and (max-width: 430px) {
-            width: 100%;
-        }
         width: calc(100% - 300px);
         height: inherit;
+
+        .voting-list-item {
+            position: relative;
+            color: #51c19d;
+            width: 150px;
+            height: 100px;
+            border: 2px solid #308c6e;
+            border-radius: 5px;
+            box-sizing: border-box;
+            margin-right: 10px;
+            user-select: none;
+            cursor: pointer;
+
+            > span {
+                position: absolute;
+                font-size: 36px;
+                font-weight: 600;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+
+            &:hover,
+            &:focus,
+            &:active,
+            &.selected {
+                color: white;
+            }
+
+            &:hover {
+                background-color: #3ba582;
+            }
+
+            &:focus,
+            &:active,
+            &.selected {
+                background-color: #308c6e;
+            }
+        }
+
+        .result-list-item {
+            -moz-transition: width 0.3s ease-in-out;
+            -o-transition: width 0.3s ease-in-out;
+            -webkit-transition: width 0.3s ease-in-out;
+            transition: width 0.3s ease-in-out;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .results-list-hidden .result-list-item {
+            width: 0%;
+        }
+
+        .results-list-open .result-list-item {
+            width: 100%;
+        }
+
+        .final-result-title {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .final-result-body {
+            font-size: 36px;
+            font-weight: 700;
+        }
     }
 
     aside {
-        @media screen and (max-width: 430px) {
-            width: 100%;
-        }
-
         width: 300px;
         height: inherit;
         background-color: white;
         position: relative;
 
         .timer {
-            @media screen and (max-width: 430px) {
-            }
-
             margin-bottom: 1em;
 
             .timer-time {
-                @media screen and (max-width: 430px) {
-                    font-size: 36px;
-                }
-
                 font-size: 56px;
                 font-weight: 600;
                 opacity: 1;
@@ -50,9 +100,6 @@
         }
 
         .session--settings {
-            @media screen and (max-width: 430px) {
-            }
-
             margin-top: 1em;
 
             .copy-options {
@@ -106,17 +153,9 @@
         }
 
         .users {
-            @media screen and (max-width: 430px) {
-                margin-bottom: -1em;
-            }
-
             margin-top: 1em;
 
             .users-list {
-                @media screen and (max-width: 430px) {
-                    display: none;
-                }
-
                 li {
                     margin-bottom: 2px;
                 }
@@ -132,87 +171,51 @@
     }
 }
 
-.voting-list-item {
-    @media screen and (max-width: 430px) {
-        width: 54px;
-        height: 36px;
-    }
+@media screen and (max-width: $mobilePortraitMaxWidth) {
+    .groom-content {
+        flex-direction: column-reverse;
 
-    position: relative;
-    color: #51c19d;
-    width: 150px;
-    height: 100px;
-    border: 2px solid #308c6e;
-    border-radius: 5px;
-    box-sizing: border-box;
-    margin-right: 10px;
-    user-select: none;
-    cursor: pointer;
+        .content {
+            width: 100%;
 
-    > span {
-        @media screen and (max-width: 430px) {
-            font-size: 24px;
+            .voting-list-item {
+                width: 54px;
+                height: 36px;
+
+                > span {
+                    font-size: 24px;
+                }
+            }
+
+            .result-list-item {
+                font-size: 18px;
+            }
+
+            .final-result-title {
+                font-size: 18px;
+            }
+
+            .final-result-body {
+                font-size: 24px;
+            }
         }
 
-        position: absolute;
-        font-size: 36px;
-        font-weight: 600;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
+        aside {
+            width: 100%;
+
+            .timer {
+                .timer-time {
+                    font-size: 36px;
+                }
+            }
+
+            .users {
+                margin-bottom: -1em;
+
+                .users-list {
+                    display: none;
+                }
+            }
+        }
     }
-
-    &:hover,
-    &:focus,
-    &:active,
-    &.selected {
-        color: white;
-    }
-
-    &:hover {
-        background-color: #3ba582;
-    }
-
-    &:focus,
-    &:active,
-    &.selected {
-        background-color: #308c6e;
-    }
-}
-
-.result-list-item {
-    @media screen and (max-width: 430px) {
-        font-size: 18px;
-    }
-    -moz-transition: width 0.3s ease-in-out;
-    -o-transition: width 0.3s ease-in-out;
-    -webkit-transition: width 0.3s ease-in-out;
-    transition: width 0.3s ease-in-out;
-    font-size: 20px;
-    font-weight: 700;
-}
-
-.results-list-hidden .result-list-item {
-    width: 0%;
-}
-
-.results-list-open .result-list-item {
-    width: 100%;
-}
-
-.final-result-title {
-    @media screen and (max-width: 430px) {
-        font-size: 18px;
-    }
-
-    font-size: 24px;
-    font-weight: 600;
-}
-
-.final-result-body {
-    @media screen and (max-width: 430px) {
-        font-size: 24px;
-    }
-    font-size: 36px;
-    font-weight: 700;
 }

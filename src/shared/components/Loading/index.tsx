@@ -1,16 +1,16 @@
+import clsx from 'clsx';
 import React from 'react';
-import classNames from 'classnames';
 
 import { ReactComponent as LoadingIcon } from 'assets/img/loading.svg';
 
 import './index.scss';
 
 interface IProps {
-    isLoading: boolean;
+    isLoading?: boolean;
 }
 
-export const Loading: React.FC<IProps> = ({ isLoading, children }) => {
-    const getClassNames = () => classNames('loading-overlay', { 'overlay-open': isLoading });
+export const Loading: React.FC<IProps> = ({ isLoading= true, children }) => {
+    const getClassNames = () => clsx('loading-overlay', { 'overlay-open': isLoading });
 
     return (
         <div className="loading">

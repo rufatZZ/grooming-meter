@@ -22,9 +22,11 @@ const WithAuthInfoComponent: React.FC<IProps> = props => {
     return <AuthContext.Provider value={{ user: loginData, isLoggedIn }}>{children}</AuthContext.Provider>;
 };
 
-export const WithAuthInfo = connect(
+const WithAuthInfo = connect(
     (state: IAppReduxState) => ({
         loginBranch: state.auth.login,
     }),
     {},
 )(WithAuthInfoComponent);
+
+export default WithAuthInfo;

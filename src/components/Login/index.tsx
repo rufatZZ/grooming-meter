@@ -31,7 +31,7 @@ interface IProps extends IStateProps, IDispatchProps {}
 
 type TProps = IProps & RouterProps;
 
-export const LoginComponent: React.FC<TProps> = (props: TProps) => {
+const LoginComponent: React.FC<TProps> = (props: TProps) => {
     const { history, createSession, getSession, processLogin, loginBranch, sessionBranch, cleanLoginBranch, cleanSessionBranch } = props;
     const { error: loginError } = loginBranch || ({} as IAsyncData<IUser>);
     const { data: sessionData, error: sessionError } = sessionBranch || ({} as IAsyncData<ISession>);
@@ -144,7 +144,7 @@ export const LoginComponent: React.FC<TProps> = (props: TProps) => {
     );
 };
 
-export const Login = withRouter<any, React.FC<TProps>>(
+const Login = withRouter<any, React.FC<TProps>>(
     connect<IStateProps, {}, {}, IAppReduxState>(
         (state: IAppReduxState) => ({
             loginBranch: state.auth.login,
@@ -159,3 +159,5 @@ export const Login = withRouter<any, React.FC<TProps>>(
         }),
     )(LoginComponent),
 );
+
+export default Login;

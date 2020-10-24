@@ -1,4 +1,3 @@
-import isEmpty from 'lodash/isEmpty';
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
@@ -13,6 +12,7 @@ import { fetchVotes, IVotesState, IVoteRq, submitVote } from 'ducks/votes';
 import { Loading } from 'shared/components/Loading';
 import { endpoint } from 'shared/consts';
 import { IUser, IVotesInfo, IVote, ISession } from 'shared/models';
+import { isEmpty } from 'shared/utils/object';
 import { IAsyncData, IActionAsyncType, isError, isPending } from 'shared/utils/redux';
 
 import { SessionSettings } from './SessionSettings';
@@ -180,7 +180,7 @@ const GroomingMeterComponent: React.FC<IProps> = props => {
         </>
     );
 };
-export const GroomingMeter = connect<IStateProps, {}, {}, IAppReduxState>(
+const GroomingMeter = connect<IStateProps, {}, {}, IAppReduxState>(
     (state: IAppReduxState): IStateProps => ({
         sessionBranch: state.auth.session,
         usersBranch: state.users.list,
@@ -196,3 +196,5 @@ export const GroomingMeter = connect<IStateProps, {}, {}, IAppReduxState>(
         addVote: (data: IVoteRq) => dispatch(submitVote(data)),
     }),
 )(GroomingMeterComponent);
+
+export default GroomingMeter;

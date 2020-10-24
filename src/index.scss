@@ -1,3 +1,5 @@
+@import "src/shared/styles/variables.scss";
+
 * {
     box-sizing: border-box;
     transition-property: color, background-color;
@@ -223,13 +225,16 @@ ul {
 }
 
 .subtitle {
-    @media screen and (max-width: 430px) {
-        font-size: 18px;
-    }
     user-select: none;
     color: #989898;
     font-size: 24px;
     font-weight: 700;
+}
+
+@media screen and (max-width: var(--mobilePortraitMaxWidth)px) {
+    .subtitle {
+        font-size: 18px;
+    }
 }
 
 @keyframes opacity {

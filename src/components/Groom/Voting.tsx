@@ -1,9 +1,9 @@
-import classNames from 'classnames';
-import isEmpty from 'lodash/isEmpty';
+import clsx from 'clsx';
 import React from 'react';
 
 import { Loading } from 'shared/components/Loading';
 import { IOption, IVotesInfo } from 'shared/models';
+import { isEmpty } from 'shared/utils/object';
 
 interface IProps {
     options: IOption[];
@@ -20,7 +20,7 @@ export const Voting: React.FC<IProps> = props => {
     const { options, loading, userVote, votesList, isShowing, toggleShow, handleReset, handleVoting } = props;
     const { votes, length: votesLen = 0, average } = votesList || ({} as IVotesInfo);
 
-    const getClassNames = (opt: IOption) => classNames('voting-list-item', 'mb-1', { selected: opt.value === userVote });
+    const getClassNames = (opt: IOption) => clsx('voting-list-item', 'mb-1', { selected: opt.value === userVote });
 
     const renderOptions = () => (
         <div className="voting-list mt-1 d-flex flex-row flex-wrap">
@@ -48,7 +48,6 @@ export const Voting: React.FC<IProps> = props => {
             <Loading isLoading={loading}>
                 {!isEmpty(votes) ? (
                     <div className="d-flex flex-row flex-align-center bg-primary px-1 py-1">
-
                         <div style={{ width: '75%' }}>
                             <div className="d-flex flex-column">{renderVotingVisual()}</div>
                         </div>

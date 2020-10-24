@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 
@@ -14,7 +14,7 @@ export const Timer: React.FC<IProps> = props => {
     const [timeDiff, setTimeDiff] = useState(0);
     const isTimeUp = () => timeDiff && timeDiff > 40;
 
-    const getClassNames = () => classNames('timer-time', 'text-center', { 'off-limit': isTimeUp(), 'on-limit': !isTimeUp() });
+    const getClassNames = () => clsx('timer-time', 'text-center', { 'off-limit': isTimeUp(), 'on-limit': !isTimeUp() });
 
     const formatDateDiff = (diff: number) => {
         setTimeDiff(diff);
