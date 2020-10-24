@@ -42,24 +42,34 @@ export const Users: React.FC<IProps> = props => {
                         <div className="panel px-3x pb-2x">
                             <ol className="users-list text-left">
                                 {!isEmpty(users) &&
-                                    users.map(user => (
-                                        <li
-                                            key={user._id}
-                                            className={clsx({
-                                                'voted-user': user.isVoted,
-                                                'bg-success': user.isVoted && user.isValidVote,
-                                                'bg-warning': user.isVoted && !user.isValidVote,
-                                            })}
-                                        >
-                                            <span
+                                    users.map(user => {
+                                        console.log(user);
+                                        console.log(clsx({
+                                            'voted-user': user.isVoted,
+                                            'bg-success': user.isVoted && user.isValidVote,
+                                            'bg-warning': user.isVoted && !user.isValidVote,
+                                        }));
+                                        console.log('=============');
+
+                                        return (
+                                            <li
+                                                key={user._id}
                                                 className={clsx({
-                                                    'font-bold': user.username === currentUser,
+                                                    'voted-user': user.isVoted,
+                                                    'bg-success': user.isVoted && user.isValidVote,
+                                                    'bg-warning': user.isVoted && !user.isValidVote,
                                                 })}
                                             >
-                                                {user.username} {user.isVoted && !user.isValidVote && `\u2014 ?`}
-                                            </span>
-                                        </li>
-                                    ))}
+                                                <span
+                                                    className={clsx({
+                                                        'font-bold': user.username === currentUser,
+                                                    })}
+                                                >
+                                                    {user.username} {user.isVoted && !user.isValidVote && `\u2014 ?`}
+                                                </span>
+                                            </li>
+                                        );
+                                    })}
                             </ol>
                         </div>
                     )}
